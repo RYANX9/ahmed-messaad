@@ -223,10 +223,9 @@ export default function Page() {
         >
           <div className="flex-1 flex items-center">
             <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Building the Future of Healthcare</span>
-              <br />
+              <span className="font-mono font-bold">Building the Future of Healthcare </span>
               <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-              <span className="font-mono font-bold">AI Intelligence</span>
+              <span className="font-mono font-bold"> AI Intelligence</span>
             </h1>
           </div>
           <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
