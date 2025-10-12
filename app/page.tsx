@@ -202,11 +202,19 @@ export default function Page() {
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
         {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center items-start transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
+          style={{
+            minHeight: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            paddingTop: "4rem",
+            paddingBottom: "4rem",
+          }}
         >
           <h1 className="text-[28px] xl:text-[38px] leading-tight">
             <span className="font-mono font-bold">Researcher Building</span>
