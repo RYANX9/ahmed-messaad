@@ -47,7 +47,7 @@ export default function Page() {
       context: "Startup Collaboration",
       year: "2024",
       description:
-        "AI-driven brain tumor diagnosis platform with 99% accuracy, integrating advanced DICOM processing and clinician-focused design.",
+        "An advanced AI platform for brain tumor detection achieving 99% accuracy, combining EfficientNet-B7 with a full DICOM workflow and intuitive clinical interface.",
       tech: ["PyTorch", "EfficientNet-B7", "DICOM", "PyQt5"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -58,7 +58,7 @@ export default function Page() {
       context: "Hemolab Startup",
       year: "2023–2024",
       description:
-        "Precision AI system for blood cell detection and classification, built on YOLOv8 and optimized for medical imaging excellence.",
+        "Complete blood analysis system: automated cell detection, segmentation, counting & classification (97% accuracy) with organized table display — eliminating manual microscopy.",
       tech: ["YOLOv8", "OpenCV", "ResNet", "EfficientNet"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -69,7 +69,7 @@ export default function Page() {
       context: "Master's Thesis",
       year: "2023",
       description:
-        "Unified deep learning model delivering real-time, multi-disease diagnostics with interpretable, high-accuracy predictions.",
+        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer’s, and COVID-19, merging accuracy with interpretability.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -80,7 +80,7 @@ export default function Page() {
       context: "Data Analytics",
       year: "2024",
       description:
-        "Neural network–powered analytics predicting healthcare costs with near-precision accuracy for smarter resource allocation.",
+        "A predictive deep learning model using Conv1D networks to uncover cost drivers and forecast healthcare expenses with exceptional reliability.",
       tech: ["CNN", "Statistical Analysis", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
