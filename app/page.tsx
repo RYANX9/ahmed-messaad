@@ -207,7 +207,7 @@ export default function Page() {
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
         {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center items-start transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -215,21 +215,22 @@ export default function Page() {
           style={{
             minHeight: "100%",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "flex-start",
-            paddingTop: "4rem",
-            paddingBottom: "4rem",
+            paddingTop: "2rem",
+            paddingBottom: "2rem",
           }}
         >
-          <h1 className="text-[28px] xl:text-[38px] leading-tight">
-            <span className="font-mono font-bold">Researcher Building</span>
-            <br />
-            <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-meaculpa text-[40px] xl:text-[48px] leading-none text-[#ffffff]">with</span>
-            <br />
-            <span className="font-mono font-bold">Intelligent Systems</span>
-          </h1>
-          <div className="mt-4 xl:mt-6 text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+          <div className="flex-1 flex items-center">
+            <h1 className="text-[20px] xl:text-[26px] leading-tight">
+              <span className="font-mono font-bold">Building the Future of Healthcare</span>
+              <br />
+              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
+              <br />
+              <span className="font-mono font-bold">AI Intelligence</span>
+            </h1>
+          </div>
+          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
             AI/ML • Medical Imaging • Deep Learning
           </div>
         </section>
