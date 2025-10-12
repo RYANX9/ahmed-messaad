@@ -203,41 +203,6 @@ export default function Page() {
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
           AHMED MESSAAD
         </div>
-        <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a 
-            href="#projects" 
-            onClick={(e) => {
-              if (window.innerWidth >= 1024) {
-                e.preventDefault();
-              }
-            }}
-            className="text-neutral-400 hover:text-white transition"
-          >
-            Projects
-          </a>
-          <a 
-            href="#about"
-            onClick={(e) => {
-              if (window.innerWidth >= 1024) {
-                e.preventDefault();
-              }
-            }}
-            className="text-neutral-400 hover:text-white transition"
-          >
-            About
-          </a>
-          <a 
-            href="#contact"
-            onClick={(e) => {
-              if (window.innerWidth >= 1024) {
-                e.preventDefault();
-              }
-            }}
-            className="text-neutral-400 hover:text-white transition"
-          >
-            Contact
-          </a>
-        </nav>
       </header>
 
       {/* Desktop Grid Layout */}
@@ -252,21 +217,20 @@ export default function Page() {
           style={{
             minHeight: "100%",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "flex-start",
-            paddingTop: "2rem",
-            paddingBottom: "2rem",
+            paddingBottom: "3rem",
           }}
         >
-          <div className="flex-1 flex items-center">
-            <h1 className="text-[20px] xl:text-[26px] leading-tight">
+          <div>
+            <h1 className="text-[20px] xl:text-[26px] leading-tight mb-4">
               <span className="font-mono font-bold">Building the Future of Healthcare </span>
               <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
               <span className="font-mono font-bold"> AI Intelligence</span>
             </h1>
-          </div>
-          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI/ML • Medical Imaging • Deep Learning
+            <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+              AI/ML • Medical Imaging • Deep Learning
+            </div>
           </div>
         </section>
 
@@ -373,11 +337,14 @@ export default function Page() {
         {/* About */}
         <section
           id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
           }`}
+          style={{
+            paddingBottom: "3rem",
+          }}
         >
           <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
             About
