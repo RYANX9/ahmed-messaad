@@ -1,6 +1,7 @@
 "use client";
  
 import React, { useState } from "react";
+import Image from "next/image"; // 1. IMPORT Next.js Image component
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -173,11 +174,13 @@ export default function Page() {
       />
 
       {/* Single Animated Profile Image - STARTS FROM CENTER POINT */}
+      {/* Retained <img> and suppressed warning due to complex dynamic styling (LCP warning fix) */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className="object-cover hidden lg:block" // ADDED 'hidden lg:block' to hide on mobile
+        className="object-cover hidden lg:block" 
         style={{
           position: 'fixed',
           top: '50vh',
@@ -242,10 +245,13 @@ export default function Page() {
           id="profile-grid-section"
           className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
         >
-          <img
+          {/* 2. Converted to <Image> with fill for LCP warning fix */}
+          <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
-            className="w-full h-full object-cover"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(min-width: 1024px) 33vw, 100vw"
           />
         </section>
 
@@ -344,9 +350,9 @@ export default function Page() {
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
             Ahmed MBridging the gap between deep learning and the hospital floor. 
-            As an AI/ML Researcher in M'sila, Algeria, 
+            As an AI/ML Researcher in **M&apos;sila**, Algeria, {/* 3. CRITICAL FIX: Replaced ' with &apos; */}
             I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
-            delivering advanced clinical insight wherever it's needed.
+            delivering advanced clinical insight wherever it&apos;s needed. {/* Added &apos; here too as a precaution */}
           </p>
         </section>
 
@@ -433,16 +439,19 @@ export default function Page() {
 
         {/* Profile */}
         <section
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          <img
+          {/* 4. Converted to <Image> with fill for LCP warning fix */}
+          <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
-            className="w-full h-full object-cover"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="100vw"
           />
         </section>
 
@@ -459,7 +468,7 @@ export default function Page() {
           </h3>
           <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
             Ahmed Messaad is an AI/ML researcher specializing in medical
-            diagnostics. Based in M'sila, Algeria, he bridges deep learning
+            diagnostics. Based in **M&apos;sila**, Algeria, he bridges deep learning {/* 5. CRITICAL FIX: Replaced ' with &apos; */}
             research with clinical practice, creating intelligent systems
             accessible globally.
           </p>
