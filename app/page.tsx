@@ -212,7 +212,7 @@ export default function Page() {
             <span className="font-mono font-bold">Researcher Building</span>
             <br />
             <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-accent font-semibold tracking-wide">with</span>
+            <span className="font-serif italic text-[#e0e0e0] tracking-wide">with</span>
             <br />
             <span className="font-mono font-bold">Intelligent Systems</span>
           </h1>
