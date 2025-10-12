@@ -2,6 +2,7 @@
  
 import React, { useState } from "react";
 import Image from "next/image";
+@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -120,6 +121,11 @@ export default function Page() {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
         }
+        .font-meaculpa {
+          font-family: 'Mea Culpa', cursive;
+          font-weight: 400;
+          letter-spacing: 0.03em;
+        }
 
         @keyframes arrow-bounce {
           0%, 100% {
@@ -220,7 +226,7 @@ export default function Page() {
             <span className="font-mono font-bold">Researcher Building</span>
             <br />
             <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-serif italic text-[#e0e0e0] tracking-wide">with</span>
+            <span className="font-meaculpa text-[40px] xl:text-[48px] leading-none text-[#ffffff]">with</span>
             <br />
             <span className="font-mono font-bold">Intelligent Systems</span>
           </h1>
