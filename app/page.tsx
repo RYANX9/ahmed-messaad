@@ -1,168 +1,595 @@
-"use client"
+use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function Page() {
+  const [activeProject, setActiveProject] = useState<string | null>("airm");
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    // Determine the breakpoint (Tailwind's 'lg' is 1024px)
+    // We check window.innerWidth to decide whether to run the animation
+    const isDesktop = window.innerWidth >= 1024;
+
+    if (!isDesktop) {
+      // Mobile/Small screen: Skip animation and immediately show content
+      setIsLoading(false);
+      return;
+    }
+
+    // Desktop/Large screen: Run the animation
+    const timer = setTimeout(() => {
+      const animatedImg = document.getElementById('animated-profile');
+      const gridSection = document.getElementById('profile-grid-section');
+      
+      if (animatedImg && gridSection) {
+        const rect = gridSection.getBoundingClientRect();
+        
+        // Calculate the center point of the grid cell
+        const gridCenterX = rect.left + rect.width / 2;
+        const gridCenterY = rect.top + rect.height / 2;
+        
+        // Move image to grid position - maintaining center point origin
+        animatedImg.style.top = `${gridCenterY}px`;
+        animatedImg.style.left = `${gridCenterX}px`;
+        animatedImg.style.width = `${rect.width}px`;
+        animatedImg.style.height = `${rect.height}px`;
+        
+        // After animation completes, just hide it behind - NO opacity change
+        setTimeout(() => {
+          animatedImg.style.visibility = 'hidden';
+          setIsLoading(false);
+        }, 1400);
+      } else {
+        // Fallback if elements are missing, still set loading to false
+        setIsLoading(false);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   const projects = [
     {
-      title: "AIRM Brain Tumor System",
-      link: "https://youtu.be/2OeqBKF3X_A",
-      date: "2024",
-      desc: "99% accuracy brain tumor classification using EfficientNet-B7. Complete DICOM integration with PyQt5 clinical interface for real-world deployment.",
+      id: "airm",
+      name: "AIRM Brain Tumor System",
+      year: "(2024)",
+      description:
+        "99% accuracy brain tumor classification using EfficientNet-B7. Complete DICOM integration with PyQt5 clinical interface for real-world deployment.",
       tech: ["PyTorch", "EfficientNet-B7", "DICOM", "PyQt5"],
+      link: "https://youtu.be/2OeqBKF3X_A",
+      linkText: "Watch Demo",
     },
     {
-      title: "HemaVision",
-      link: "https://youtu.be/YxhA877Wyn0",
-      date: "2023–2024",
-      desc: "Complete blood analysis system: automated cell detection, segmentation, counting & classification (97% accuracy) with organized table display — eliminating manual microscopy.",
+      id: "hemavision",
+      name: "HemaVision",
+      year: "(2023–2024)",
+      description:
+        "Complete blood analysis system: automated cell detection, segmentation, counting & classification (97% accuracy) with organized table display — eliminating manual microscopy.",
       tech: ["YOLOv8", "OpenCV", "ResNet", "Disease Classification"],
+      link: "https://youtu.be/YxhA877Wyn0",
+      linkText: "Watch Demo",
     },
     {
-      title: "My Daily Health",
-      link: "https://youtu.be/kh7WBjNPpEM",
-      date: "2023",
-      desc: "Multi-disease AI diagnostic ensemble (90-99% accuracy) combining ResNet50, DenseNet121 & EfficientNet-B3 with interpretable real-time predictions.",
+      id: "mydailyhealth",
+      name: "My Daily Health",
+      year: "(2023)",
+      description:
+        "Multi-disease AI diagnostic ensemble (90-99% accuracy) combining ResNet50, DenseNet121 & EfficientNet-B3 with interpretable real-time predictions.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
+      link: "https://youtu.be/kh7WBjNPpEM",
+      linkText: "Watch Demo",
     },
     {
-      title: "Healthcare Cost Prediction",
-      link: "https://www.kaggle.com/ahmedmessaad/healthcostpridiction",
-      date: "2024",
-      desc: "Conv1D neural network achieving R² = 0.8793 for healthcare cost forecasting with comprehensive feature engineering and statistical analysis.",
+      id: "healthcost",
+      name: "Healthcare Cost Prediction",
+      year: "(2024)",
+      description:
+        "Conv1D neural network achieving R² = 0.8793 for healthcare cost forecasting with comprehensive feature engineering and statistical analysis.",
       tech: ["Conv1D", "Feature Engineering", "Plotly"],
+      link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
+      linkText: "View Details",
     },
   ];
 
-  const [current, setCurrent] = useState(0);
-
-  const nextProject = () => setCurrent((prev) => (prev + 1) % projects.length);
-  const prevProject = () => setCurrent((prev) => (prev - 1 + projects.length) % projects.length);
-
   return (
-    <main className="min-h-screen w-full bg-[#0f1115] text-gray-100 font-sans flex flex-col py-8 md:py-0">
-      <div className="max-w-[1400px] w-full mx-auto flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-8 items-center px-4 sm:px-6 lg:px-8 pb-20 lg:pb-8">
+    <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        
+        *::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+        
+        /* Primary - Bold titles and headers */
+        .font-mono {
+          font-family: 'IBM Plex Mono', monospace;
+          letter-spacing: 0.02em;
+        }
+        
+        /* Secondary - Elegant italics */
+        .font-serif {
+          font-family: 'Crimson Pro', serif;
+        }
+        
+        /* Tertiary - Modern sans for body */
+        .font-sans {
+          font-family: 'Inter', sans-serif;
+        }
+        
+        /* Accent - Tech labels */
+        .font-accent {
+          font-family: 'Space Grotesk', sans-serif;
+          letter-spacing: 0.05em;
+        }
 
-        {/* Left column — Intro with profile picture */}
-        <section className="lg:col-span-6 w-full flex flex-col justify-center">
-          <motion.div
-            initial={{ x: -60, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 80, damping: 12 }}
-            className="space-y-4 md:space-y-6 flex flex-col items-start"
-          >
-            <div className="w-32 h-32 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
-              <img
-                src="/ahmed.jpg"
-                alt="Ahmed Messaad"
-                className="w-full h-full object-cover"
-              />
-            </div>
+        @keyframes arrow-bounce {
+          0%, 100% {
+            transform: translateX(0);
+          }
+          50% {
+            transform: translateX(4px);
+          }
+        }
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight">Ahmed Messaad</h1>
-            
-            <div className="text-sm md:text-base text-gray-400 tracking-wide -mt-2">AI / ML Researcher • M'sila, Algeria</div>
+        .arrow-animate:hover svg {
+          animation: arrow-bounce 0.6s ease-in-out infinite;
+        }
 
-            <p className="text-base md:text-xl text-gray-300 max-w-xl">Developing intelligent healthcare systems that bridge cutting-edge AI research with real-world clinical deployment — from medical imaging to predictive analytics.</p>
+        /* Completely invisible scrollbar - ALWAYS HIDDEN - NO LAYOUT SHIFT */
+        .invisible-scroll {
+          scrollbar-width: none !important; /* Firefox */
+          -ms-overflow-style: none !important; /* IE/Edge */
+          overflow-y: scroll !important;
+        }
+        
+        .invisible-scroll::-webkit-scrollbar {
+          display: none !important; /* Chrome/Safari/Opera */
+          width: 0 !important;
+          height: 0 !important;
+          background: transparent !important;
+        }
+        
+        .invisible-scroll::-webkit-scrollbar-track {
+          display: none !important;
+        }
+        
+        .invisible-scroll::-webkit-scrollbar-thumb {
+          display: none !important;
+        }
+      `}</style>
 
-            <div className="flex items-center gap-3 md:gap-4 mt-2 flex-wrap">
-              <a href="mailto:ahmed.messaad@outlook.com" className="inline-flex items-center gap-2 md:gap-3 rounded-2xl px-4 py-2 border border-gray-700 text-xs md:text-sm hover:border-gray-500 transition-colors">Contact</a>
-              <a href="https://linkedin.com/in/ahmedmessaad" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 md:gap-3 rounded-2xl px-4 py-2 bg-white/5 text-xs md:text-sm hover:bg-white/7 transition-colors">LinkedIn</a>
-            </div>
+      {/* Loading Overlay - Behind picture */}
+      <div
+        className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
+          isLoading ? "opacity-100" : "opacity-0"
+        }`}
+      />
 
-            <div className="mt-4 md:mt-6 text-xs md:text-sm text-gray-400 max-w-prose leading-relaxed">
-              <strong className="text-gray-200">Expertise:</strong> Deep learning for medical imaging (CNNs, transfer learning), embedded AI systems, DICOM pipeline integration, and clinical-grade model deployment. Published researcher at ICSTEM 2023.
-            </div>
-          </motion.div>
+      {/* Single Animated Profile Image - STARTS FROM CENTER POINT */}
+      <img
+        id="animated-profile"
+        src="/ahmed.jpg"
+        alt="Ahmed Messaad"
+        className="object-cover hidden lg:block" // ADDED 'hidden lg:block' to hide on mobile
+        style={{
+          position: 'fixed',
+          top: '50vh',
+          left: '50vw',
+          width: '280px',
+          height: '280px',
+          transform: 'translate(-50%, -50%)',
+          transformOrigin: 'center center',
+          zIndex: 100,
+          pointerEvents: 'none',
+          transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
+        }}
+      />
+
+      {/* Header */}
+      <header
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
+          isLoading ? "opacity-0" : "opacity-100 delay-300"
+        }`}
+      >
+        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
+          AHMED MESSAAD
+        </div>
+        <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
+          <a href="" className="text-neutral-400 hover:text-white transition">
+            Projects
+          </a>
+          <a href="" className="text-neutral-400 hover:text-white transition">
+            About
+          </a>
+          <a href="" className="text-neutral-400 hover:text-white transition">
+            Contact
+          </a>
+        </nav>
+      </header>
+
+      {/* Desktop Grid Layout - No Scroll */}
+      <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
+        {/* Hero */}
+        <section
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-500"
+          }`}
+        >
+          <h1 className="text-[28px] xl:text-[38px] leading-tight">
+            <span className="font-mono font-bold">Researcher Building</span>
+            <br />
+            <span className="font-serif italic font-light">Healthcare</span>{" "}
+            <span className="font-mono font-bold">with</span>
+            <br />
+            <span className="font-mono font-bold">Intelligent Systems</span>
+          </h1>
+          <div className="mt-4 xl:mt-6 text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+            AI/ML • Medical Imaging • Deep Learning
+          </div>
         </section>
 
-        {/* Right column — Projects as slideshow */}
-        <aside className="lg:col-span-6 w-full flex flex-col justify-center space-y-4 md:space-y-6">
-          <div className="relative rounded-2xl min-h-[280px] md:h-[260px] p-5 md:p-6 border border-white/6 bg-white/2 backdrop-blur-md flex flex-col justify-between overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={projects[current].title} 
-                initial={{ opacity: 0, x: 40 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -40 }} 
-                transition={{ duration: 0.4 }} 
-                className="flex flex-col justify-between h-full"
+        {/* Profile - Picture destination */}
+        <section 
+          id="profile-grid-section"
+          className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
+        >
+          <img
+            src="/ahmed.jpg"
+            alt="Ahmed Messaad"
+            className="w-full h-full object-cover"
+          />
+        </section>
+
+        {/* Projects */}
+        <aside
+          id="projects"
+          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-700"
+          }`}
+        >
+          <div className="flex-1 overflow-y-auto invisible-scroll py-4">
+            {projects.map((p) => (
+              <div
+                key={p.id}
+                className={`border-b border-[#2a2a2a] transition ${
+                  activeProject === p.id ? "bg-[#151515]" : ""
+                }`}
               >
-                <div>
-                  <div className="text-xs text-gray-300">Project</div>
-                  <h3 className="text-base md:text-lg font-semibold mt-1">{projects[current].title}</h3>
-                  <a href={projects[current].link} target="_blank" rel="noreferrer" className="text-xs md:text-sm text-cyan-400 hover:underline inline-block mt-1">View Demo ↗</a>
-                  <p className="mt-2 md:mt-3 text-xs md:text-sm text-gray-300 leading-relaxed">{projects[current].desc}</p>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-400 mt-4 gap-2">
-                  <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-                    <span>{projects[current].date}</span>
-                    <span className="text-gray-500">|</span>
-                    <span className="break-words">{projects[current].tech.join(" • ")}</span>
+                <button
+                  onClick={() =>
+                    setActiveProject(activeProject === p.id ? null : p.id)
+                  }
+                  className="w-full flex justify-between items-center px-10 xl:px-12 py-8 xl:py-10 text-left"
+                >
+                  <div className="text-xl xl:text-2xl font-semibold font-mono">
+                    {p.name}
+                  </div>
+                  <svg
+                    className={`w-6 h-6 xl:w-7 xl:h-7 transition-transform ${
+                      activeProject === p.id ? "rotate-90" : ""
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+
+                <div
+                  className={`overflow-hidden transition-all duration-500 ${
+                    activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                  }`}
+                >
+                  <div className="px-10 xl:px-12 pb-8 xl:pb-10 text-[15px] xl:text-[16px] text-neutral-400 leading-relaxed">
+                    <p className="mb-7 xl:mb-8 font-sans">{p.description}</p>
+                    <div className="flex flex-wrap gap-2.5 xl:gap-3 mb-7 xl:mb-8">
+                      {p.tech.map((t) => (
+                        <span
+                          key={t}
+                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[12px] xl:text-[13px] px-3.5 py-2 transition hover:bg-[#333] font-mono"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="arrow-animate inline-flex items-center gap-2 text-white text-[13px] xl:text-[14px] tracking-wide transition font-mono"
+                    >
+                      {p.linkText}
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                      </svg>
+                    </a>
                   </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-
-            <div className="absolute bottom-4 right-4 flex gap-2 md:gap-3 z-10">
-              <button onClick={prevProject} className="text-xs px-3 py-1.5 rounded-full border border-white/10 hover:border-white/30 transition-colors bg-[#0f1115]/80 backdrop-blur-sm">← Prev</button>
-              <button onClick={nextProject} className="text-xs px-3 py-1.5 rounded-full border border-white/10 hover:border-white/30 transition-colors bg-[#0f1115]/80 backdrop-blur-sm">Next →</button>
-            </div>
+              </div>
+            ))}
           </div>
-
-          <motion.div 
-            whileHover={{ scale: 1.02 }} 
-            className="rounded-2xl min-h-[140px] p-4 md:p-5 border border-white/6 flex flex-col justify-between bg-[#06070a]"
-          >
-            <div>
-              <div className="text-xs text-gray-500">International Recognition</div>
-              <h3 className="text-base md:text-lg font-semibold mt-1">ICSTEM 2023 — Outstanding Research</h3>
-              <p className="mt-1 md:mt-2 text-xs md:text-sm text-gray-400">"Brain Disease Diagnosis Using Deep Learning" • Istanbul, Turkey</p>
-            </div>
-            <div className="flex items-center gap-2 md:gap-3 text-xs text-gray-500 mt-3 flex-wrap">
-              <span>FIA Robotics Finalist 2023</span>
-              <span>•</span>
-              <span>5-Star Academic Excellence</span>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            whileHover={{ scale: 1.02 }} 
-            className="rounded-2xl min-h-[130px] p-4 md:p-5 border border-white/6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white/2"
-          >
-            <div className="flex-1">
-              <div className="text-xs text-gray-300">Education</div>
-              <h3 className="text-base md:text-lg font-semibold mt-1">M.Sc. Embedded Systems</h3>
-              <p className="mt-1 md:mt-2 text-xs md:text-sm text-gray-300 max-w-xs">University Mohamed Boudiaf • Specializing in embedded AI for medical devices and edge computing</p>
-            </div>
-            <div className="text-xs md:text-sm text-gray-400 sm:text-right">
-              <div className="font-medium text-gray-300">Open to Collaborations</div>
-              <div className="mt-1">Research • Consulting • Projects</div>
-            </div>
-          </motion.div>
         </aside>
+
+        {/* About */}
+        <section
+          id="about"
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-900"
+          }`}
+        >
+          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-6 font-accent">
+            About
+          </h3>
+          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
+            Ahmed MBridging the gap between deep learning and the hospital floor. 
+            As an AI/ML Researcher in M'sila, Algeria, 
+            I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
+            delivering advanced clinical insight wherever it's needed.
+          </p>
+        </section>
+
+        {/* Contact */}
+        <section
+          id="contact"
+          onClick={() =>
+            (window.location.href = "mailto:ahmed.messaad@outlook.com")
+          }
+          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-900"
+          }`}
+        >
+          <svg
+            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M8 24L24 8M24 8H8M24 8V24" />
+          </svg>
+          <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
+            Ready to Collaborate?
+          </div>
+          <h2 className="text-[44px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
+            <span className="font-mono">CONTACT</span>
+            <span className="italic font-serif font-light ml-2">me</span>
+          </h2>
+          <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
+            <a
+              href="https://linkedin.com/in/ahmedmessaad"
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              LINKEDIN
+            </a>
+            <a
+              href="https://github.com/ahmedmessaad"
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              GITHUB
+            </a>
+            <a
+              href="mailto:ahmed.messaad@outlook.com"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              EMAIL
+            </a>
+          </div>
+        </section>
       </div>
 
-      {/* Footer bar */}
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 w-full max-w-4xl">
-        <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          transition={{ delay: 0.4 }} 
-          className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 bg-white/3 border border-white/6 rounded-full px-4 py-2.5 backdrop-blur-md text-xs md:text-sm mx-auto w-fit"
+      {/* Mobile Stack Layout */}
+      <div className="lg:hidden pt-16">
+        {/* Hero */}
+        <section
+          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[30px]"
+              : "opacity-100 translate-y-0 delay-500"
+          }`}
         >
-          <div className="flex items-center gap-2 md:gap-3">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="hidden sm:block">
-              <path d="M12 2v20" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M4 10h16" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="text-xs text-gray-200">Ahmed Messaad — AI/ML Researcher</span>
+          <h1 className="text-[24px] leading-tight">
+            <span className="font-mono font-bold">Researcher Building</span>
+            <br />
+            <span className="font-serif italic font-light">Healthcare</span>{" "}
+            <span className="font-mono font-bold">with</span>
+            <br />
+            <span className="font-mono font-bold">Intelligent Systems</span>
+          </h1>
+          <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
+            AI/ML • Medical Imaging • Deep Learning
           </div>
-          <div className="hidden sm:block text-xs text-gray-300">•</div>
-          <div className="text-xs text-gray-300">M'sila, Algeria</div>
-          <a href="mailto:ahmed.messaad@outlook.com" className="text-xs underline underline-offset-2 hover:text-white transition-colors">ahmed.messaad@outlook.com</a>
-        </motion.div>
+        </section>
+
+        {/* Profile */}
+        <section
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[30px]"
+              : "opacity-100 translate-y-0 delay-700"
+          }`}
+        >
+          <img
+            src="/ahmed.jpg"
+            alt="Ahmed Messaad"
+            className="w-full h-full object-cover"
+          />
+        </section>
+
+        {/* About */}
+        <section
+          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[30px]"
+              : "opacity-100 translate-y-0 delay-900"
+          }`}
+        >
+          <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
+            About
+          </h3>
+          <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
+            Ahmed Messaad is an AI/ML researcher specializing in medical
+            diagnostics. Based in M'sila, Algeria, he bridges deep learning
+            research with clinical practice, creating intelligent systems
+            accessible globally.
+          </p>
+        </section>
+
+        {/* Projects */}
+        <aside
+          id="projects"
+          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[30px]"
+              : "opacity-100 translate-y-0 delay-1100"
+          }`}
+        >
+          {projects.map((p) => (
+            <div
+              key={p.id}
+              className={`border-b border-[#2a2a2a] transition ${
+                activeProject === p.id ? "bg-[#151515]" : ""
+              }`}
+            >
+              <button
+                onClick={() =>
+                  setActiveProject(activeProject === p.id ? null : p.id)
+                }
+                className="w-full flex justify-between items-center px-6 py-5 text-left"
+              >
+                <div className="text-base font-semibold font-mono">
+                  {p.name}
+                </div>
+                <svg
+                  className={`w-4 h-4 transition-transform ${
+                    activeProject === p.id ? "rotate-90" : ""
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+
+              <div
+                className={`overflow-hidden transition-all duration-500 ${
+                  activeProject === p.id ? "max-h-[500px]" : "max-h-0"
+                }`}
+              >
+                <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
+                  <p className="mb-5 font-sans">{p.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {p.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#333] font-mono"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="arrow-animate inline-flex items-center gap-2 text-white text-[11px] tracking-wide transition font-mono"
+                  >
+                    {p.linkText}
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </aside>
+
+        {/* Contact */}
+        <section
+          onClick={() =>
+            (window.location.href = "mailto:ahmed.messaad@outlook.com")
+          }
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[30px]"
+              : "opacity-100 translate-y-0 delay-1300"
+          }`}
+        >
+          <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
+            Ready to Collaborate?
+          </div>
+          <h2 className="text-[36px] font-bold leading-none">
+            <span className="font-mono">CONTACT</span>
+            <span className="italic font-serif font-light ml-2">me</span>
+          </h2>
+          <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
+            <a
+              href="https://linkedin.com/in/ahmedmessaad"
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              LINKEDIN
+            </a>
+            <a
+              href="https://github.com/ahmedmessaad"
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              GITHUB
+            </a>
+            <a
+              href="mailto:ahmed.messaad@outlook.com"
+              onClick={(e) => e.stopPropagation()}
+              className="text-neutral-500 hover:text-white transition"
+            >
+              EMAIL
+            </a>
+          </div>
+        </section>
       </div>
     </main>
   );
