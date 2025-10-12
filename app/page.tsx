@@ -1,24 +1,20 @@
 "use client";
  
 import React, { useState } from "react";
-import Image from "next/image"; // 1. IMPORT Next.js Image component
+import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
-    // Determine the breakpoint (Tailwind's 'lg' is 1024px)
-    // We check window.innerWidth to decide whether to run the animation
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
-      // Mobile/Small screen: Skip animation and immediately show content
       setIsLoading(false);
       return;
     }
 
-    // Desktop/Large screen: Run the animation
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
       const gridSection = document.getElementById('profile-grid-section');
@@ -26,28 +22,40 @@ export default function Page() {
       if (animatedImg && gridSection) {
         const rect = gridSection.getBoundingClientRect();
         
-        // Calculate the center point of the grid cell
         const gridCenterX = rect.left + rect.width / 2;
         const gridCenterY = rect.top + rect.height / 2;
         
-        // Move image to grid position - maintaining center point origin
         animatedImg.style.top = `${gridCenterY}px`;
         animatedImg.style.left = `${gridCenterX}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         
-        // After animation completes, just hide it behind - NO opacity change
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
           setIsLoading(false);
         }, 1400);
       } else {
-        // Fallback if elements are missing, still set loading to false
         setIsLoading(false);
       }
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  // Navigation handler - only works on mobile
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    const isMobile = window.innerWidth < 1024;
+    
+    if (!isMobile) {
+      e.preventDefault();
+      return;
+    }
+    
+    e.preventDefault();
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const projects = [
     {
@@ -108,23 +116,19 @@ export default function Page() {
           height: 0 !important;
         }
         
-        /* Primary - Bold titles and headers */
         .font-mono {
           font-family: 'IBM Plex Mono', monospace;
           letter-spacing: 0.02em;
         }
         
-        /* Secondary - Elegant italics */
         .font-serif {
           font-family: 'Crimson Pro', serif;
         }
         
-        /* Tertiary - Modern sans for body */
         .font-sans {
           font-family: 'Inter', sans-serif;
         }
         
-        /* Accent - Tech labels */
         .font-accent {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
@@ -143,15 +147,14 @@ export default function Page() {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
-        /* Completely invisible scrollbar - ALWAYS HIDDEN - NO LAYOUT SHIFT */
         .invisible-scroll {
-          scrollbar-width: none !important; /* Firefox */
-          -ms-overflow-style: none !important; /* IE/Edge */
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
           overflow-y: scroll !important;
         }
         
         .invisible-scroll::-webkit-scrollbar {
-          display: none !important; /* Chrome/Safari/Opera */
+          display: none !important;
           width: 0 !important;
           height: 0 !important;
           background: transparent !important;
@@ -164,17 +167,34 @@ export default function Page() {
         .invisible-scroll::-webkit-scrollbar-thumb {
           display: none !important;
         }
+
+        /* 16:9 Aspect Ratio Container */
+        .aspect-ratio-container {
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #0a0a0a;
+        }
+
+        .aspect-ratio-content {
+          width: 100%;
+          height: 100%;
+          max-width: 177.78vh; /* 16:9 based on height */
+          max-height: 56.25vw; /* 9:16 based on width */
+          margin: 0 auto;
+        }
       `}</style>
 
-      {/* Loading Overlay - Behind picture */}
+      {/* Loading Overlay */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      {/* Single Animated Profile Image - STARTS FROM CENTER POINT */}
-      {/* Retained <img> and suppressed warning due to complex dynamic styling (LCP warning fix) */}
+      {/* Single Animated Profile Image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
@@ -205,213 +225,227 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#projects" 
+            onClick={(e) => handleNavClick(e, 'projects')}
+            className="text-neutral-400 hover:text-white transition cursor-pointer"
+          >
             Projects
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#about" 
+            onClick={(e) => handleNavClick(e, 'about')}
+            className="text-neutral-400 hover:text-white transition cursor-pointer"
+          >
             About
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#contact" 
+            onClick={(e) => handleNavClick(e, 'contact')}
+            className="text-neutral-400 hover:text-white transition cursor-pointer"
+          >
             Contact
           </a>
         </nav>
       </header>
 
-      {/* Desktop Grid Layout - No Scroll */}
-      <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
-        {/* Hero */}
-        <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-500"
-          }`}
-        >
-          <h1 className="text-[28px] xl:text-[38px] leading-tight">
-            <span className="font-mono font-bold">Researcher Building</span>
-            <br />
-            <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-mono font-bold">with</span>
-            <br />
-            <span className="font-mono font-bold">Intelligent Systems</span>
-          </h1>
-          <div className="mt-4 xl:mt-6 text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI/ML • Medical Imaging • Deep Learning
-          </div>
-        </section>
+      {/* Desktop 16:9 Grid Layout */}
+      <div className="hidden lg:block aspect-ratio-container pt-20">
+        <div className="aspect-ratio-content grid grid-cols-3 grid-rows-2 h-full">
+          {/* Hero */}
+          <section
+            className={`border border-[#2a2a2a] p-6 2xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+              isLoading
+                ? "opacity-0 translate-y-[50px]"
+                : "opacity-100 translate-y-0 delay-500"
+            }`}
+          >
+            <h1 className="text-[clamp(20px,2.2vw,38px)] leading-[1.2]">
+              <span className="font-mono font-bold">Researcher Building</span>
+              <br />
+              <span className="font-serif italic font-light">Healthcare</span>{" "}
+              <span className="font-mono font-bold">with</span>
+              <br />
+              <span className="font-mono font-bold">Intelligent Systems</span>
+            </h1>
+            <div className="mt-4 2xl:mt-6 text-[clamp(9px,0.8vw,12px)] tracking-wider uppercase text-neutral-500 font-accent">
+              AI/ML • Medical Imaging • Deep Learning
+            </div>
+          </section>
 
-        {/* Profile - Picture destination */}
-        <section 
-          id="profile-grid-section"
-          className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
-        >
-          {/* 2. Converted to <Image> with fill for LCP warning fix */}
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
-        </section>
+          {/* Profile */}
+          <section 
+            id="profile-grid-section"
+            className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
+          >
+            <Image
+              src="/ahmed.jpg"
+              alt="Ahmed Messaad"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              priority
+            />
+          </section>
 
-        {/* Projects */}
-        <aside
-          id="projects"
-          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-700"
-          }`}
-        >
-          <div className="flex-1 overflow-y-auto invisible-scroll py-4">
-            {projects.map((p) => (
-              <div
-                key={p.id}
-                className={`border-b border-[#2a2a2a] transition ${
-                  activeProject === p.id ? "bg-[#151515]" : ""
-                }`}
-              >
-                <button
-                  onClick={() =>
-                    setActiveProject(activeProject === p.id ? null : p.id)
-                  }
-                  className="w-full flex justify-between items-center px-10 xl:px-12 py-8 xl:py-10 text-left"
-                >
-                  <div className="text-xl xl:text-2xl font-semibold font-mono">
-                    {p.name}
-                  </div>
-                  <svg
-                    className={`w-6 h-6 xl:w-7 xl:h-7 transition-transform ${
-                      activeProject === p.id ? "rotate-90" : ""
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </button>
-
+          {/* Projects */}
+          <aside
+            id="projects"
+            className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
+              isLoading
+                ? "opacity-0 translate-y-[50px]"
+                : "opacity-100 translate-y-0 delay-700"
+            }`}
+          >
+            <div className="flex-1 overflow-y-auto invisible-scroll py-2">
+              {projects.map((p) => (
                 <div
-                  className={`overflow-hidden transition-all duration-500 ${
-                    activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                  key={p.id}
+                  className={`border-b border-[#2a2a2a] transition ${
+                    activeProject === p.id ? "bg-[#151515]" : ""
                   }`}
                 >
-                  <div className="px-10 xl:px-12 pb-8 xl:pb-10 text-[15px] xl:text-[16px] text-neutral-400 leading-relaxed">
-                    <p className="mb-7 xl:mb-8 font-sans">{p.description}</p>
-                    <div className="flex flex-wrap gap-2.5 xl:gap-3 mb-7 xl:mb-8">
-                      {p.tech.map((t) => (
-                        <span
-                          key={t}
-                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[12px] xl:text-[13px] px-3.5 py-2 transition hover:bg-[#333] font-mono"
-                        >
-                          {t}
-                        </span>
-                      ))}
+                  <button
+                    onClick={() =>
+                      setActiveProject(activeProject === p.id ? null : p.id)
+                    }
+                    className="w-full flex justify-between items-center px-6 2xl:px-12 py-5 2xl:py-10 text-left"
+                  >
+                    <div className="text-[clamp(14px,1.4vw,22px)] font-semibold font-mono">
+                      {p.name}
                     </div>
-                    <a
-                      href={p.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="arrow-animate inline-flex items-center gap-2 text-white text-[13px] xl:text-[14px] tracking-wide transition font-mono"
+                    <svg
+                      className={`w-5 h-5 2xl:w-7 2xl:h-7 transition-transform flex-shrink-0 ${
+                        activeProject === p.id ? "rotate-90" : ""
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
                     >
-                      {p.linkText}
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                    }`}
+                  >
+                    <div className="px-6 2xl:px-12 pb-5 2xl:pb-10 text-[clamp(12px,1vw,16px)] text-neutral-400 leading-relaxed">
+                      <p className="mb-4 2xl:mb-8 font-sans">{p.description}</p>
+                      <div className="flex flex-wrap gap-2 2xl:gap-3 mb-4 2xl:mb-8">
+                        {p.tech.map((t) => (
+                          <span
+                            key={t}
+                            className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[clamp(10px,0.85vw,13px)] px-2.5 2xl:px-3.5 py-1.5 2xl:py-2 transition hover:bg-[#333] font-mono"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      
+                        href={p.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="arrow-animate inline-flex items-center gap-2 text-white text-[clamp(11px,0.9vw,14px)] tracking-wide transition font-mono"
                       >
-                        <path d="M7 17L17 7M17 7H7M17 7V17" />
-                      </svg>
-                    </a>
+                        {p.linkText}
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </aside>
+              ))}
+            </div>
+          </aside>
 
-        {/* About */}
-        <section
-          id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
-          }`}
-        >
-          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-6 font-accent">
-            About
-          </h3>
-          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            Ahmed MBridging the gap between deep learning and the hospital floor. 
-            As an AI/ML Researcher in **M&apos;sila**, Algeria, {/* 3. CRITICAL FIX: Replaced ' with &apos; */}
-            I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
-            delivering advanced clinical insight wherever it&apos;s needed. {/* Added &apos; here too as a precaution */}
-          </p>
-        </section>
-
-        {/* Contact */}
-        <section
-          id="contact"
-          onClick={() =>
-            (window.location.href = "mailto:ahmed.messaad@outlook.com")
-          }
-          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
-          }`}
-        >
-          <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+          {/* About */}
+          <section
+            id="about"
+            className={`border border-[#2a2a2a] p-6 2xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+              isLoading
+                ? "opacity-0 translate-y-[50px]"
+                : "opacity-100 translate-y-0 delay-900"
+            }`}
           >
-            <path d="M8 24L24 8M24 8H8M24 8V24" />
-          </svg>
-          <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
-            Ready to Collaborate?
-          </div>
-          <h2 className="text-[44px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-            <span className="font-mono">CONTACT</span>
-            <span className="italic font-serif font-light ml-2">me</span>
-          </h2>
-          <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-            <a
-              href="https://linkedin.com/in/ahmedmessaad"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
+            <h3 className="text-[clamp(9px,0.75vw,11px)] uppercase tracking-wider text-neutral-500 mb-3 2xl:mb-6 font-accent">
+              About
+            </h3>
+            <p className="text-neutral-300 text-[clamp(11px,1vw,15px)] leading-relaxed font-sans">
+              Ahmed MBridging the gap between deep learning and the hospital floor. 
+              As an AI/ML Researcher in **M&apos;sila**, Algeria, 
+              I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
+              delivering advanced clinical insight wherever it&apos;s needed.
+            </p>
+          </section>
+
+          {/* Contact */}
+          <section
+            id="contact"
+            onClick={() =>
+              (window.location.href = "mailto:ahmed.messaad@outlook.com")
+            }
+            className={`border border-[#2a2a2a] bg-[#1a1a1a] p-6 2xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+              isLoading
+                ? "opacity-0 translate-y-[50px]"
+                : "opacity-100 translate-y-0 delay-900"
+            }`}
+          >
+            <svg
+              className="absolute top-4 right-4 2xl:top-10 2xl:right-10 w-5 h-5 2xl:w-7 2xl:h-7"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              LINKEDIN
-            </a>
-            <a
-              href="https://github.com/ahmedmessaad"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              GITHUB
-            </a>
-            <a
-              href="mailto:ahmed.messaad@outlook.com"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              EMAIL
-            </a>
-          </div>
-        </section>
+              <path d="M8 24L24 8M24 8H8M24 8V24" />
+            </svg>
+            <div className="text-[clamp(8px,0.7vw,10px)] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
+              Ready to Collaborate?
+            </div>
+            <h2 className="text-[clamp(32px,3.5vw,56px)] font-bold leading-none mb-4 2xl:mb-8">
+              <span className="font-mono">CONTACT</span>
+              <span className="italic font-serif font-light ml-2">me</span>
+            </h2>
+            <div className="flex justify-between w-full text-[clamp(8px,0.7vw,10px)] tracking-wider uppercase font-accent">
+              
+                href="https://linkedin.com/in/ahmedmessaad"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                LINKEDIN
+              </a>
+              
+                href="https://github.com/ahmedmessaad"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                GITHUB
+              </a>
+              
+                href="mailto:ahmed.messaad@outlook.com"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                EMAIL
+              </a>
+            </div>
+          </section>
+        </div>
       </div>
 
       {/* Mobile Stack Layout */}
@@ -445,18 +479,19 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          {/* 4. Converted to <Image> with fill for LCP warning fix */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
             fill
             style={{ objectFit: 'cover' }}
             sizes="100vw"
+            priority
           />
         </section>
 
         {/* About */}
         <section
+          id="about"
           className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
@@ -468,7 +503,7 @@ export default function Page() {
           </h3>
           <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
             Ahmed Messaad is an AI/ML researcher specializing in medical
-            diagnostics. Based in **M&apos;sila**, Algeria, he bridges deep learning {/* 5. CRITICAL FIX: Replaced ' with &apos; */}
+            diagnostics. Based in **M&apos;sila**, Algeria, he bridges deep learning
             research with clinical practice, creating intelligent systems
             accessible globally.
           </p>
@@ -529,7 +564,7 @@ export default function Page() {
                       </span>
                     ))}
                   </div>
-                  <a
+                  
                     href={p.link}
                     target="_blank"
                     rel="noreferrer"
@@ -555,6 +590,7 @@ export default function Page() {
 
         {/* Contact */}
         <section
+          id="contact"
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
@@ -572,7 +608,7 @@ export default function Page() {
             <span className="italic font-serif font-light ml-2">me</span>
           </h2>
           <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-            <a
+            
               href="https://linkedin.com/in/ahmedmessaad"
               target="_blank"
               rel="noreferrer"
@@ -581,7 +617,7 @@ export default function Page() {
             >
               LINKEDIN
             </a>
-            <a
+            
               href="https://github.com/ahmedmessaad"
               target="_blank"
               rel="noreferrer"
@@ -590,7 +626,7 @@ export default function Page() {
             >
               GITHUB
             </a>
-            <a
+            
               href="mailto:ahmed.messaad@outlook.com"
               onClick={(e) => e.stopPropagation()}
               className="text-neutral-500 hover:text-white transition"
