@@ -2,7 +2,6 @@
  
 import React, { useState } from "react";
 import Image from "next/image";
-@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -92,7 +91,7 @@ export default function Page() {
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Mea+Culpa&display=swap');
         * {
           scrollbar-width: none !important;
           -ms-overflow-style: none !important;
