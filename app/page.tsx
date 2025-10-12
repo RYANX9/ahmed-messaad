@@ -392,7 +392,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
               LINKEDIN
             </a>
             <a
-              href="https://github.com/ahmedmessaad"
+              href="https://github.com/RYANX9"
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
