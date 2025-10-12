@@ -135,21 +135,27 @@ export default function Page() {
           }
         }
 
+        @keyframes arrow-float {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          25% {
+            transform: translate(3px, -3px) rotate(2deg);
+          }
+          50% {
+            transform: translate(0, -5px) rotate(0deg);
+          }
+          75% {
+            transform: translate(-3px, -3px) rotate(-2deg);
+          }
+        }
+
         .arrow-animate:hover svg {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
-        @keyframes arrow-float {
-          0%, 100% {
-            transform: translate(0, 0);
-          }
-          50% {
-            transform: translate(4px, -4px);
-          }
-        }
-
-        .arrow-float {
-          animation: arrow-float 2s ease-in-out infinite;
+        .arrow-contact-animate {
+          animation: arrow-float 3s ease-in-out infinite;
         }
 
         .invisible-scroll {
@@ -204,25 +210,13 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a 
-            href="#projects" 
-            onClick={(e) => e.preventDefault()}
-            className="text-neutral-400 hover:text-white transition cursor-default"
-          >
+          <a href="#projects" className="text-neutral-400 hover:text-white transition">
             Projects
           </a>
-          <a 
-            href="#about"
-            onClick={(e) => e.preventDefault()}
-            className="text-neutral-400 hover:text-white transition cursor-default"
-          >
+          <a href="#about" className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a 
-            href="#contact"
-            onClick={(e) => e.preventDefault()}
-            className="text-neutral-400 hover:text-white transition cursor-default"
-          >
+          <a href="#contact" className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
@@ -232,7 +226,7 @@ export default function Page() {
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
         {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col items-start transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -245,11 +239,13 @@ export default function Page() {
             paddingBottom: "3rem",
           }}
         >
-          <h1 className="text-[20px] xl:text-[26px] leading-tight mb-4">
-            <span className="font-mono font-bold">Building the Future of Healthcare </span>
-            <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-            <span className="font-mono font-bold"> AI Intelligence</span>
-          </h1>
+          <div className="flex-1 flex items-end pb-4">
+            <h1 className="text-[20px] xl:text-[26px] leading-tight">
+              <span className="font-mono font-bold">Building the Future of Healthcare </span>
+              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
+              <span className="font-mono font-bold"> AI Intelligence</span>
+            </h1>
+          </div>
           <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
             AI/ML • Medical Imaging • Deep Learning
           </div>
@@ -269,7 +265,7 @@ export default function Page() {
           />
         </section>
 
-        {/* Projects */}
+        {/* Projects - 10% smaller, no top padding */}
         <aside
           id="projects"
           className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
@@ -390,7 +386,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           }`}
         >
           <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-float"
+            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
@@ -477,7 +473,6 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
 
         {/* About */}
         <section
-          id="about"
           className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
@@ -578,7 +573,6 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
 
         {/* Contact */}
         <section
-          id="contact"
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
@@ -589,7 +583,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           }`}
         >
           <svg
-            className="absolute top-4 right-4 w-5 h-5 arrow-float"
+            className="absolute top-6 right-6 w-5 h-5 arrow-contact-animate"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
