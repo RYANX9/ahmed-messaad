@@ -226,7 +226,6 @@ export default function Page() {
               <span className="font-mono font-bold">Building the Future of Healthcare</span>
               <br />
               <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-              <br />
               <span className="font-mono font-bold">AI Intelligence</span>
             </h1>
           </div>
