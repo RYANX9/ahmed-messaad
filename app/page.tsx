@@ -1,48 +1,39 @@
 "use client";
  
 import React, { useState } from "react";
-import Image from "next/image"; // 1. IMPORT Next.js Image component
+import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
-    // Determine the breakpoint (Tailwind's 'lg' is 1024px)
-    // We check window.innerWidth to decide whether to run the animation
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
-      // Mobile/Small screen: Skip animation and immediately show content
       setIsLoading(false);
       return;
     }
 
-    // Desktop/Large screen: Run the animation
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
       const gridSection = document.getElementById('profile-grid-section');
       
       if (animatedImg && gridSection) {
         const rect = gridSection.getBoundingClientRect();
-        
-        // Calculate the center point of the grid cell
         const gridCenterX = rect.left + rect.width / 2;
         const gridCenterY = rect.top + rect.height / 2;
         
-        // Move image to grid position - maintaining center point origin
         animatedImg.style.top = `${gridCenterY}px`;
         animatedImg.style.left = `${gridCenterX}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         
-        // After animation completes, just hide it behind - NO opacity change
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
           setIsLoading(false);
         }, 1400);
       } else {
-        // Fallback if elements are missing, still set loading to false
         setIsLoading(false);
       }
     }, 300);
@@ -53,9 +44,10 @@ export default function Page() {
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
-      year: "(2024)",
+      context: "Startup Collaboration",
+      year: "2024",
       description:
-        "99% accuracy brain tumor classification using EfficientNet-B7. Complete DICOM integration with PyQt5 clinical interface for real-world deployment.",
+        "State-of-the-art brain tumor classification achieving 99% accuracy using EfficientNet-B7. Built a complete DICOM processing pipeline and PyQt5 interface for clinical radiologists. Overcame limited dataset challenges through advanced augmentation strategies.",
       tech: ["PyTorch", "EfficientNet-B7", "DICOM", "PyQt5"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -63,19 +55,21 @@ export default function Page() {
     {
       id: "hemavision",
       name: "HemaVision",
-      year: "(2023–2024)",
+      context: "Hemolab Startup",
+      year: "2023–2024",
       description:
-        "Complete blood analysis system: automated cell detection, segmentation, counting & classification (97% accuracy) with organized table display — eliminating manual microscopy.",
-      tech: ["YOLOv8", "OpenCV", "ResNet", "Disease Classification"],
+        "AI-powered blood cell segmentation and classification system using YOLOv8. Achieved 97% accuracy across multiple cell types with 30% improvement through custom OpenCV preprocessing. Led full development cycle using Agile methodology.",
+      tech: ["YOLOv8", "OpenCV", "ResNet", "EfficientNet"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
     },
     {
       id: "mydailyhealth",
       name: "My Daily Health",
-      year: "(2023)",
+      context: "Master's Thesis",
+      year: "2023",
       description:
-        "Multi-disease AI diagnostic ensemble (90-99% accuracy) combining ResNet50, DenseNet121 & EfficientNet-B3 with interpretable real-time predictions.",
+        "Multi-disease diagnostic system achieving 90.3%–99.5% accuracy for brain tumors, Alzheimer's, and COVID-19. Designed ensemble architecture combining ResNet50, DenseNet-121, and EfficientNet-B3. Real-time processing with interpretable predictions.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -83,12 +77,13 @@ export default function Page() {
     {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
-      year: "(2024)",
+      context: "Data Analytics",
+      year: "2024",
       description:
-        "Conv1D neural network achieving R² = 0.8793 for healthcare cost forecasting with comprehensive feature engineering and statistical analysis.",
-      tech: ["Conv1D", "Feature Engineering", "Plotly"],
+        "Predictive model achieving R² = 0.8793 for healthcare cost forecasting. Applied Conv1D neural networks with advanced feature engineering to identify cost drivers and optimize resource allocation.",
+      tech: ["CNN", "Statistical Analysis", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
-      linkText: "View Details",
+      linkText: "View Project",
     },
   ];
 
@@ -108,23 +103,19 @@ export default function Page() {
           height: 0 !important;
         }
         
-        /* Primary - Bold titles and headers */
         .font-mono {
           font-family: 'IBM Plex Mono', monospace;
           letter-spacing: 0.02em;
         }
         
-        /* Secondary - Elegant italics */
         .font-serif {
           font-family: 'Crimson Pro', serif;
         }
         
-        /* Tertiary - Modern sans for body */
         .font-sans {
           font-family: 'Inter', sans-serif;
         }
         
-        /* Accent - Tech labels */
         .font-accent {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
@@ -143,38 +134,28 @@ export default function Page() {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
-        /* Completely invisible scrollbar - ALWAYS HIDDEN - NO LAYOUT SHIFT */
         .invisible-scroll {
-          scrollbar-width: none !important; /* Firefox */
-          -ms-overflow-style: none !important; /* IE/Edge */
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
           overflow-y: scroll !important;
         }
         
         .invisible-scroll::-webkit-scrollbar {
-          display: none !important; /* Chrome/Safari/Opera */
+          display: none !important;
           width: 0 !important;
           height: 0 !important;
           background: transparent !important;
         }
-        
-        .invisible-scroll::-webkit-scrollbar-track {
-          display: none !important;
-        }
-        
-        .invisible-scroll::-webkit-scrollbar-thumb {
-          display: none !important;
-        }
       `}</style>
 
-      {/* Loading Overlay - Behind picture */}
+      {/* Loading Overlay */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      {/* Single Animated Profile Image - STARTS FROM CENTER POINT */}
-      {/* Retained <img> and suppressed warning due to complex dynamic styling (LCP warning fix) */}
+      {/* Animated Profile Image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
@@ -205,19 +186,19 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#projects" className="text-neutral-400 hover:text-white transition">
             Projects
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#about" className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#contact" className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
       </header>
 
-      {/* Desktop Grid Layout - No Scroll */}
+      {/* Desktop Grid Layout */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
         {/* Hero */}
         <section
@@ -240,12 +221,11 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile - Picture destination */}
+        {/* Profile */}
         <section 
           id="profile-grid-section"
           className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
         >
-          {/* 2. Converted to <Image> with fill for LCP warning fix */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
@@ -255,7 +235,7 @@ export default function Page() {
           />
         </section>
 
-        {/* Projects */}
+        {/* Projects - 10% smaller, no top padding */}
         <aside
           id="projects"
           className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
@@ -264,7 +244,7 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          <div className="flex-1 overflow-y-auto invisible-scroll py-4">
+          <div className="flex-1 overflow-y-auto invisible-scroll">
             {projects.map((p) => (
               <div
                 key={p.id}
@@ -276,13 +256,18 @@ export default function Page() {
                   onClick={() =>
                     setActiveProject(activeProject === p.id ? null : p.id)
                   }
-                  className="w-full flex justify-between items-center px-10 xl:px-12 py-8 xl:py-10 text-left"
+                  className="w-full flex justify-between items-center px-8 xl:px-10 py-6 xl:py-7 text-left"
                 >
-                  <div className="text-xl xl:text-2xl font-semibold font-mono">
-                    {p.name}
+                  <div>
+                    <div className="text-lg xl:text-xl font-semibold font-mono">
+                      {p.name}
+                    </div>
+                    <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                      {p.context} • {p.year}
+                    </div>
                   </div>
                   <svg
-                    className={`w-6 h-6 xl:w-7 xl:h-7 transition-transform ${
+                    className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ml-3 ${
                       activeProject === p.id ? "rotate-90" : ""
                     }`}
                     viewBox="0 0 24 24"
@@ -299,13 +284,13 @@ export default function Page() {
                     activeProject === p.id ? "max-h-[700px]" : "max-h-0"
                   }`}
                 >
-                  <div className="px-10 xl:px-12 pb-8 xl:pb-10 text-[15px] xl:text-[16px] text-neutral-400 leading-relaxed">
-                    <p className="mb-7 xl:mb-8 font-sans">{p.description}</p>
-                    <div className="flex flex-wrap gap-2.5 xl:gap-3 mb-7 xl:mb-8">
+                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
+                    <p className="mb-5 xl:mb-6 font-sans">{p.description}</p>
+                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
                       {p.tech.map((t) => (
                         <span
                           key={t}
-                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[12px] xl:text-[13px] px-3.5 py-2 transition hover:bg-[#333] font-mono"
+                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#333] font-mono"
                         >
                           {t}
                         </span>
@@ -315,12 +300,12 @@ export default function Page() {
                       href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="arrow-animate inline-flex items-center gap-2 text-white text-[13px] xl:text-[14px] tracking-wide transition font-mono"
+                      className="arrow-animate inline-flex items-center gap-2 text-white text-[12px] xl:text-[13px] tracking-wide transition font-mono"
                     >
                       {p.linkText}
                       <svg
-                        width="16"
-                        height="16"
+                        width="14"
+                        height="14"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -345,14 +330,11 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-900"
           }`}
         >
-          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-6 font-accent">
+          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            Ahmed MBridging the gap between deep learning and the hospital floor. 
-            As an AI/ML Researcher in **M&apos;sila**, Algeria, {/* 3. CRITICAL FIX: Replaced ' with &apos; */}
-            I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
-            delivering advanced clinical insight wherever it&apos;s needed. {/* Added &apos; here too as a precaution */}
+            I specialize in deep learning and computer vision to create diagnostic systems that bridge research and clinical practice. Based in M&apos;sila, Algeria, I develop AI solutions that solve real healthcare challenges—from brain tumor detection to blood cell analysis. My work combines neural architecture design, medical image processing, and intuitive interfaces for clinical deployment.
           </p>
         </section>
 
@@ -445,7 +427,6 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          {/* 4. Converted to <Image> with fill for LCP warning fix */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
@@ -467,10 +448,7 @@ export default function Page() {
             About
           </h3>
           <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
-            Ahmed Messaad is an AI/ML researcher specializing in medical
-            diagnostics. Based in **M&apos;sila**, Algeria, he bridges deep learning {/* 5. CRITICAL FIX: Replaced ' with &apos; */}
-            research with clinical practice, creating intelligent systems
-            accessible globally.
+            I specialize in deep learning and computer vision to create diagnostic systems that bridge research and clinical practice. Based in M&apos;sila, Algeria, I develop AI solutions that solve real healthcare challenges—from brain tumor detection to blood cell analysis.
           </p>
         </section>
 
@@ -496,11 +474,16 @@ export default function Page() {
                 }
                 className="w-full flex justify-between items-center px-6 py-5 text-left"
               >
-                <div className="text-base font-semibold font-mono">
-                  {p.name}
+                <div>
+                  <div className="text-base font-semibold font-mono">
+                    {p.name}
+                  </div>
+                  <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                    {p.context} • {p.year}
+                  </div>
                 </div>
                 <svg
-                  className={`w-4 h-4 transition-transform ${
+                  className={`w-4 h-4 transition-transform flex-shrink-0 ml-3 ${
                     activeProject === p.id ? "rotate-90" : ""
                   }`}
                   viewBox="0 0 24 24"
