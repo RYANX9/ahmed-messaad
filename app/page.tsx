@@ -203,13 +203,36 @@ export default function Page() {
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
           AHMED MESSAAD
         </div>
+        <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
+          <a 
+            href="#projects" 
+            onClick={(e) => e.preventDefault()}
+            className="text-neutral-400 hover:text-white transition cursor-default"
+          >
+            Projects
+          </a>
+          <a 
+            href="#about"
+            onClick={(e) => e.preventDefault()}
+            className="text-neutral-400 hover:text-white transition cursor-default"
+          >
+            About
+          </a>
+          <a 
+            href="#contact"
+            onClick={(e) => e.preventDefault()}
+            className="text-neutral-400 hover:text-white transition cursor-default"
+          >
+            Contact
+          </a>
+        </nav>
       </header>
 
       {/* Desktop Grid Layout */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
         {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col items-start transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -222,15 +245,13 @@ export default function Page() {
             paddingBottom: "3rem",
           }}
         >
-          <div>
-            <h1 className="text-[20px] xl:text-[26px] leading-tight mb-4">
-              <span className="font-mono font-bold">Building the Future of Healthcare </span>
-              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-              <span className="font-mono font-bold"> AI Intelligence</span>
-            </h1>
-            <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
-              AI/ML • Medical Imaging • Deep Learning
-            </div>
+          <h1 className="text-[20px] xl:text-[26px] leading-tight mb-4">
+            <span className="font-mono font-bold">Building the Future of Healthcare </span>
+            <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
+            <span className="font-mono font-bold"> AI Intelligence</span>
+          </h1>
+          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+            AI/ML • Medical Imaging • Deep Learning
           </div>
         </section>
 
