@@ -69,7 +69,7 @@ export default function Page() {
       context: "Master's Thesis",
       year: "2023",
       description:
-        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer’s, and COVID-19, merging accuracy with interpretability.",
+        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer's, and COVID-19, merging accuracy with interpretability.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -135,8 +135,27 @@ export default function Page() {
           }
         }
 
+        @keyframes arrow-float {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          25% {
+            transform: translate(3px, -3px) rotate(2deg);
+          }
+          50% {
+            transform: translate(0, -5px) rotate(0deg);
+          }
+          75% {
+            transform: translate(-3px, -3px) rotate(-2deg);
+          }
+        }
+
         .arrow-animate:hover svg {
           animation: arrow-bounce 0.6s ease-in-out infinite;
+        }
+
+        .arrow-contact-animate {
+          animation: arrow-float 3s ease-in-out infinite;
         }
 
         .invisible-scroll {
@@ -215,13 +234,12 @@ export default function Page() {
           style={{
             minHeight: "100%",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "flex-start",
-            paddingTop: "2rem",
-            paddingBottom: "2rem",
+            paddingBottom: "3rem",
           }}
         >
-          <div className="flex-1 flex items-center">
+          <div className="flex-1 flex items-end pb-4">
             <h1 className="text-[20px] xl:text-[26px] leading-tight">
               <span className="font-mono font-bold">Building the Future of Healthcare </span>
               <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
@@ -336,17 +354,20 @@ export default function Page() {
         {/* About */}
         <section
           id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
           }`}
+          style={{
+            paddingBottom: "3rem",
+          }}
         >
           <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI/ML researcher from M’sila, Algeria.
+            AI/ML researcher from M'sila, Algeria.
 Focused on medical imaging, deep learning, and real-world clinical AI.
 Bridging innovation and accessibility in healthcare through intelligent systems.
           </p>
@@ -365,7 +386,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           }`}
         >
           <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7"
+            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
@@ -555,12 +576,21 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
           }`}
         >
+          <svg
+            className="absolute top-6 right-6 w-5 h-5 arrow-contact-animate"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M8 24L24 8M24 8H8M24 8V24" />
+          </svg>
           <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
             Ready to Collaborate?
           </div>
