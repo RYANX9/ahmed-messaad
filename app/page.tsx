@@ -1,20 +1,24 @@
 "use client";
  
 import React, { useState } from "react";
-import Image from "next/image";
+import Image from "next/image"; // 1. IMPORT Next.js Image component
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
+    // Determine the breakpoint (Tailwind's 'lg' is 1024px)
+    // We check window.innerWidth to decide whether to run the animation
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
+      // Mobile/Small screen: Skip animation and immediately show content
       setIsLoading(false);
       return;
     }
 
+    // Desktop/Large screen: Run the animation
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
       const gridSection = document.getElementById('profile-grid-section');
@@ -22,19 +26,23 @@ export default function Page() {
       if (animatedImg && gridSection) {
         const rect = gridSection.getBoundingClientRect();
         
+        // Calculate the center point of the grid cell
         const gridCenterX = rect.left + rect.width / 2;
         const gridCenterY = rect.top + rect.height / 2;
         
+        // Move image to grid position - maintaining center point origin
         animatedImg.style.top = `${gridCenterY}px`;
         animatedImg.style.left = `${gridCenterX}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         
+        // After animation completes, just hide it behind - NO opacity change
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
           setIsLoading(false);
         }, 1400);
       } else {
+        // Fallback if elements are missing, still set loading to false
         setIsLoading(false);
       }
     }, 300);
@@ -100,19 +108,23 @@ export default function Page() {
           height: 0 !important;
         }
         
+        /* Primary - Bold titles and headers */
         .font-mono {
           font-family: 'IBM Plex Mono', monospace;
           letter-spacing: 0.02em;
         }
         
+        /* Secondary - Elegant italics */
         .font-serif {
           font-family: 'Crimson Pro', serif;
         }
         
+        /* Tertiary - Modern sans for body */
         .font-sans {
           font-family: 'Inter', sans-serif;
         }
         
+        /* Accent - Tech labels */
         .font-accent {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
@@ -131,14 +143,15 @@ export default function Page() {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
+        /* Completely invisible scrollbar - ALWAYS HIDDEN - NO LAYOUT SHIFT */
         .invisible-scroll {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
+          scrollbar-width: none !important; /* Firefox */
+          -ms-overflow-style: none !important; /* IE/Edge */
           overflow-y: scroll !important;
         }
         
         .invisible-scroll::-webkit-scrollbar {
-          display: none !important;
+          display: none !important; /* Chrome/Safari/Opera */
           width: 0 !important;
           height: 0 !important;
           background: transparent !important;
@@ -153,12 +166,15 @@ export default function Page() {
         }
       `}</style>
 
+      {/* Loading Overlay - Behind picture */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
+      {/* Single Animated Profile Image - STARTS FROM CENTER POINT */}
+      {/* Retained <img> and suppressed warning due to complex dynamic styling (LCP warning fix) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
@@ -179,6 +195,7 @@ export default function Page() {
         }}
       />
 
+      {/* Header */}
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
@@ -188,19 +205,21 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="#" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             Projects
           </a>
-          <a href="#" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a href="#" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
       </header>
 
+      {/* Desktop Grid Layout - No Scroll */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
+        {/* Hero */}
         <section
           className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
             isLoading
@@ -221,10 +240,12 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Profile - Picture destination */}
         <section 
           id="profile-grid-section"
           className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
         >
+          {/* 2. Converted to <Image> with fill for LCP warning fix */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
@@ -234,6 +255,7 @@ export default function Page() {
           />
         </section>
 
+        {/* Projects */}
         <aside
           id="projects"
           className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
@@ -314,6 +336,7 @@ export default function Page() {
           </div>
         </aside>
 
+        {/* About */}
         <section
           id="about"
           className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-center transition-all duration-1000 ${
@@ -326,13 +349,14 @@ export default function Page() {
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            Bridging the gap between deep learning and the hospital floor. 
-            As an AI/ML Researcher in M&apos;sila, Algeria, 
+            Ahmed MBridging the gap between deep learning and the hospital floor. 
+            As an AI/ML Researcher in **M&apos;sila**, Algeria, {/* 3. CRITICAL FIX: Replaced ' with &apos; */}
             I engineer Medical Diagnostic systems that transform research into high-impact, globally accessible tools, 
-            delivering advanced clinical insight wherever it&apos;s needed.
+            delivering advanced clinical insight wherever it&apos;s needed. {/* Added &apos; here too as a precaution */}
           </p>
         </section>
 
+        {/* Contact */}
         <section
           id="contact"
           onClick={() =>
@@ -390,7 +414,9 @@ export default function Page() {
         </section>
       </div>
 
+      {/* Mobile Stack Layout */}
       <div className="lg:hidden pt-16">
+        {/* Hero */}
         <section
           className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
@@ -411,6 +437,7 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Profile */}
         <section
           className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 ${
             isLoading
@@ -418,6 +445,7 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
+          {/* 4. Converted to <Image> with fill for LCP warning fix */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
@@ -427,6 +455,7 @@ export default function Page() {
           />
         </section>
 
+        {/* About */}
         <section
           className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
@@ -439,12 +468,13 @@ export default function Page() {
           </h3>
           <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
             Ahmed Messaad is an AI/ML researcher specializing in medical
-            diagnostics. Based in M&apos;sila, Algeria, he bridges deep learning
+            diagnostics. Based in **M&apos;sila**, Algeria, he bridges deep learning {/* 5. CRITICAL FIX: Replaced ' with &apos; */}
             research with clinical practice, creating intelligent systems
             accessible globally.
           </p>
         </section>
 
+        {/* Projects */}
         <aside
           id="projects"
           className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
@@ -523,6 +553,7 @@ export default function Page() {
           ))}
         </aside>
 
+        {/* Contact */}
         <section
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
