@@ -47,7 +47,7 @@ export default function Page() {
       context: "Startup Collaboration",
       year: "2024",
       description:
-        "State-of-the-art brain tumor classification achieving 99% accuracy using EfficientNet-B7. Built a complete DICOM processing pipeline and PyQt5 interface for clinical radiologists. Overcame limited dataset challenges through advanced augmentation strategies.",
+        "AI-driven brain tumor diagnosis platform with 99% accuracy, integrating advanced DICOM processing and clinician-focused design.",
       tech: ["PyTorch", "EfficientNet-B7", "DICOM", "PyQt5"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -58,7 +58,7 @@ export default function Page() {
       context: "Hemolab Startup",
       year: "2023–2024",
       description:
-        "AI-powered blood cell segmentation and classification system using YOLOv8. Achieved 97% accuracy across multiple cell types with 30% improvement through custom OpenCV preprocessing. Led full development cycle using Agile methodology.",
+        "Precision AI system for blood cell detection and classification, built on YOLOv8 and optimized for medical imaging excellence.",
       tech: ["YOLOv8", "OpenCV", "ResNet", "EfficientNet"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -69,7 +69,7 @@ export default function Page() {
       context: "Master's Thesis",
       year: "2023",
       description:
-        "Multi-disease diagnostic system achieving 90.3%–99.5% accuracy for brain tumors, Alzheimer's, and COVID-19. Designed ensemble architecture combining ResNet50, DenseNet-121, and EfficientNet-B3. Real-time processing with interpretable predictions.",
+        "Unified deep learning model delivering real-time, multi-disease diagnostics with interpretable, high-accuracy predictions.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -80,7 +80,7 @@ export default function Page() {
       context: "Data Analytics",
       year: "2024",
       description:
-        "Predictive model achieving R² = 0.8793 for healthcare cost forecasting. Applied Conv1D neural networks with advanced feature engineering to identify cost drivers and optimize resource allocation.",
+        "Neural network–powered analytics predicting healthcare costs with near-precision accuracy for smarter resource allocation.",
       tech: ["CNN", "Statistical Analysis", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
@@ -212,7 +212,7 @@ export default function Page() {
             <span className="font-mono font-bold">Researcher Building</span>
             <br />
             <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-mono font-bold">with</span>
+            <span className="font-accent font-semibold tracking-wide">with</span>
             <br />
             <span className="font-mono font-bold">Intelligent Systems</span>
           </h1>
@@ -334,7 +334,9 @@ export default function Page() {
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            I specialize in deep learning and computer vision to create diagnostic systems that bridge research and clinical practice. Based in M&apos;sila, Algeria, I develop AI solutions that solve real healthcare challenges—from brain tumor detection to blood cell analysis. My work combines neural architecture design, medical image processing, and intuitive interfaces for clinical deployment.
+            AI/ML researcher from M’sila, Algeria.
+Focused on medical imaging, deep learning, and real-world clinical AI.
+Bridging innovation and accessibility in healthcare through intelligent systems.
           </p>
         </section>
 
