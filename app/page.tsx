@@ -188,13 +188,13 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#" className="text-neutral-400 hover:text-white transition">
             Projects
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#" className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a href="#" className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
