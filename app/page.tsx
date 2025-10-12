@@ -69,7 +69,7 @@ export default function Page() {
       context: "Master's Thesis",
       year: "2023",
       description:
-        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer’s, and COVID-19, merging accuracy with interpretability.",
+        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer's, and COVID-19, merging accuracy with interpretability.",
       tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -139,6 +139,19 @@ export default function Page() {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
+        @keyframes arrow-float {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+          50% {
+            transform: translate(4px, -4px);
+          }
+        }
+
+        .arrow-float {
+          animation: arrow-float 2s ease-in-out infinite;
+        }
+
         .invisible-scroll {
           scrollbar-width: none !important;
           -ms-overflow-style: none !important;
@@ -191,13 +204,37 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="#projects" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#projects" 
+            onClick={(e) => {
+              if (window.innerWidth >= 1024) {
+                e.preventDefault();
+              }
+            }}
+            className="text-neutral-400 hover:text-white transition"
+          >
             Projects
           </a>
-          <a href="#about" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#about"
+            onClick={(e) => {
+              if (window.innerWidth >= 1024) {
+                e.preventDefault();
+              }
+            }}
+            className="text-neutral-400 hover:text-white transition"
+          >
             About
           </a>
-          <a href="#contact" className="text-neutral-400 hover:text-white transition">
+          <a 
+            href="#contact"
+            onClick={(e) => {
+              if (window.innerWidth >= 1024) {
+                e.preventDefault();
+              }
+            }}
+            className="text-neutral-400 hover:text-white transition"
+          >
             Contact
           </a>
         </nav>
@@ -247,7 +284,7 @@ export default function Page() {
           />
         </section>
 
-        {/* Projects - 10% smaller, no top padding */}
+        {/* Projects */}
         <aside
           id="projects"
           className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
@@ -346,7 +383,7 @@ export default function Page() {
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI/ML researcher from M’sila, Algeria.
+            AI/ML researcher from M'sila, Algeria.
 Focused on medical imaging, deep learning, and real-world clinical AI.
 Bridging innovation and accessibility in healthcare through intelligent systems.
           </p>
@@ -365,7 +402,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           }`}
         >
           <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7"
+            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-float"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
@@ -452,6 +489,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
 
         {/* About */}
         <section
+          id="about"
           className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
@@ -552,15 +590,25 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
 
         {/* Contact */}
         <section
+          id="contact"
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
           }`}
         >
+          <svg
+            className="absolute top-4 right-4 w-5 h-5 arrow-float"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M8 24L24 8M24 8H8M24 8V24" />
+          </svg>
           <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
             Ready to Collaborate?
           </div>
