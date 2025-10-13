@@ -14,6 +14,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ahmed Messaad",
-  description: "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
+  description:
+    "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
   icons: {
-    icon: "/ahmed.jpg", // your
+    icon: "/ahmed.png", // Ensure /public/ahmed.png exists
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}
