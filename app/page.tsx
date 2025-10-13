@@ -208,14 +208,14 @@ export default function Page() {
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
-          AHMED MESSAAD
+          AHMED <span className="italic">MESSAAD</span>
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
           <a href="" className="text-neutral-400 hover:text-white transition">
-            Projects
+            About
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition">
-            About
+            Projects
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition">
             Contact
