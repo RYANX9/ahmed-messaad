@@ -207,8 +207,8 @@ export default function Page() {
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
-        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
-          AHMED<span className="italic">MESSAAD</span>
+        <div className="font-accent text-sm lg:text-xl font-semibold tracking-tight">
+           AHMED <span className="italic font-serif font-light">MESSAAD</span>
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
           <a href="" className="text-neutral-400 hover:text-white transition">
