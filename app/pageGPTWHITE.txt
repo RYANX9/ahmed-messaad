@@ -199,6 +199,7 @@ export default function Page() {
           transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
         }}
       />
+     
 
       {/* Header */}
       <header
@@ -210,13 +211,13 @@ export default function Page() {
           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="#projects" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             Projects
           </a>
-          <a href="#about" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a href="#contact" className="text-neutral-400 hover:text-white transition">
+          <a href="" className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
