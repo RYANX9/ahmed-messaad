@@ -1,4 +1,22 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata = {
+  title: "Ahmed Messaad",
+  description: "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
+};
 
 export default function RootLayout({
   children,
@@ -10,23 +28,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-center bg-transparent py-4">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/ahmed.jpg"
-              alt="Ahmed Messaad"
-              width={36}
-              height={36}
-              className="rounded-full object-cover shadow-md"
-              priority
-            />
-            <div className="font-mono text-base lg:text-xl font-bold tracking-tight">
-              AHMED <span className="italic font-serif font-light">MESSAAD</span>
-            </div>
+        <div className="flex items-center gap-3 p-4">
+          <Image
+            src="/ahmed.jpg"
+            alt="Ahmed Messaad"
+            width={32}
+            height={32}
+            className="rounded-full object-cover"
+          />
+          <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
+            AHMED <span className="italic">MESSAAD</span>
           </div>
-        </nav>
-
-        <main className="pt-20">{children}</main>
+        </div>
+        {children}
       </body>
     </html>
   );
