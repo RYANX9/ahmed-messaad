@@ -17,8 +17,9 @@ export const metadata: Metadata = {
   description:
     "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
   icons: {
-    icon: "/ahmed-icon.png", // favicon file must be in /public
-    shortcut: "/ahmed-icon.png",
+    icon: [
+      { url: "/ahmed-icon.png", type: "image/png", sizes: "120x120" },
+    ],
     apple: "/ahmed-icon.png",
   },
 };
@@ -31,9 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Explicit favicon link for full browser compatibility */}
-        <link rel="icon" href="/ahmed-icon.png" type="image/png" />
+        {/* Force favicon override */}
+        <link rel="icon" href="/ahmed-icon.png" type="image/png" sizes="120x120" />
+        <link rel="shortcut icon" href="/ahmed-icon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/ahmed-icon.png" />
+        <meta name="theme-color" content="#000000" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
