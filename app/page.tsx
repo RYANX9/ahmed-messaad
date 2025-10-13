@@ -113,11 +113,13 @@ export default function Page() {
     window.location.href = "mailto:ahmed.messaad@outlook.com";
   }, []);
 
-  const ProjectItem = React.memo(({ project, isActive, onToggle }: { 
-    project: typeof projects[0], 
-    isActive: boolean, 
-    onToggle: (id: string) => void 
-  }) => (
+  interface ProjectItemProps {
+    project: typeof projects[0];
+    isActive: boolean;
+    onToggle: (id: string) => void;
+  }
+
+  const ProjectItem = React.memo<ProjectItemProps>(({ project, isActive, onToggle }) => (
     <div
       className={`border-b border-[#2a2a2a] transition-colors will-change-auto ${
         isActive ? "bg-[#151515]" : ""
@@ -190,11 +192,7 @@ export default function Page() {
 
   ProjectItem.displayName = "ProjectItem";
 
-  const MobileProjectItem = React.memo(({ project, isActive, onToggle }: { 
-    project: typeof projects[0], 
-    isActive: boolean, 
-    onToggle: (id: string) => void 
-  }) => (
+  const MobileProjectItem = React.memo<ProjectItemProps>(({ project, isActive, onToggle }) => (
     <div
       className={`border-b border-[#2a2a2a] transition-colors will-change-auto ${
         isActive ? "bg-[#151515]" : ""
@@ -403,10 +401,10 @@ export default function Page() {
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
-            About
+            Projects
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
-            Projects
+            About
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
             Contact
