@@ -8,7 +8,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
   const animatedImgRef = useRef<HTMLImageElement>(null);
   const gridSectionRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | null>(null); // ✅ Fixed initialization to null
 
   useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
