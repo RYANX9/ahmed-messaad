@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
   icons: {
     icon: [
-      { url: "/ahmed-icon.png", type: "image/png", sizes: "120x120" },
+      { url: "/ahmed-icon1.png", type: "image/png", sizes: "120x120" },
     ],
-    apple: "/ahmed-icon.png",
+    apple: "/ahmed-icon1.png",
   },
 };
 
@@ -33,9 +33,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Force favicon override */}
-        <link rel="icon" href="/ahmed-icon.png" type="image/png" sizes="120x120" />
-        <link rel="shortcut icon" href="/ahmed-icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/ahmed-icon.png" />
+        <link rel="icon" href="/ahmed-icon1.png" type="image/png" sizes="120x120" />
+        <link rel="shortcut icon" href="/ahmed-icon1.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/ahmed-icon1.png" />
         <meta name="theme-color" content="#000000" />
       </head>
       <body
