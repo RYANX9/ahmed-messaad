@@ -207,17 +207,17 @@ export default function Page() {
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
-        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
-          AHMED MESSAAD
+        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
+           AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a href="" className="text-neutral-400 hover:text-white transition">
-            Projects
-          </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a className="text-neutral-400 hover:text-white transition">
             About
           </a>
-          <a href="" className="text-neutral-400 hover:text-white transition">
+          <a className="text-neutral-400 hover:text-white transition">
+            Projects
+          </a>
+          <a className="text-neutral-400 hover:text-white transition">
             Contact
           </a>
         </nav>
@@ -442,14 +442,11 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
               : "opacity-100 translate-y-0 delay-500"
           }`}
         >
-          <h1 className="text-[24px] leading-tight">
-            <span className="font-mono font-bold">Researcher Building</span>
-            <br />
-            <span className="font-serif italic font-light">Healthcare</span>{" "}
-            <span className="font-mono font-bold">with</span>
-            <br />
-            <span className="font-mono font-bold">Intelligent Systems</span>
-          </h1>
+          <h1 className="text-[20px] xl:text-[26px] leading-tight">
+              <span className="font-mono font-bold">Building the Future of Healthcare </span>
+              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
+              <span className="font-mono font-bold"> AI Intelligence</span>
+            </h1>
           <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
             AI/ML • Medical Imaging • Deep Learning
           </div>
@@ -483,8 +480,8 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
             About
           </h3>
-          <p className="text-neutral-300 text-[13px] leading-relaxed font-sans">
-            I specialize in deep learning and computer vision to create diagnostic systems that bridge research and clinical practice. Based in M&apos;sila, Algeria, I develop AI solutions that solve real healthcare challenges—from brain tumor detection to blood cell analysis.
+          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
+            AI/ML researcher from M'sila, Algeria. Focused on medical imaging, deep learning, and real-world clinical AI. Bridging innovation and accessibility in healthcare through intelligent systems.
           </p>
         </section>
 
@@ -610,7 +607,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
               LINKEDIN
             </a>
             <a
-              href="https://github.com/ahmedmessaad"
+              href="https://github.com/RYANX9"
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
