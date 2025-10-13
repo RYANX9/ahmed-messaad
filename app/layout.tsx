@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Ahmed Messaad",
   description:
     "AI/ML Researcher specializing in Medical Imaging and Deep Learning.",
+    icons: {
+    icon: "/ahmed-icon.png", // must be unique, stored in /public
+  },
 };
 
 export default function RootLayout({
