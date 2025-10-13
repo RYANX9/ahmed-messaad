@@ -1,16 +1,13 @@
 "use client";
  
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  const animatedImgRef = useRef<HTMLImageElement>(null);
-  const gridSectionRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
@@ -19,15 +16,15 @@ export default function Page() {
     }
 
     const timer = setTimeout(() => {
-      const animatedImg = animatedImgRef.current;
-      const gridSection = gridSectionRef.current;
+      const animatedImg = document.getElementById('animated-profile');
+      const gridSection = document.getElementById('profile-grid-section');
       
       if (animatedImg && gridSection) {
         const rect = gridSection.getBoundingClientRect();
         const gridCenterX = rect.left + rect.width / 2;
         const gridCenterY = rect.top + rect.height / 2;
         
-        rafRef.current = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
           animatedImg.style.top = `${gridCenterY}px`;
           animatedImg.style.left = `${gridCenterX}px`;
           animatedImg.style.width = `${rect.width}px`;
@@ -35,30 +32,19 @@ export default function Page() {
         });
         
         setTimeout(() => {
-          if (rafRef.current) {
-            cancelAnimationFrame(rafRef.current);
-          }
-          rafRef.current = requestAnimationFrame(() => {
-            if (animatedImg) {
-              animatedImg.style.visibility = 'hidden';
-            }
-            setIsLoading(false);
+          requestAnimationFrame(() => {
+            animatedImg.style.visibility = 'hidden';
           });
+          setIsLoading(false);
         }, 1400);
       } else {
         setIsLoading(false);
       }
     }, 300);
-
-    return () => {
-      clearTimeout(timer);
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
+    return () => clearTimeout(timer);
   }, []);
 
-  const projects = useMemo(() => [
+  const projects = [
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
@@ -103,173 +89,13 @@ export default function Page() {
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
     },
-  ], []);
-
-  const handleProjectToggle = useCallback((projectId: string) => {
-    setActiveProject(prev => prev === projectId ? null : projectId);
-  }, []);
-
-  const handleContactClick = useCallback(() => {
-    window.location.href = "mailto:ahmed.messaad@outlook.com";
-  }, []);
-
-  interface ProjectItemProps {
-    project: typeof projects[0];
-    isActive: boolean;
-    onToggle: (id: string) => void;
-  }
-
-  const ProjectItem = React.memo<ProjectItemProps>(({ project, isActive, onToggle }) => (
-    <div
-      className={`border-b border-[#2a2a2a] transition-colors will-change-auto ${
-        isActive ? "bg-[#151515]" : ""
-      }`}
-    >
-      <button
-        onClick={() => onToggle(project.id)}
-        className="w-full flex justify-between items-center px-8 xl:px-10 py-6 xl:py-7 text-left"
-      >
-        <div>
-          <div className="text-lg xl:text-xl font-semibold font-mono">
-            {project.name}
-          </div>
-          <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
-            {project.context} • {project.year}
-          </div>
-        </div>
-        <svg
-          className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform duration-300 flex-shrink-0 ml-3 ${
-            isActive ? "rotate-90" : ""
-          }`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
-
-      <div
-        className={`overflow-hidden transition-all duration-500 ${
-          isActive ? "max-h-[700px]" : "max-h-0"
-        }`}
-      >
-        <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
-          <p className="mb-5 xl:mb-6 font-sans">{project.description}</p>
-          <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition-colors hover:bg-[#333] font-mono"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-          
-            href={project.link}
-            target="_blank"
-            rel="noreferrer"
-            className="arrow-animate inline-flex items-center gap-2 text-white text-[12px] xl:text-[13px] tracking-wide transition font-mono"
-          >
-            {project.linkText}
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  ));
-
-  ProjectItem.displayName = "ProjectItem";
-
-  const MobileProjectItem = React.memo<ProjectItemProps>(({ project, isActive, onToggle }) => (
-    <div
-      className={`border-b border-[#2a2a2a] transition-colors will-change-auto ${
-        isActive ? "bg-[#151515]" : ""
-      }`}
-    >
-      <button
-        onClick={() => onToggle(project.id)}
-        className="w-full flex justify-between items-center px-6 py-5 text-left"
-      >
-        <div>
-          <div className="text-base font-semibold font-mono">
-            {project.name}
-          </div>
-          <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
-            {project.context} • {project.year}
-          </div>
-        </div>
-        <svg
-          className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ml-3 ${
-            isActive ? "rotate-90" : ""
-          }`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
-
-      <div
-        className={`overflow-hidden transition-all duration-500 ${
-          isActive ? "max-h-[500px]" : "max-h-0"
-        }`}
-      >
-        <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
-          <p className="mb-5 font-sans">{project.description}</p>
-          <div className="flex flex-wrap gap-2 mb-5">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition-colors hover:bg-[#333] font-mono"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-          
-            href={project.link}
-            target="_blank"
-            rel="noreferrer"
-            className="arrow-animate inline-flex items-center gap-2 text-white text-[11px] tracking-wide transition font-mono"
-          >
-            {project.linkText}
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  ));
-
-  MobileProjectItem.displayName = "MobileProjectItem";
+  ];
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Mea+Culpa&display=swap');
-        
         * {
           scrollbar-width: none !important;
           -ms-overflow-style: none !important;
@@ -298,7 +124,6 @@ export default function Page() {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
         }
-        
         .font-meaculpa {
           font-family: 'Mea Culpa', cursive;
           font-weight: 400;
@@ -354,10 +179,6 @@ export default function Page() {
           will-change: transform;
         }
 
-        .will-change-opacity {
-          will-change: opacity;
-        }
-
         .gpu-accelerated {
           transform: translateZ(0);
           backface-visibility: hidden;
@@ -365,18 +186,20 @@ export default function Page() {
         }
       `}</style>
 
+      {/* Loading Overlay */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
+      {/* Animated Profile Image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        ref={animatedImgRef}
+        id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className="object-cover hidden lg:block gpu-accelerated will-change-transform" 
+        className="object-cover hidden lg:block gpu-accelerated" 
         style={{
           position: 'fixed',
           top: '50vh',
@@ -390,9 +213,11 @@ export default function Page() {
           transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
         }}
       />
+     
 
+      {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 will-change-opacity ${
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
@@ -401,10 +226,10 @@ export default function Page() {
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
-            About
+            Projects
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
-            Projects
+            About
           </a>
           <a href="" className="text-neutral-400 hover:text-white transition-colors">
             Contact
@@ -412,9 +237,11 @@ export default function Page() {
         </nav>
       </header>
 
+      {/* Desktop Grid Layout */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
+        {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -439,8 +266,9 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Profile */}
         <section 
-          ref={gridSectionRef}
+          id="profile-grid-section"
           className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
         >
           <Image
@@ -454,9 +282,10 @@ export default function Page() {
           />
         </section>
 
+        {/* Projects */}
         <aside
           id="projects"
-          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-700"
@@ -464,19 +293,85 @@ export default function Page() {
         >
           <div className="flex-1 overflow-y-auto invisible-scroll">
             {projects.map((p) => (
-              <ProjectItem 
-                key={p.id} 
-                project={p} 
-                isActive={activeProject === p.id} 
-                onToggle={handleProjectToggle}
-              />
+              <div
+                key={p.id}
+                className={`border-b border-[#2a2a2a] transition-colors ${
+                  activeProject === p.id ? "bg-[#151515]" : ""
+                }`}
+              >
+                <button
+                  onClick={() =>
+                    setActiveProject(activeProject === p.id ? null : p.id)
+                  }
+                  className="w-full flex justify-between items-center px-8 xl:px-10 py-6 xl:py-7 text-left"
+                >
+                  <div>
+                    <div className="text-lg xl:text-xl font-semibold font-mono">
+                      {p.name}
+                    </div>
+                    <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                      {p.context} • {p.year}
+                    </div>
+                  </div>
+                  <svg
+                    className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform duration-300 flex-shrink-0 ml-3 ${
+                      activeProject === p.id ? "rotate-90" : ""
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+
+                <div
+                  className={`overflow-hidden transition-all duration-500 ${
+                    activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                  }`}
+                >
+                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
+                    <p className="mb-5 xl:mb-6 font-sans">{p.description}</p>
+                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
+                      {p.tech.map((t) => (
+                        <span
+                          key={t}
+                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition-colors hover:bg-[#333] font-mono"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="arrow-animate inline-flex items-center gap-2 text-white text-[12px] xl:text-[13px] tracking-wide transition font-mono"
+                    >
+                      {p.linkText}
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </aside>
 
+        {/* About */}
         <section
           id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -495,10 +390,13 @@ export default function Page() {
           </p>
         </section>
 
+        {/* Contact */}
         <section
           id="contact"
-          onClick={handleContactClick}
-          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 will-change-transform will-change-opacity ${
+          onClick={() =>
+            (window.location.href = "mailto:ahmed.messaad@outlook.com")
+          }
+          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -550,9 +448,11 @@ export default function Page() {
         </section>
       </div>
 
+      {/* Mobile Stack Layout */}
       <div className="lg:hidden pt-16">
+        {/* Hero */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -571,8 +471,9 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Profile */}
         <section
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-700"
@@ -589,8 +490,9 @@ export default function Page() {
           />
         </section>
 
+        {/* About */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -604,27 +506,96 @@ export default function Page() {
           </p>
         </section>
 
+        {/* Projects */}
         <aside
           id="projects"
-          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 will-change-transform will-change-opacity ${
+          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1100"
           }`}
         >
           {projects.map((p) => (
-            <MobileProjectItem 
-              key={p.id} 
-              project={p} 
-              isActive={activeProject === p.id} 
-              onToggle={handleProjectToggle}
-            />
+            <div
+              key={p.id}
+              className={`border-b border-[#2a2a2a] transition-colors ${
+                activeProject === p.id ? "bg-[#151515]" : ""
+              }`}
+            >
+              <button
+                onClick={() =>
+                  setActiveProject(activeProject === p.id ? null : p.id)
+                }
+                className="w-full flex justify-between items-center px-6 py-5 text-left"
+              >
+                <div>
+                  <div className="text-base font-semibold font-mono">
+                    {p.name}
+                  </div>
+                  <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                    {p.context} • {p.year}
+                  </div>
+                </div>
+                <svg
+                  className={`w-4 h-4 transition-transform duration-300 flex-shrink-0 ml-3 ${
+                    activeProject === p.id ? "rotate-90" : ""
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+
+              <div
+                className={`overflow-hidden transition-all duration-500 ${
+                  activeProject === p.id ? "max-h-[500px]" : "max-h-0"
+                }`}
+              >
+                <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
+                  <p className="mb-5 font-sans">{p.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {p.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition-colors hover:bg-[#333] font-mono"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  
+                    href={p.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="arrow-animate inline-flex items-center gap-2 text-white text-[11px] tracking-wide transition font-mono"
+                  >
+                    {p.linkText}
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
           ))}
         </aside>
 
+        {/* Contact */}
         <section
-          onClick={handleContactClick}
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative will-change-transform will-change-opacity ${
+          onClick={() =>
+            (window.location.href = "mailto:ahmed.messaad@outlook.com")
+          }
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
