@@ -247,7 +247,7 @@ export default function Page() {
               <span className="font-mono font-bold"> AI Intelligence</span>
             </h1>
           </div>
-          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-400 font-accent">
             AI/ML • Medical Imaging • Deep Learning
           </div>
         </section>
