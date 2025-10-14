@@ -5,44 +5,37 @@ import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const [showContent, setShowContent] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
-      setAnimationComplete(true);
+      setShowContent(true);
       return;
     }
-
-    const profileSection = document.getElementById('profile-grid-section');
-    
-    if (!profileSection) {
-      setAnimationComplete(true);
-      return;
-    }
-
-    const rect = profileSection.getBoundingClientRect();
-    const finalTop = rect.top + window.scrollY;
-    const finalLeft = rect.left + window.scrollX;
-    const finalWidth = rect.width;
-    const finalHeight = rect.height;
-
-    document.documentElement.style.setProperty('--final-top', `${finalTop}px`);
-    document.documentElement.style.setProperty('--final-left', `${finalLeft}px`);
-    document.documentElement.style.setProperty('--final-width', `${finalWidth}px`);
-    document.documentElement.style.setProperty('--final-height', `${finalHeight}px`);
-
-    requestAnimationFrame(() => {
-      const animatedImg = document.getElementById('animated-profile');
-      if (animatedImg) {
-        animatedImg.classList.add('animate');
-      }
-    });
 
     const timer = setTimeout(() => {
-      setAnimationComplete(true);
-    }, 1500);
+      const profileImg = document.getElementById('profile-image');
+      const profileSection = document.getElementById('profile-grid-section');
+      
+      if (!profileImg || !profileSection) {
+        setShowContent(true);
+        return;
+      }
+
+      const rect = profileSection.getBoundingClientRect();
+      
+      profileImg.style.top = `${rect.top}px`;
+      profileImg.style.left = `${rect.left}px`;
+      profileImg.style.width = `${rect.width}px`;
+      profileImg.style.height = `${rect.height}px`;
+      profileImg.style.borderRadius = '16px';
+
+      setTimeout(() => {
+        setShowContent(true);
+      }, 1600);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
@@ -173,50 +166,36 @@ export default function Page() {
           background: transparent !important;
         }
 
-        #animated-profile {
+        #profile-image {
           position: fixed;
-          top: 50vh;
-          left: 50vw;
+          top: 50%;
+          left: 50%;
           width: 240px;
           height: 240px;
-          border-radius: 16px;
           transform: translate(-50%, -50%);
+          border-radius: 50%;
           z-index: 100;
-          pointer-events: none;
+          transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           object-fit: cover;
-        }
-
-        #animated-profile.animate {
-          animation: moveToTarget 1500ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        @keyframes moveToTarget {
-          to {
-            top: var(--final-top);
-            left: var(--final-left);
-            width: var(--final-width);
-            height: var(--final-height);
-            transform: none;
-          }
         }
       `}</style>
 
-      <div className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${animationComplete ? "opacity-0" : "opacity-100"}`} />
+      <div className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${showContent ? "opacity-0" : "opacity-100"}`} />
 
       <img
-        id="animated-profile"
+        id="profile-image"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className={`hidden lg:block transition-opacity duration-300 ${animationComplete ? "opacity-0" : "opacity-100"}`}
+        className="hidden lg:block"
       />
 
-      <header className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${animationComplete ? "opacity-100 delay-300" : "opacity-0"}`}>
+      <header className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${showContent ? "opacity-100 delay-300" : "opacity-0"}`}>
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">AHMED MESSAAD</div>
       </header>
 
       <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
         
-        <section className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-500" : "opacity-0 translate-y-[50px]"}`}>
+        <section className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-500" : "opacity-0 translate-y-[50px]"}`}>
           <div className="flex items-start justify-end">
             <svg className="w-16 h-16 xl:w-20 xl:h-20 text-neutral-700" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="50" cy="50" r="40" />
@@ -241,13 +220,10 @@ export default function Page() {
           </div>
         </section>
 
-        <section id="profile-grid-section" className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${animationComplete ? "opacity-100" : "opacity-0"}`}>
-          {animationComplete && (
-            <Image src="/ahmed.jpg" alt="Ahmed Messaad" fill style={{ objectFit: 'cover' }} sizes="(min-width: 1024px) 33vw, 100vw" priority />
-          )}
+        <section id="profile-grid-section" className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative">
         </section>
 
-        <aside id="projects" className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-900" : "opacity-0 translate-y-[50px]"}`}>
+        <aside id="projects" className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-900" : "opacity-0 translate-y-[50px]"}`}>
           <div className="flex-1 overflow-y-auto invisible-scroll">
             {projects.map((p, idx) => (
               <div key={p.id} className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${activeProject === p.id ? "bg-[#151515]" : ""}`}>
@@ -286,7 +262,7 @@ export default function Page() {
           </div>
         </aside>
 
-        <section id="about" className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[50px]"}`}>
+        <section id="about" className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[50px]"}`}>
           <div className="flex items-start justify-start">
             <svg className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
               <circle cx="50" cy="50" r="20" />
@@ -301,7 +277,7 @@ export default function Page() {
           </div>
         </section>
 
-        <section id="contact-section" onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")} className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[50px]"}`}>
+        <section id="contact-section" onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")} className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[50px]"}`}>
           <div className="flex justify-between items-start mb-auto">
             <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">Have some<br />questions?</div>
             <svg className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2">
@@ -322,7 +298,7 @@ export default function Page() {
 
       <div className="lg:hidden pt-16">
         
-        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[320px] transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-500" : "opacity-0 translate-y-[30px]"}`}>
+        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[320px] transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-500" : "opacity-0 translate-y-[30px]"}`}>
           <div className="flex items-start justify-end">
             <svg className="w-14 h-14 text-neutral-700" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5">
               <circle cx="50" cy="50" r="40" />
@@ -347,11 +323,11 @@ export default function Page() {
           </div>
         </section>
 
-        <section className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[380px] relative transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-700" : "opacity-0 translate-y-[30px]"}`}>
+        <section className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[380px] relative transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-700" : "opacity-0 translate-y-[30px]"}`}>
           <Image src="/ahmed.jpg" alt="Ahmed Messaad" fill style={{ objectFit: 'cover' }} sizes="100vw" priority />
         </section>
 
-        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-900" : "opacity-0 translate-y-[30px]"}`}>
+        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-900" : "opacity-0 translate-y-[30px]"}`}>
           <div className="flex items-start justify-start">
             <svg className="w-10 h-10 text-neutral-700" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
               <circle cx="50" cy="50" r="20" />
@@ -366,7 +342,7 @@ export default function Page() {
           </div>
         </section>
 
-        <aside id="projects" className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${animationComplete ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[30px]"}`}>
+        <aside id="projects" className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0 delay-1100" : "opacity-0 translate-y-[30px]"}`}>
           {projects.map((p, idx) => (
             <div key={p.id} className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${activeProject === p.id ? "bg-[#151515]" : ""}`}>
               <button onClick={() => setActiveProject(activeProject === p.id ? null : p.id)} className="w-full flex justify-between items-center px-6 py-4 text-left">
@@ -403,7 +379,7 @@ export default function Page() {
           ))}
         </aside>
 
-        <section onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")} className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] ${animationComplete ? "opacity-100 translate-y-0 delay-1300" : "opacity-0 translate-y-[30px]"}`}>
+        <section onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")} className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] ${showContent ? "opacity-100 translate-y-0 delay-1300" : "opacity-0 translate-y-[30px]"}`}>
           <div className="flex justify-between items-start">
             <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">Have some<br />questions?</div>
             <svg className="w-5 h-5 arrow-contact-animate" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2">
