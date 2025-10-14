@@ -442,7 +442,7 @@ export default function Page() {
         >
           <h1 className="text-[20px] xl:text-[26px] leading-tight">
               <span className="font-mono font-bold">Advancing Clinical Medicine </span>
-              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
+              <span className="italic font-serif font-light ml-2">through</span>
               <span className="font-mono font-bold"> Deep Learning Systems</span>
             </h1>
           <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
