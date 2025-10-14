@@ -66,7 +66,7 @@ export default function Page() {
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
-      image: "/mri.jpg",
+      image: "/brain.jpg",
     },
     {
       id: "hemavision",
@@ -78,7 +78,7 @@ export default function Page() {
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
-      image: "/mri.jpg",
+      image: "/blood.jpg",
     },
     {
       id: "healthcost",
@@ -90,7 +90,7 @@ export default function Page() {
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
-      image: "/healthcost.jpg",
+      image: "/healthcarecost.png",
     },
     {
       id: "mydailyhealth",
@@ -102,7 +102,7 @@ export default function Page() {
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
-      image: "/mydailyhealth.jpg",
+      image: "/daily.png",
     },
   ];
 
