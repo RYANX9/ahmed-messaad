@@ -173,7 +173,7 @@ export default function Page() {
           width: 240px;
           height: 240px;
           transform: translate(-50%, -50%);
-          border-radius: 50%;
+          border-radius: 16px;
           z-index: 100;
           transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           object-fit: cover;
