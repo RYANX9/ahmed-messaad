@@ -214,27 +214,17 @@ export default function Page() {
         }}
       />
 
-      {/* Header */}
-      <header
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
-          isLoading ? "opacity-0" : "opacity-100 delay-300"
-        }`}
-      >
-        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
-          AHMED MESSAAD
-        </div>
-        <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
-          <a className="text-neutral-400 hover:text-white transition">
-            About
-          </a>
-          <a className="text-neutral-400 hover:text-white transition">
-            Projects
-          </a>
-          <a className="text-neutral-400 hover:text-white transition">
-            Contact
-          </a>
-        </nav>
-      </header>
+      // Starting around line 179
+      {/* Header */}
+      <header
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
+          isLoading ? "opacity-0" : "opacity-100 delay-300"
+        }`}
+      >
+        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
+          AHMED MESSAAD
+        </div>
+      </header>
 
       {/* Desktop Grid Layout */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
