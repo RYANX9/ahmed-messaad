@@ -6,49 +6,48 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
+  // FIX 1: New state to track when the animation is complete and the static image should appear
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
       setIsLoading(false);
+      setIsAnimationComplete(true); // Complete instantly on mobile
       return;
     }
 
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
-      const gridContainer = document.getElementById('desktop-grid');
+      // FIX 2: Target the specific profile grid section for accurate bounding box
+      const profileGridSection = document.getElementById('profile-grid-section');
       
-      if (animatedImg && gridContainer) {
-        // Get grid container info
-        const gridRect = gridContainer.getBoundingClientRect();
-        const gridStyles = window.getComputedStyle(gridContainer);
-        const padding = parseFloat(gridStyles.padding);
-        const gap = 12; // 3 = 12px in Tailwind
+      if (animatedImg && profileGridSection) {
+        // Get the exact final position and size of the target grid cell
+        const rect = profileGridSection.getBoundingClientRect();
         
-        // Grid layout: 3 columns, profile is at column 2 (0-indexed = 1), row 1
-        // Column widths are equal in auto-rows-fr
-        const gridWidth = gridRect.width - (padding * 2);
-        const colWidth = (gridWidth - (gap * 2)) / 3;
-        
-        // Calculate profile image position (column 1, row 1)
-        const posX = gridRect.left + window.scrollX + padding + (colWidth + gap);
-        const posY = gridRect.top + window.scrollY + padding + (colWidth + gap);
-        
-        animatedImg.style.position = 'fixed';
-        animatedImg.style.top = `${posY}px`;
-        animatedImg.style.left = `${posX}px`;
-        animatedImg.style.width = `${colWidth}px`;
-        animatedImg.style.height = `${colWidth}px`;
+        // 1. Set the final position and size (CSS transition handles the smooth movement)
+        animatedImg.style.top = `${rect.top}px`;
+        animatedImg.style.left = `${rect.left}px`;
+        animatedImg.style.width = `${rect.width}px`;
+        animatedImg.style.height = `${rect.height}px`;
         animatedImg.style.borderRadius = '16px';
-        animatedImg.style.zIndex = '100';
+        // 2. IMPORTANT: Set the final transform state to 'none' to move from '-50%, -50%' to 'none'
+        animatedImg.style.transform = 'none';
         
+        // After the transition finishes (1400ms), hide the animated image and trigger the static image reveal
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
+          // This ensures the static image appears exactly when the animated one disappears
+          setIsAnimationComplete(true); 
+          // This starts the fade-in for the header and other grid sections
           setIsLoading(false);
         }, 1400);
       } else {
+        // Fallback in case elements aren't found
         setIsLoading(false);
+        setIsAnimationComplete(true);
       }
     }, 300);
     return () => clearTimeout(timer);
@@ -202,10 +201,11 @@ export default function Page() {
           width: '240px',
           height: '240px',
           borderRadius: '16px',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate(-50%, -50%)', // Initial state: centered
           zIndex: 100,
           pointerEvents: 'none',
-          transition: 'all 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+          // FIX 3: Transition must include all transforming properties
+          transition: 'top 1400ms cubic-bezier(0.16, 1, 0.3, 1), left 1400ms cubic-bezier(0.16, 1, 0.3, 1), width 1400ms cubic-bezier(0.16, 1, 0.3, 1), height 1400ms cubic-bezier(0.16, 1, 0.3, 1), border-radius 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       />
 
@@ -232,6 +232,7 @@ export default function Page() {
       </header>
 
       {/* Desktop Grid Layout */}
+      {/* The grid container must have an ID if we wanted to use the manual calculation, but since we are targeting the section, we don't need it. */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
         {/* Hero */}
         <section
@@ -272,22 +273,26 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile */}
+        {/* Profile (The Grid Item) */}
         <section 
           id="profile-grid-section"
-          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 max-w-[85%] mx-auto ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-700"
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 max-w-[85%] mx-auto ${
+            // FIX 4: Use isAnimationComplete to smoothly fade in the static image
+            isAnimationComplete 
+              ? "opacity-100 delay-500" // Fades in after animation completes
+              : "opacity-0" 
           }`}
         >
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
+          {/* FIX 5: Only render the final Image component when the animation is complete */}
+          {isAnimationComplete && (
+            <Image
+              src="/ahmed.jpg"
+              alt="Ahmed Messaad"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(min-width: 1024px) 33vw, 100vw"
+            />
+          )}
         </section>
 
         {/* Projects */}
