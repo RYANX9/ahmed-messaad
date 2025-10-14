@@ -44,46 +44,46 @@ export default function Page() {
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
-      context: "Startup Collaboration",
+      context: "Clinical AI Platform",
       year: "2024",
       description:
-        "An advanced AI platform for brain tumor detection achieving 99% accuracy, combining EfficientNet-B7 with a full DICOM workflow and intuitive clinical interface.",
-      tech: ["PyTorch", "EfficientNet-B7", "DICOM", "PyQt5"],
+        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+      tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
     },
     {
       id: "hemavision",
       name: "HemaVision",
-      context: "Hemolab Startup",
+      context: "Medical Automation",
       year: "2023–2024",
       description:
-        "Complete blood analysis system: automated cell detection, segmentation, counting & classification (97% accuracy) with organized table display — eliminating manual microscopy.",
-      tech: ["YOLOv8", "OpenCV", "ResNet", "EfficientNet"],
+        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+      tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
-      linkText: "Watch Demo",
-    },
-    {
-      id: "mydailyhealth",
-      name: "My Daily Health",
-      context: "Master's Thesis",
-      year: "2023",
-      description:
-        "An ensemble deep learning solution for real-time detection of brain tumors, Alzheimer's, and COVID-19, merging accuracy with interpretability.",
-      tech: ["TensorFlow", "Keras", "Transfer Learning", "Tkinter"],
-      link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
     },
     {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
-      context: "Data Analytics",
+      context: "Deep Learning Research",
       year: "2024",
       description:
-        "A predictive deep learning model using Conv1D networks to uncover cost drivers and forecast healthcare expenses with exceptional reliability.",
-      tech: ["CNN", "Statistical Analysis", "Plotly"],
+        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+      tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
+    },
+    {
+      id: "mydailyhealth",
+      name: "My Daily Health",
+      context: "Research Thesis",
+      year: "2023",
+      description:
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
+      link: "https://youtu.be/kh7WBjNPpEM",
+      linkText: "Watch Demo",
     },
   ];
 
@@ -242,13 +242,13 @@ export default function Page() {
         >
           <div className="flex-1 flex items-end pb-4">
             <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Building the Future of Healthcare </span>
-              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-              <span className="font-mono font-bold"> AI Intelligence</span>
+              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
+              <span className="italic font-serif font-light ml-2">through</span>
+              <span className="font-mono font-bold"> Deep Learning Systems</span>
             </h1>
           </div>
-          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI/ML • Medical Imaging • Deep Learning
+          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-400 font-accent">
+            AI Research • Medical Imaging • Computer Vision
           </div>
         </section>
 
@@ -368,9 +368,7 @@ export default function Page() {
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI/ML researcher from M'sila, Algeria.
-Focused on medical imaging, deep learning, and real-world clinical AI.
-Bridging innovation and accessibility in healthcare through intelligent systems.
+            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
           </p>
         </section>
 
@@ -396,7 +394,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
             <path d="M8 24L24 8M24 8H8M24 8V24" />
           </svg>
           <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
-            Ready to Collaborate?
+            Let's Connect
           </div>
           <h2 className="text-[44px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
             <span className="font-mono">CONTACT</span>
@@ -443,12 +441,12 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
           }`}
         >
           <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Building the Future of Healthcare </span>
-              <span className="font-meaculpa text-[32px] xl:text-[40px] leading-none text-[#ffffff]">through</span>
-              <span className="font-mono font-bold"> AI Intelligence</span>
+              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
+              <span className="italic font-serif font-light ml-2">through</span>
+              <span className="font-mono font-bold"> Deep Learning Systems</span>
             </h1>
           <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI/ML • Medical Imaging • Deep Learning
+            AI Research • Medical Imaging • Computer Vision
           </div>
         </section>
 
@@ -481,7 +479,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
             About
           </h3>
           <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI/ML researcher from M'sila, Algeria. Focused on medical imaging, deep learning, and real-world clinical AI. Bridging innovation and accessibility in healthcare through intelligent systems.
+            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
           </p>
         </section>
 
@@ -590,7 +588,7 @@ Bridging innovation and accessibility in healthcare through intelligent systems.
             <path d="M8 24L24 8M24 8H8M24 8V24" />
           </svg>
           <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            Ready to Collaborate?
+            Let's Connect
           </div>
           <h2 className="text-[36px] font-bold leading-none">
             <span className="font-mono">CONTACT</span>
