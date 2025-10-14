@@ -1,7 +1,7 @@
 "use client";
  
 import React, { useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -17,32 +17,31 @@ export default function Page() {
 
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
-      const gridContainer = document.getElementById('grid-container');
+      const gridContainer = document.getElementById('desktop-grid');
       
       if (animatedImg && gridContainer) {
-        // Get the grid container's position and the profile section's target position
+        // Get grid container info
         const gridRect = gridContainer.getBoundingClientRect();
-        const gridTop = gridRect.top + window.scrollY;
-        const gridLeft = gridRect.left + window.scrollX;
-        const gridGap = 12; // gap-3 in tailwind = 12px
+        const gridStyles = window.getComputedStyle(gridContainer);
+        const padding = parseFloat(gridStyles.padding);
+        const gap = 12; // 3 = 12px in Tailwind
         
-        // Profile section is in position [1] of the grid (row 1, col 2)
-        // Each cell is 1fr, so we need to calculate the position
-        const cellWidth = (gridRect.width - gridGap * 2) / 3;
-        const cellHeight = (gridRect.height - gridGap) / 2;
+        // Grid layout: 3 columns, profile is at column 2 (0-indexed = 1), row 1
+        // Column widths are equal in auto-rows-fr
+        const gridWidth = gridRect.width - (padding * 2);
+        const colWidth = (gridWidth - (gap * 2)) / 3;
         
-        // Profile is at column 1 (index 1), row 0
-        const targetLeft = gridLeft + gridGap + cellWidth + gridGap;
-        const targetTop = gridTop + gridGap;
+        // Calculate profile image position (column 1, row 1)
+        const posX = gridRect.left + window.scrollX + padding + (colWidth + gap);
+        const posY = gridRect.top + window.scrollY + padding + (colWidth + gap);
         
         animatedImg.style.position = 'fixed';
-        animatedImg.style.top = `${targetTop}px`;
-        animatedImg.style.left = `${targetLeft}px`;
-        animatedImg.style.width = `${cellWidth}px`;
-        animatedImg.style.height = `${cellHeight}px`;
+        animatedImg.style.top = `${posY}px`;
+        animatedImg.style.left = `${posX}px`;
+        animatedImg.style.width = `${colWidth}px`;
+        animatedImg.style.height = `${colWidth}px`;
         animatedImg.style.borderRadius = '16px';
         animatedImg.style.zIndex = '100';
-        animatedImg.style.pointerEvents = 'none';
         
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
