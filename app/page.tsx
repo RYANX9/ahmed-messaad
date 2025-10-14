@@ -64,17 +64,6 @@ export default function Page() {
       linkText: "Watch Demo",
     },
     {
-      id: "mydailyhealth",
-      name: "My Daily Health",
-      context: "Research Thesis",
-      year: "2023",
-      description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
-      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
-      link: "https://youtu.be/kh7WBjNPpEM",
-      linkText: "Watch Demo",
-    },
-    {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
       context: "Deep Learning Research",
@@ -84,6 +73,17 @@ export default function Page() {
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
+    },
+    {
+      id: "mydailyhealth",
+      name: "My Daily Health",
+      context: "Research Thesis",
+      year: "2023",
+      description:
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
+      link: "https://youtu.be/kh7WBjNPpEM",
+      linkText: "Watch Demo",
     },
   ];
 
