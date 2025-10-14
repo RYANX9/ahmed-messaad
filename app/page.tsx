@@ -6,51 +6,53 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  // FIX 1: New state to track when the animation is complete and the static image should appear
-  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [showStaticImage, setShowStaticImage] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
       setIsLoading(false);
-      setIsAnimationComplete(true); // Complete instantly on mobile
+      setShowStaticImage(true);
       return;
     }
 
-    const timer = setTimeout(() => {
+    // Wait a bit to ensure DOM is ready
+    const initialDelay = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
-      // FIX 2: Target the specific profile grid section for accurate bounding box
-      const profileGridSection = document.getElementById('profile-grid-section');
+      const profileSection = document.getElementById('profile-grid-section');
       
-      if (animatedImg && profileGridSection) {
-        // Get the exact final position and size of the target grid cell
-        const rect = profileGridSection.getBoundingClientRect();
-        
-        // 1. Set the final position and size (CSS transition handles the smooth movement)
-        animatedImg.style.top = `${rect.top}px`;
-        animatedImg.style.left = `${rect.left}px`;
-        animatedImg.style.width = `${rect.width}px`;
-        animatedImg.style.height = `${rect.height}px`;
-        animatedImg.style.borderRadius = '16px';
-        // 2. IMPORTANT: Set the final transform state to 'none' to move from '-50%, -50%' to 'none'
-        animatedImg.style.transform = 'none';
-        
-        // After the transition finishes (1400ms), hide the animated image and trigger the static image reveal
-        setTimeout(() => {
-          animatedImg.style.visibility = 'hidden';
-          // This ensures the static image appears exactly when the animated one disappears
-          setIsAnimationComplete(true); 
-          // This starts the fade-in for the header and other grid sections
-          setIsLoading(false);
-        }, 1400);
-      } else {
-        // Fallback in case elements aren't found
+      if (!animatedImg || !profileSection) {
         setIsLoading(false);
-        setIsAnimationComplete(true);
+        setShowStaticImage(true);
+        return;
       }
-    }, 300);
-    return () => clearTimeout(timer);
+
+      // Get the exact position where the profile image should be
+      const rect = profileSection.getBoundingClientRect();
+      
+      // Calculate absolute position accounting for current scroll
+      const absoluteTop = rect.top + window.scrollY;
+      const absoluteLeft = rect.left + window.scrollX;
+
+      // Set the animated image to move to this position
+      animatedImg.style.top = `${absoluteTop}px`;
+      animatedImg.style.left = `${absoluteLeft}px`;
+      animatedImg.style.width = `${rect.width}px`;
+      animatedImg.style.height = `${rect.height}px`;
+      animatedImg.style.transform = 'none';
+
+      // After animation completes, hide animated and show static
+      const completeDelay = setTimeout(() => {
+        animatedImg.style.visibility = 'hidden';
+        setShowStaticImage(true);
+        setIsLoading(false);
+      }, 1500);
+
+      return () => clearTimeout(completeDelay);
+    }, 100);
+
+    return () => clearTimeout(initialDelay);
   }, []);
 
   const projects = [
@@ -201,11 +203,10 @@ export default function Page() {
           width: '240px',
           height: '240px',
           borderRadius: '16px',
-          transform: 'translate(-50%, -50%)', // Initial state: centered
+          transform: 'translate(-50%, -50%)',
           zIndex: 100,
           pointerEvents: 'none',
-          // FIX 3: Transition must include all transforming properties
-          transition: 'top 1400ms cubic-bezier(0.16, 1, 0.3, 1), left 1400ms cubic-bezier(0.16, 1, 0.3, 1), width 1400ms cubic-bezier(0.16, 1, 0.3, 1), height 1400ms cubic-bezier(0.16, 1, 0.3, 1), border-radius 1400ms cubic-bezier(0.16, 1, 0.3, 1), transform 1400ms cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'all 1500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         }}
       />
 
@@ -232,7 +233,6 @@ export default function Page() {
       </header>
 
       {/* Desktop Grid Layout */}
-      {/* The grid container must have an ID if we wanted to use the manual calculation, but since we are targeting the section, we don't need it. */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
         {/* Hero */}
         <section
@@ -273,18 +273,16 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile (The Grid Item) */}
+        {/* Profile */}
         <section 
           id="profile-grid-section"
-          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 max-w-[85%] mx-auto ${
-            // FIX 4: Use isAnimationComplete to smoothly fade in the static image
-            isAnimationComplete 
-              ? "opacity-100 delay-500" // Fades in after animation completes
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
+            showStaticImage 
+              ? "opacity-100" 
               : "opacity-0" 
           }`}
         >
-          {/* FIX 5: Only render the final Image component when the animation is complete */}
-          {isAnimationComplete && (
+          {showStaticImage && (
             <Image
               src="/ahmed.jpg"
               alt="Ahmed Messaad"
