@@ -1,3 +1,4 @@
+
 "use client";
  
 import React, { useState } from "react";
@@ -224,38 +225,54 @@ export default function Page() {
       </header>
 
       {/* Desktop Grid Layout */}
-      <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
-        {/* Hero */}
+      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 xl:gap-4 min-h-screen pt-20 p-3 xl:p-4 pb-6">
+        {/* Hero - spans 1 column, taller */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
+          className={`rounded-2xl xl:rounded-3xl border border-[#2a2a2a] p-10 xl:p-14 flex flex-col justify-between transition-all duration-1000 row-span-2 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
-          style={{
-            minHeight: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "flex-start",
-            paddingBottom: "3rem",
-          }}
         >
-          <div className="flex-1 flex items-end pb-4">
-            <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-              <span className="italic font-serif font-light ml-2">through</span>
-              <span className="font-mono font-bold"> Deep Learning Systems</span>
-            </h1>
+          <div className="relative w-12 h-12 xl:w-16 xl:h-16 mb-auto">
+            <svg viewBox="0 0 100 100" className="w-full h-full opacity-20">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+              {[...Array(12)].map((_, i) => (
+                <line
+                  key={i}
+                  x1="50"
+                  y1="5"
+                  x2="50"
+                  y2="15"
+                  stroke="currentColor"
+                  strokeWidth="0.5"
+                  transform={`rotate(${i * 30} 50 50)`}
+                />
+              ))}
+            </svg>
           </div>
-          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-400 font-accent">
-            AI Research • Medical Imaging • Computer Vision
+          
+          <div className="space-y-6 xl:space-y-8">
+            <h1 className="text-[28px] xl:text-[38px] 2xl:text-[42px] leading-[1.15]">
+              <span className="font-mono font-bold block">Advancing Clinical</span>
+              <span className="font-mono font-bold block">Medicine </span>
+              <span className="italic font-serif font-light">through </span>
+              <span className="font-mono font-bold">Deep Learning</span>
+            </h1>
+            <div className="text-[11px] xl:text-[12px] tracking-wider uppercase text-neutral-500 font-accent">
+              AI Research • Medical Imaging • Computer Vision
+            </div>
           </div>
         </section>
 
-        {/* Profile */}
+        {/* Profile - square-ish */}
         <section 
           id="profile-grid-section"
-          className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
+          className={`rounded-2xl xl:rounded-3xl border border-[#2a2a2a] bg-[#1a1a1a] overflow-hidden relative min-h-[400px] transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-700"
+          }`}
         >
           <Image
             src="/ahmed.jpg"
@@ -266,39 +283,65 @@ export default function Page() {
           />
         </section>
 
-        {/* Projects - 10% smaller, no top padding */}
+        {/* About - square-ish */}
+        <section
+          id="about"
+          className={`rounded-2xl xl:rounded-3xl border border-[#2a2a2a] p-10 xl:p-14 flex flex-col justify-between transition-all duration-1000 ${
+            isLoading
+              ? "opacity-0 translate-y-[50px]"
+              : "opacity-100 translate-y-0 delay-900"
+          }`}
+        >
+          <div className="relative w-10 h-10 xl:w-12 xl:h-12 mb-auto">
+            <svg viewBox="0 0 100 100" className="w-full h-full opacity-20">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+              <path d="M50,10 Q70,30 50,50 Q30,70 50,90" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </svg>
+          </div>
+          
+          <div className="space-y-4 xl:space-y-5">
+            <h3 className="text-[11px] xl:text-[12px] uppercase tracking-wider text-neutral-500 font-accent">
+              About
+            </h3>
+            <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
+              AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+            </p>
+          </div>
+        </section>
+
+        {/* Projects - right column, full height */}
         <aside
           id="projects"
-          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
+          className={`row-span-2 rounded-2xl xl:rounded-3xl border border-[#2a2a2a] bg-[#0a0a0a] overflow-hidden transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          <div className="flex-1 overflow-y-auto invisible-scroll">
-            {projects.map((p) => (
+          <div className="h-full overflow-y-auto invisible-scroll">
+            {projects.map((p, idx) => (
               <div
                 key={p.id}
-                className={`border-b border-[#2a2a2a] transition ${
+                className={`transition ${
                   activeProject === p.id ? "bg-[#151515]" : ""
-                }`}
+                } ${idx !== projects.length - 1 ? "border-b border-[#2a2a2a]" : ""}`}
               >
                 <button
                   onClick={() =>
                     setActiveProject(activeProject === p.id ? null : p.id)
                   }
-                  className="w-full flex justify-between items-center px-8 xl:px-10 py-6 xl:py-7 text-left"
+                  className="w-full flex justify-between items-start px-8 xl:px-10 py-6 xl:py-7 text-left group"
                 >
-                  <div>
-                    <div className="text-lg xl:text-xl font-semibold font-mono">
+                  <div className="flex-1 min-w-0 pr-4">
+                    <div className="text-[17px] xl:text-[19px] font-semibold font-mono group-hover:text-neutral-300 transition">
                       {p.name}
                     </div>
-                    <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                    <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1.5 font-accent uppercase tracking-wide">
                       {p.context} • {p.year}
                     </div>
                   </div>
                   <svg
-                    className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ml-3 ${
+                    className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ${
                       activeProject === p.id ? "rotate-90" : ""
                     }`}
                     viewBox="0 0 24 24"
@@ -315,13 +358,15 @@ export default function Page() {
                     activeProject === p.id ? "max-h-[700px]" : "max-h-0"
                   }`}
                 >
-                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
-                    <p className="mb-5 xl:mb-6 font-sans">{p.description}</p>
-                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
+                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 space-y-5">
+                    <p className="text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed font-sans">
+                      {p.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
                       {p.tech.map((t) => (
                         <span
                           key={t}
-                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#333] font-mono"
+                          className="bg-[#1a1a1a] text-neutral-300 border border-[#2a2a2a] rounded-lg text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#252525] hover:border-[#3a3a3a] font-mono"
                         >
                           {t}
                         </span>
@@ -331,7 +376,7 @@ export default function Page() {
                       href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="arrow-animate inline-flex items-center gap-2 text-white text-[12px] xl:text-[13px] tracking-wide transition font-mono"
+                      className="arrow-animate inline-flex items-center gap-2 text-white text-[12px] xl:text-[13px] tracking-wide transition font-mono hover:text-neutral-300"
                     >
                       {p.linkText}
                       <svg
@@ -352,274 +397,65 @@ export default function Page() {
           </div>
         </aside>
 
-        {/* About */}
-        <section
-          id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
-          }`}
-          style={{
-            paddingBottom: "3rem",
-          }}
-        >
-          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
-            About
-          </h3>
-          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
-          </p>
-        </section>
-
-        {/* Contact */}
+        {/* Contact - wide */}
         <section
           id="contact"
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+          className={`col-span-2 rounded-2xl xl:rounded-3xl border border-[#2a2a2a] bg-[#1a1a1a] p-10 xl:p-14 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
-          }`}
-        >
-          <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M8 24L24 8M24 8H8M24 8V24" />
-          </svg>
-          <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
-            Let's Connect
-          </div>
-          <h2 className="text-[44px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-            <span className="font-mono">CONTACT</span>
-            <span className="italic font-serif font-light ml-2">me</span>
-          </h2>
-          <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-            <a
-              href="https://linkedin.com/in/ahmedmessaad"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              LINKEDIN
-            </a>
-            <a
-              href="https://github.com/RYANX9"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              GITHUB
-            </a>
-            <a
-              href="mailto:ahmed.messaad@outlook.com"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              EMAIL
-            </a>
-          </div>
-        </section>
-      </div>
-
-      {/* Mobile Stack Layout */}
-      <div className="lg:hidden pt-16">
-        {/* Hero */}
-        <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
-              : "opacity-100 translate-y-0 delay-500"
-          }`}
-        >
-          <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-              <span className="italic font-serif font-light ml-2">through</span>
-              <span className="font-mono font-bold"> Deep Learning Systems</span>
-            </h1>
-          <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI Research • Medical Imaging • Computer Vision
-          </div>
-        </section>
-
-        {/* Profile */}
-        <section
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
-              : "opacity-100 translate-y-0 delay-700"
-          }`}
-        >
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="100vw"
-          />
-        </section>
-
-        {/* About */}
-        <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
-              : "opacity-100 translate-y-0 delay-900"
-          }`}
-        >
-          <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
-            About
-          </h3>
-          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
-          </p>
-        </section>
-
-        {/* Projects */}
-        <aside
-          id="projects"
-          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1100"
           }`}
         >
-          {projects.map((p) => (
-            <div
-              key={p.id}
-              className={`border-b border-[#2a2a2a] transition ${
-                activeProject === p.id ? "bg-[#151515]" : ""
-              }`}
-            >
-              <button
-                onClick={() =>
-                  setActiveProject(activeProject === p.id ? null : p.id)
-                }
-                className="w-full flex justify-between items-center px-6 py-5 text-left"
-              >
-                <div>
-                  <div className="text-base font-semibold font-mono">
-                    {p.name}
-                  </div>
-                  <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
-                    {p.context} • {p.year}
-                  </div>
-                </div>
-                <svg
-                  className={`w-4 h-4 transition-transform flex-shrink-0 ml-3 ${
-                    activeProject === p.id ? "rotate-90" : ""
-                  }`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-500 ${
-                  activeProject === p.id ? "max-h-[500px]" : "max-h-0"
-                }`}
-              >
-                <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
-                  <p className="mb-5 font-sans">{p.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {p.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#333] font-mono"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="arrow-animate inline-flex items-center gap-2 text-white text-[11px] tracking-wide transition font-mono"
-                  >
-                    {p.linkText}
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </aside>
-
-        {/* Contact */}
-        <section
-          onClick={() =>
-            (window.location.href = "mailto:ahmed.messaad@outlook.com")
-          }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
-              : "opacity-100 translate-y-0 delay-1300"
-          }`}
-        >
           <svg
-            className="absolute top-6 right-6 w-5 h-5 arrow-contact-animate"
+            className="absolute top-8 right-8 xl:top-12 xl:right-12 w-7 h-7 xl:w-9 xl:h-9 arrow-contact-animate opacity-70"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
           >
             <path d="M8 24L24 8M24 8H8M24 8V24" />
           </svg>
-          <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            Let's Connect
+          
+          <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
+            Have some questions?
           </div>
-          <h2 className="text-[36px] font-bold leading-none">
-            <span className="font-mono">CONTACT</span>
-            <span className="italic font-serif font-light ml-2">me</span>
-          </h2>
-          <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-            <a
-              href="https://linkedin.com/in/ahmedmessaad"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              LINKEDIN
-            </a>
-            <a
-              href="https://github.com/RYANX9"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              GITHUB
-            </a>
-            <a
-              href="mailto:ahmed.messaad@outlook.com"
-              onClick={(e) => e.stopPropagation()}
-              className="text-neutral-500 hover:text-white transition"
-            >
-              EMAIL
-            </a>
+          
+          <div className="space-y-8">
+            <h2 className="text-[52px] xl:text-[68px] 2xl:text-[76px] font-bold leading-none">
+              <span className="font-mono block">Contact </span>
+              <span className="italic font-serif font-light">me</span>
+            </h2>
+            
+            <div className="flex gap-8 xl:gap-12 text-[10px] xl:text-[11px] tracking-wider uppercase font-accent">
+              <a
+                href="https://linkedin.com/in/ahmedmessaad"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                LINKEDIN
+              </a>
+              <a
+                href="https://github.com/RYANX9"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                GITHUB
+              </a>
+              <a
+                href="mailto:ahmed.messaad@outlook.com"
+                onClick={(e) => e.stopPropagation()}
+                className="text-neutral-500 hover:text-white transition"
+              >
+                EMAIL
+              </a>
+            </div>
           </div>
         </section>
       </div>
