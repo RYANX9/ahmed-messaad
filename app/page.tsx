@@ -17,22 +17,32 @@ export default function Page() {
 
     const timer = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
-      const contactSection = document.getElementById('contact-section');
+      const gridContainer = document.getElementById('grid-container');
       
-      if (animatedImg && contactSection) {
-        const rect = contactSection.getBoundingClientRect();
+      if (animatedImg && gridContainer) {
+        // Get the grid container's position and the profile section's target position
+        const gridRect = gridContainer.getBoundingClientRect();
+        const gridTop = gridRect.top + window.scrollY;
+        const gridLeft = gridRect.left + window.scrollX;
+        const gridGap = 12; // gap-3 in tailwind = 12px
         
-        // Calculate position relative to viewport, accounting for scroll
-        const posX = rect.left + window.scrollX;
-        const posY = rect.top + window.scrollY;
+        // Profile section is in position [1] of the grid (row 1, col 2)
+        // Each cell is 1fr, so we need to calculate the position
+        const cellWidth = (gridRect.width - gridGap * 2) / 3;
+        const cellHeight = (gridRect.height - gridGap) / 2;
+        
+        // Profile is at column 1 (index 1), row 0
+        const targetLeft = gridLeft + gridGap + cellWidth + gridGap;
+        const targetTop = gridTop + gridGap;
         
         animatedImg.style.position = 'fixed';
-        animatedImg.style.top = `${posY}px`;
-        animatedImg.style.left = `${posX}px`;
-        animatedImg.style.width = `${rect.width}px`;
-        animatedImg.style.height = `${rect.height}px`;
+        animatedImg.style.top = `${targetTop}px`;
+        animatedImg.style.left = `${targetLeft}px`;
+        animatedImg.style.width = `${cellWidth}px`;
+        animatedImg.style.height = `${cellHeight}px`;
         animatedImg.style.borderRadius = '16px';
         animatedImg.style.zIndex = '100';
+        animatedImg.style.pointerEvents = 'none';
         
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
