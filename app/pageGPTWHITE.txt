@@ -6,38 +6,53 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
+  const [showStaticImage, setShowStaticImage] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
       setIsLoading(false);
+      setShowStaticImage(true);
       return;
     }
 
-    const timer = setTimeout(() => {
+    // Wait a bit to ensure DOM is ready
+    const initialDelay = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
-      const gridSection = document.getElementById('profile-grid-section');
+      const profileSection = document.getElementById('profile-grid-section');
       
-      if (animatedImg && gridSection) {
-        const rect = gridSection.getBoundingClientRect();
-        const gridCenterX = rect.left + rect.width / 2;
-        const gridCenterY = rect.top + rect.height / 2;
-        
-        animatedImg.style.top = `${gridCenterY}px`;
-        animatedImg.style.left = `${gridCenterX}px`;
-        animatedImg.style.width = `${rect.width}px`;
-        animatedImg.style.height = `${rect.height}px`;
-        
-        setTimeout(() => {
-          animatedImg.style.visibility = 'hidden';
-          setIsLoading(false);
-        }, 1400);
-      } else {
+      if (!animatedImg || !profileSection) {
         setIsLoading(false);
+        setShowStaticImage(true);
+        return;
       }
-    }, 300);
-    return () => clearTimeout(timer);
+
+      // Get the exact position where the profile image should be
+      const rect = profileSection.getBoundingClientRect();
+      
+      // Calculate absolute position accounting for current scroll
+      const absoluteTop = rect.top + window.scrollY;
+      const absoluteLeft = rect.left + window.scrollX;
+
+      // Set the animated image to move to this position
+      animatedImg.style.top = `${absoluteTop}px`;
+      animatedImg.style.left = `${absoluteLeft}px`;
+      animatedImg.style.width = `${rect.width}px`;
+      animatedImg.style.height = `${rect.height}px`;
+      animatedImg.style.transform = 'none';
+
+      // After animation completes, hide animated and show static
+      const completeDelay = setTimeout(() => {
+        animatedImg.style.visibility = 'hidden';
+        setShowStaticImage(true);
+        setIsLoading(false);
+      }, 1500);
+
+      return () => clearTimeout(completeDelay);
+    }, 100);
+
+    return () => clearTimeout(initialDelay);
   }, []);
 
   const projects = [
@@ -51,6 +66,7 @@ export default function Page() {
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
+      image: "/brain.jpg",
     },
     {
       id: "hemavision",
@@ -62,6 +78,7 @@ export default function Page() {
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
+      image: "/blood.jpg",
     },
     {
       id: "healthcost",
@@ -73,6 +90,7 @@ export default function Page() {
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
+      image: "/healthcarecost.png",
     },
     {
       id: "mydailyhealth",
@@ -84,6 +102,7 @@ export default function Page() {
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
+      image: "/daily.png",
     },
   ];
 
@@ -91,7 +110,7 @@ export default function Page() {
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Mea+Culpa&display=swap');
+        
         * {
           scrollbar-width: none !important;
           -ms-overflow-style: none !important;
@@ -119,11 +138,6 @@ export default function Page() {
         .font-accent {
           font-family: 'Space Grotesk', sans-serif;
           letter-spacing: 0.05em;
-        }
-        .font-meaculpa {
-          font-family: 'Mea Culpa', cursive;
-          font-weight: 400;
-          letter-spacing: 0.03em;
         }
 
         @keyframes arrow-bounce {
@@ -190,16 +204,15 @@ export default function Page() {
           position: 'fixed',
           top: '50vh',
           left: '50vw',
-          width: '280px',
-          height: '280px',
+          width: '240px',
+          height: '240px',
+          borderRadius: '16px',
           transform: 'translate(-50%, -50%)',
-          transformOrigin: 'center center',
           zIndex: 100,
           pointerEvents: 'none',
-          transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
+          transition: 'all 1500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         }}
       />
-     
 
       {/* Header */}
       <header
@@ -208,7 +221,7 @@ export default function Page() {
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
-           AHMED MESSAAD
+          AHMED MESSAAD
         </div>
         <nav className="flex gap-3 lg:gap-8 text-[10px] lg:text-[13px] uppercase tracking-wide font-mono">
           <a className="text-neutral-400 hover:text-white transition">
@@ -224,62 +237,80 @@ export default function Page() {
       </header>
 
       {/* Desktop Grid Layout */}
-      <div className="hidden lg:grid lg:grid-cols-3 lg:grid-rows-2 h-screen pt-20">
+      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
         {/* Hero */}
         <section
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end items-start transition-all duration-1000 ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
-          style={{
-            minHeight: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "flex-start",
-            paddingBottom: "3rem",
-          }}
         >
-          <div className="flex-1 flex items-end pb-4">
-            <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-              <span className="italic font-serif font-light ml-2">through</span>
-              <span className="font-mono font-bold"> Deep Learning Systems</span>
-            </h1>
+          <div className="flex items-start justify-end">
+            <svg
+              className="w-16 h-16 xl:w-20 xl:h-20 text-neutral-700"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.5"
+            >
+              <circle cx="50" cy="50" r="40" />
+              <circle cx="50" cy="50" r="30" />
+              <circle cx="50" cy="50" r="20" />
+              <circle cx="50" cy="50" r="10" />
+              <line x1="50" y1="10" x2="50" y2="90" />
+              <line x1="10" y1="50" x2="90" y2="50" />
+              <line x1="20" y1="20" x2="80" y2="80" />
+              <line x1="80" y1="20" x2="20" y2="80" />
+            </svg>
           </div>
-          <div className="text-[10px] xl:text-[12px] tracking-wider uppercase text-neutral-400 font-accent">
-            AI Research • Medical Imaging • Computer Vision
+          
+          <div>
+            <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
+              <span className="font-mono font-bold">Advancing Clinical Medicine </span>
+              <span className="italic font-serif font-light">through </span>
+              <span className="font-mono font-bold">AI-Driven Design</span>
+            </h1>
+            <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
+              AI Research • Medical Imaging • Computer Vision
+            </div>
           </div>
         </section>
 
         {/* Profile */}
         <section 
           id="profile-grid-section"
-          className="border border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden relative"
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
+            showStaticImage 
+              ? "opacity-100" 
+              : "opacity-0" 
+          }`}
         >
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
+          {showStaticImage && (
+            <Image
+              src="/ahmed.jpg"
+              alt="Ahmed Messaad"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(min-width: 1024px) 33vw, 100vw"
+            />
+          )}
         </section>
 
-        {/* Projects - 10% smaller, no top padding */}
+        {/* Projects */}
         <aside
           id="projects"
-          className={`row-span-2 border border-[#2a2a2a] bg-[#0a0a0a] flex flex-col overflow-hidden transition-all duration-1000 ${
+          className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-700"
+              : "opacity-100 translate-y-0 delay-900"
           }`}
         >
           <div className="flex-1 overflow-y-auto invisible-scroll">
-            {projects.map((p) => (
+            {projects.map((p, idx) => (
               <div
                 key={p.id}
-                className={`border-b border-[#2a2a2a] transition ${
+                className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
                   activeProject === p.id ? "bg-[#151515]" : ""
                 }`}
               >
@@ -312,12 +343,25 @@ export default function Page() {
 
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
-                    activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                    activeProject === p.id ? "max-h-[900px]" : "max-h-0"
                   }`}
                 >
-                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
-                    <p className="mb-5 xl:mb-6 font-sans">{p.description}</p>
-                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
+                  <div className="px-8 xl:px-10 pb-6 xl:pb-7">
+                    {/* Project Image */}
+                    <div className="relative w-full h-48 xl:h-56 mb-4 xl:mb-5 rounded-lg overflow-hidden">
+                      <Image
+                        src={p.image}
+                        alt={p.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(min-width: 1024px) 20vw, 100vw"
+                      />
+                    </div>
+
+                    <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-neutral-400 leading-relaxed font-sans">
+                      {p.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-4 xl:mb-5">
                       {p.tech.map((t) => (
                         <span
                           key={t}
@@ -355,51 +399,67 @@ export default function Page() {
         {/* About */}
         <section
           id="about"
-          className={`border border-[#2a2a2a] p-8 xl:p-12 flex flex-col justify-end transition-all duration-1000 ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
+              : "opacity-100 translate-y-0 delay-1100"
           }`}
-          style={{
-            paddingBottom: "3rem",
-          }}
         >
-          <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
-            About
-          </h3>
-          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
-          </p>
+          <div className="flex items-start justify-start">
+            <svg
+              className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            >
+              <circle cx="50" cy="50" r="20" />
+              <circle cx="50" cy="50" r="5" />
+            </svg>
+          </div>
+          
+          <div>
+            <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
+              About
+            </h3>
+            <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
+              AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+            </p>
+          </div>
         </section>
 
         {/* Contact */}
         <section
-          id="contact"
+          id="contact-section"
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border border-[#2a2a2a] bg-[#1a1a1a] p-8 xl:p-12 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-900"
+              : "opacity-100 translate-y-0 delay-1100"
           }`}
         >
-          <svg
-            className="absolute top-6 right-6 xl:top-10 xl:right-10 w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M8 24L24 8M24 8H8M24 8V24" />
-          </svg>
-          <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent mb-auto">
-            Let's Connect
+          <div className="flex justify-between items-start mb-auto">
+            <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
+              Have some<br />questions?
+            </div>
+            <svg
+              className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M8 24L24 8M24 8H8M24 8V24" />
+            </svg>
           </div>
-          <h2 className="text-[44px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-            <span className="font-mono">CONTACT</span>
-            <span className="italic font-serif font-light ml-2">me</span>
+          
+          <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
+            <span className="font-mono">Contact </span>
+            <span className="italic font-serif font-light">me</span>
           </h2>
+          
           <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
             <a
               href="https://linkedin.com/in/ahmedmessaad"
@@ -434,25 +494,46 @@ export default function Page() {
       <div className="lg:hidden pt-16">
         {/* Hero */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[320px] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
         >
-          <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-              <span className="italic font-serif font-light ml-2">through</span>
-              <span className="font-mono font-bold"> Deep Learning Systems</span>
+          <div className="flex items-start justify-end">
+            <svg
+              className="w-14 h-14 text-neutral-700"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.5"
+            >
+              <circle cx="50" cy="50" r="40" />
+              <circle cx="50" cy="50" r="30" />
+              <circle cx="50" cy="50" r="20" />
+              <circle cx="50" cy="50" r="10" />
+              <line x1="50" y1="10" x2="50" y2="90" />
+              <line x1="10" y1="50" x2="90" y2="50" />
+              <line x1="20" y1="20" x2="80" y2="80" />
+              <line x1="80" y1="20" x2="20" y2="80" />
+            </svg>
+          </div>
+          
+          <div className="mt-auto">
+            <h1 className="text-[22px] leading-[1.2] mb-4">
+              <span className="font-mono font-bold">Advancing Clinical Medicine </span>
+              <span className="italic font-serif font-light">through </span>
+              <span className="font-mono font-bold">AI-Driven Design</span>
             </h1>
-          <div className="mt-3 text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            AI Research • Medical Imaging • Computer Vision
+            <div className="text-[9px] tracking-wider uppercase text-neutral-400 font-accent">
+              AI Research • Medical Imaging • Computer Vision
+            </div>
           </div>
         </section>
 
         {/* Profile */}
         <section
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[350px] relative transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[380px] relative transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-700"
@@ -469,18 +550,33 @@ export default function Page() {
 
         {/* About */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-900"
           }`}
         >
-          <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
-            About
-          </h3>
-          <p className="text-neutral-300 text-[13px] xl:text-[15px] leading-relaxed font-sans">
-            AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
-          </p>
+          <div className="flex items-start justify-start">
+            <svg
+              className="w-10 h-10 text-neutral-700"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            >
+              <circle cx="50" cy="50" r="20" />
+              <circle cx="50" cy="50" r="5" />
+            </svg>
+          </div>
+          
+          <div className="mt-auto">
+            <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
+              About
+            </h3>
+            <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
+              AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+            </p>
+          </div>
         </section>
 
         {/* Projects */}
@@ -492,10 +588,10 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-1100"
           }`}
         >
-          {projects.map((p) => (
+          {projects.map((p, idx) => (
             <div
               key={p.id}
-              className={`border-b border-[#2a2a2a] transition ${
+              className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
                 activeProject === p.id ? "bg-[#151515]" : ""
               }`}
             >
@@ -528,12 +624,25 @@ export default function Page() {
 
               <div
                 className={`overflow-hidden transition-all duration-500 ${
-                  activeProject === p.id ? "max-h-[500px]" : "max-h-0"
+                  activeProject === p.id ? "max-h-[800px]" : "max-h-0"
                 }`}
               >
-                <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
-                  <p className="mb-5 font-sans">{p.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
+                <div className="px-6 pb-5">
+                  {/* Project Image Mobile */}
+                  <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="100vw"
+                    />
+                  </div>
+
+                  <p className="mb-4 text-sm text-neutral-400 leading-relaxed font-sans">
+                    {p.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {p.tech.map((t) => (
                       <span
                         key={t}
@@ -572,28 +681,32 @@ export default function Page() {
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
           }`}
         >
-          <svg
-            className="absolute top-6 right-6 w-5 h-5 arrow-contact-animate"
-            viewBox="0 0 32 32"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M8 24L24 8M24 8H8M24 8V24" />
-          </svg>
-          <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-            Let's Connect
+          <div className="flex justify-between items-start">
+            <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
+              Have some<br />questions?
+            </div>
+            <svg
+              className="w-5 h-5 arrow-contact-animate"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M8 24L24 8M24 8H8M24 8V24" />
+            </svg>
           </div>
-          <h2 className="text-[36px] font-bold leading-none">
-            <span className="font-mono">CONTACT</span>
-            <span className="italic font-serif font-light ml-2">me</span>
+          
+          <h2 className="text-[40px] font-bold leading-none mt-auto mb-5">
+            <span className="font-mono">Contact </span>
+            <span className="italic font-serif font-light">me</span>
           </h2>
+          
           <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
             <a
               href="https://linkedin.com/in/ahmedmessaad"
