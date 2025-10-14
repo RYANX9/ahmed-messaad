@@ -66,7 +66,7 @@ export default function Page() {
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
-      image: "/airm.jpg",
+      image: "/mri.jpg",
     },
     {
       id: "hemavision",
@@ -78,7 +78,7 @@ export default function Page() {
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
-      image: "/hemavision.jpg",
+      image: "/mri.jpg",
     },
     {
       id: "healthcost",
