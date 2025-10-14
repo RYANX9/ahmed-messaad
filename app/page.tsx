@@ -21,11 +21,10 @@ export default function Page() {
       
       if (animatedImg && gridSection) {
         const rect = gridSection.getBoundingClientRect();
-        const gridCenterX = rect.left + rect.width / 2;
-        const gridCenterY = rect.top + rect.height / 2;
         
-        animatedImg.style.top = `${gridCenterY}px`;
-        animatedImg.style.left = `${gridCenterX}px`;
+        // --- FIX: Set the final position to the top-left corner of the target section ---
+        animatedImg.style.top = `${rect.top}px`;
+        animatedImg.style.left = `${rect.left}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         animatedImg.style.borderRadius = '16px';
@@ -184,13 +183,15 @@ export default function Page() {
         className="object-cover hidden lg:block" 
         style={{
           position: 'fixed',
-          top: '50vh',
-          left: '50vw',
+          // --- FIX: Calculate top/left to be the top-left corner of the centered image (50vw - 120px) ---
+          top: 'calc(50vh - 120px)',
+          left: 'calc(50vw - 120px)',
           width: '240px',
           height: '240px',
           borderRadius: '16px',
-          transform: 'translate(-50%, -50%)',
-          transformOrigin: 'center center',
+          // --- FIX: Remove the transform to allow smooth top/left transition to the target's top-left ---
+          transform: 'none',
+          transformOrigin: 'top left', // Better origin for top/left/width/height transitions
           zIndex: 100,
           pointerEvents: 'none',
           transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1), border-radius 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
