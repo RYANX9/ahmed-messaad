@@ -242,7 +242,7 @@ export default function Page() {
         >
           <div className="flex-1 flex items-end pb-4">
             <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine </span>
+              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
               <span className="italic font-serif font-light ml-2">through</span>
               <span className="font-mono font-bold"> Deep Learning Systems</span>
             </h1>
@@ -441,7 +441,7 @@ export default function Page() {
           }`}
         >
           <h1 className="text-[20px] xl:text-[26px] leading-tight">
-              <span className="font-mono font-bold">Advancing Clinical Medicine </span>
+              <span className="font-mono font-bold">Advancing Clinical Medicine</span>
               <span className="italic font-serif font-light ml-2">through</span>
               <span className="font-mono font-bold"> Deep Learning Systems</span>
             </h1>
