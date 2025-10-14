@@ -6,15 +6,15 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  // State to control the visibility of the permanent Image component
-  const [showGridImage, setShowGridImage] = useState(false);
+  // NEW STATE: Tracks if the animation is complete, allowing the grid item to fade in
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
       setIsLoading(false);
-      setShowGridImage(true); // Show grid image immediately on mobile
+      setIsAnimationComplete(true); // Complete instantly on mobile
       return;
     }
 
@@ -23,27 +23,27 @@ export default function Page() {
       const gridSection = document.getElementById('profile-grid-section');
       
       if (animatedImg && gridSection) {
-        // We ensure the grid section is visible for the animation
-        gridSection.style.opacity = '1';
-        
         const rect = gridSection.getBoundingClientRect();
         
-        // Final position for the fixed animating image
-        animatedImg.style.top = `${rect.top + window.scrollY}px`; // Adjusted for scroll position
+        // Final position to the top-left of the target grid section
+        animatedImg.style.top = `${rect.top}px`;
         animatedImg.style.left = `${rect.left}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         animatedImg.style.borderRadius = '16px';
         
-        // The duration of the animation is 1400ms
+        // After the transition finishes (1400ms), hide the animated image and update state
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
-          setShowGridImage(true); // Show the permanent Image component
-          setIsLoading(false); // Remove main loading screen
-        }, 1400); 
+          // 1. Mark the animation as complete so the grid section can fade in
+          setIsAnimationComplete(true); 
+          // 2. Mark the overall loading as done (this handles the header/overlay fade)
+          setIsLoading(false);
+        }, 1400);
       } else {
+        // Fallback in case elements aren't found
         setIsLoading(false);
-        setShowGridImage(true);
+        setIsAnimationComplete(true);
       }
     }, 300);
     return () => clearTimeout(timer);
@@ -183,7 +183,11 @@ export default function Page() {
         }`}
       />
 
-      {/* Animated Profile Image (The one that flies in) */}
+      {/* Animated Profile Image */}
+      {/* This is the initial, animating image. 
+        It starts centered and scales/moves into the target grid section.
+        It is hidden after the animation completes.
+      */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
@@ -192,17 +196,17 @@ export default function Page() {
         className="object-cover hidden lg:block" 
         style={{
           position: 'fixed',
-          // Start position: centered on screen
+          // Calculated initial top-left position for a 240px centered image
           top: 'calc(50vh - 120px)',
           left: 'calc(50vw - 120px)',
           width: '240px',
           height: '240px',
           borderRadius: '16px',
           transform: 'none',
-          transformOrigin: 'top left', 
+          transformOrigin: 'top left',
           zIndex: 100,
           pointerEvents: 'none',
-          // Use `top` and `left` for the transition
+          // The crucial transition properties
           transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1), border-radius 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
         }}
       />
@@ -270,25 +274,30 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile (The final grid slot for the image) */}
+        {/* Profile (The Grid Item) */}
         <section 
           id="profile-grid-section"
-          // Removed the opacity/translate conditional class here to make it visible during animation
-          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 max-w-[85%] mx-auto`}
-          style={{ 
-            opacity: isLoading ? '0' : '1', // Set initial opacity to 0
-            transform: isLoading ? 'translateY(50px)' : 'translateY(0)', // Set initial transform
-            transitionDelay: isLoading ? '700ms' : '0ms' // Add delay for the opacity fade-in
-          }}
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-opacity duration-700 max-w-[85%] mx-auto ${
+            // FIX: Use isAnimationComplete to smoothly fade in the static image
+            isAnimationComplete
+              ? "opacity-100 delay-500"
+              : "opacity-0"
+          }`}
+          // We keep the initial loading delay on the surrounding sections 
+          // but the profile image itself will only show its content (the Image component) after the animation.
         >
-          {/* This is the permanent image that appears after the fixed one finishes */}
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover', opacity: showGridImage ? 1 : 0, transition: 'opacity 300ms' }}
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
+          {/* This is the final, static image component. 
+            It is only rendered/visible when the animation is complete (on desktop).
+          */}
+          {isAnimationComplete && (
+            <Image
+              src="/ahmed.jpg"
+              alt="Ahmed Messaad"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(min-width: 1024px) 33vw, 100vw"
+            />
+          )}
         </section>
 
         {/* Projects */}
@@ -471,7 +480,7 @@ export default function Page() {
         </section>
       </div>
 
-      {/* Mobile Stack Layout */}
+      {/* Mobile Stack Layout (Remains unchanged) */}
       <div className="lg:hidden pt-16">
         {/* Hero */}
         <section
