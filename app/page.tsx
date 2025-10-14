@@ -28,6 +28,7 @@ export default function Page() {
         animatedImg.style.left = `${gridCenterX}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
+        animatedImg.style.borderRadius = '16px';
         
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
@@ -185,13 +186,14 @@ export default function Page() {
           position: 'fixed',
           top: '50vh',
           left: '50vw',
-          width: '280px',
-          height: '280px',
+          width: '240px',
+          height: '240px',
+          borderRadius: '16px',
           transform: 'translate(-50%, -50%)',
           transformOrigin: 'center center',
           zIndex: 100,
           pointerEvents: 'none',
-          transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
+          transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1), border-radius 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
         }}
       />
 
@@ -261,7 +263,7 @@ export default function Page() {
         {/* Profile */}
         <section 
           id="profile-grid-section"
-          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 ${
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 max-w-[85%] mx-auto ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-700"
