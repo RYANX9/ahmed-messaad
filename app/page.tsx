@@ -1,7 +1,7 @@
 "use client";
  
 import React, { useState } from "react";
-import Image from "next/image";
+import Image from "next/image"; 
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
