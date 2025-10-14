@@ -6,12 +6,15 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
+  // State to control the visibility of the permanent Image component
+  const [showGridImage, setShowGridImage] = useState(false);
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
 
     if (!isDesktop) {
       setIsLoading(false);
+      setShowGridImage(true); // Show grid image immediately on mobile
       return;
     }
 
@@ -20,21 +23,27 @@ export default function Page() {
       const gridSection = document.getElementById('profile-grid-section');
       
       if (animatedImg && gridSection) {
+        // We ensure the grid section is visible for the animation
+        gridSection.style.opacity = '1';
+        
         const rect = gridSection.getBoundingClientRect();
         
-        // --- FIX: Set the final position to the top-left corner of the target section ---
-        animatedImg.style.top = `${rect.top}px`;
+        // Final position for the fixed animating image
+        animatedImg.style.top = `${rect.top + window.scrollY}px`; // Adjusted for scroll position
         animatedImg.style.left = `${rect.left}px`;
         animatedImg.style.width = `${rect.width}px`;
         animatedImg.style.height = `${rect.height}px`;
         animatedImg.style.borderRadius = '16px';
         
+        // The duration of the animation is 1400ms
         setTimeout(() => {
           animatedImg.style.visibility = 'hidden';
-          setIsLoading(false);
-        }, 1400);
+          setShowGridImage(true); // Show the permanent Image component
+          setIsLoading(false); // Remove main loading screen
+        }, 1400); 
       } else {
         setIsLoading(false);
+        setShowGridImage(true);
       }
     }, 300);
     return () => clearTimeout(timer);
@@ -174,7 +183,7 @@ export default function Page() {
         }`}
       />
 
-      {/* Animated Profile Image */}
+      {/* Animated Profile Image (The one that flies in) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
@@ -183,17 +192,17 @@ export default function Page() {
         className="object-cover hidden lg:block" 
         style={{
           position: 'fixed',
-          // --- FIX: Calculate top/left to be the top-left corner of the centered image (50vw - 120px) ---
+          // Start position: centered on screen
           top: 'calc(50vh - 120px)',
           left: 'calc(50vw - 120px)',
           width: '240px',
           height: '240px',
           borderRadius: '16px',
-          // --- FIX: Remove the transform to allow smooth top/left transition to the target's top-left ---
           transform: 'none',
-          transformOrigin: 'top left', // Better origin for top/left/width/height transitions
+          transformOrigin: 'top left', 
           zIndex: 100,
           pointerEvents: 'none',
+          // Use `top` and `left` for the transition
           transition: 'top 1400ms cubic-bezier(0.76, 0, 0.24, 1), left 1400ms cubic-bezier(0.76, 0, 0.24, 1), width 1400ms cubic-bezier(0.76, 0, 0.24, 1), height 1400ms cubic-bezier(0.76, 0, 0.24, 1), border-radius 1400ms cubic-bezier(0.76, 0, 0.24, 1)',
         }}
       />
@@ -261,20 +270,23 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile */}
+        {/* Profile (The final grid slot for the image) */}
         <section 
           id="profile-grid-section"
-          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 max-w-[85%] mx-auto ${
-            isLoading
-              ? "opacity-0 translate-y-[50px]"
-              : "opacity-100 translate-y-0 delay-700"
-          }`}
+          // Removed the opacity/translate conditional class here to make it visible during animation
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-1000 max-w-[85%] mx-auto`}
+          style={{ 
+            opacity: isLoading ? '0' : '1', // Set initial opacity to 0
+            transform: isLoading ? 'translateY(50px)' : 'translateY(0)', // Set initial transform
+            transitionDelay: isLoading ? '700ms' : '0ms' // Add delay for the opacity fade-in
+          }}
         >
+          {/* This is the permanent image that appears after the fixed one finishes */}
           <Image
             src="/ahmed.jpg"
             alt="Ahmed Messaad"
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', opacity: showGridImage ? 1 : 0, transition: 'opacity 300ms' }}
             sizes="(min-width: 1024px) 33vw, 100vw"
           />
         </section>
