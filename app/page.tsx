@@ -66,6 +66,7 @@ export default function Page() {
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
+      image: "/airm.jpg",
     },
     {
       id: "hemavision",
@@ -77,6 +78,7 @@ export default function Page() {
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
+      image: "/hemavision.jpg",
     },
     {
       id: "healthcost",
@@ -88,6 +90,7 @@ export default function Page() {
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
+      image: "/healthcost.jpg",
     },
     {
       id: "mydailyhealth",
@@ -99,6 +102,7 @@ export default function Page() {
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
+      image: "/mydailyhealth.jpg",
     },
   ];
 
@@ -339,12 +343,25 @@ export default function Page() {
 
                 <div
                   className={`overflow-hidden transition-all duration-500 ${
-                    activeProject === p.id ? "max-h-[700px]" : "max-h-0"
+                    activeProject === p.id ? "max-h-[900px]" : "max-h-0"
                   }`}
                 >
-                  <div className="px-8 xl:px-10 pb-6 xl:pb-7 text-[14px] xl:text-[15px] text-neutral-400 leading-relaxed">
-                    <p className="mb-5 xl:mb-6 font-sans">{p.description}</p>
-                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-5 xl:mb-6">
+                  <div className="px-8 xl:px-10 pb-6 xl:pb-7">
+                    {/* Project Image */}
+                    <div className="relative w-full h-48 xl:h-56 mb-4 xl:mb-5 rounded-lg overflow-hidden">
+                      <Image
+                        src={p.image}
+                        alt={p.name}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(min-width: 1024px) 20vw, 100vw"
+                      />
+                    </div>
+
+                    <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-neutral-400 leading-relaxed font-sans">
+                      {p.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-4 xl:mb-5">
                       {p.tech.map((t) => (
                         <span
                           key={t}
@@ -607,12 +624,25 @@ export default function Page() {
 
               <div
                 className={`overflow-hidden transition-all duration-500 ${
-                  activeProject === p.id ? "max-h-[500px]" : "max-h-0"
+                  activeProject === p.id ? "max-h-[800px]" : "max-h-0"
                 }`}
               >
-                <div className="px-6 pb-5 text-sm text-neutral-400 leading-relaxed">
-                  <p className="mb-5 font-sans">{p.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-5">
+                <div className="px-6 pb-5">
+                  {/* Project Image Mobile */}
+                  <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="100vw"
+                    />
+                  </div>
+
+                  <p className="mb-4 text-sm text-neutral-400 leading-relaxed font-sans">
+                    {p.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {p.tech.map((t) => (
                       <span
                         key={t}
