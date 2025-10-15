@@ -312,7 +312,7 @@ export default function Page() {
             </DecorativeSVG>
           </div>
           <div className="mt-auto">
-            <h1 className="text-[42px] leading-[1.15] mb-5">
+            <h1 className="text-[48px] leading-[1.15] mb-5">
               <span className="font-mono font-bold">Advancing Clinical Medicine </span>
               <span className="italic font-serif font-light">through </span>
               <span className="font-mono font-bold">Deep Learning</span>
