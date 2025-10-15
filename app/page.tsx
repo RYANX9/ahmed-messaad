@@ -6,11 +6,13 @@ import Image from "next/image";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  
-  // NEW STATE: Controls when the fixed image has its final calculated position and can start the transition.
+
+  // NEW STATE: Controls the scale down animation (Step 1)
+  const [isScaledDown, setIsScaledDown] = useState(false);
+
+  // Existing states repurposed for transition flow
+  // isImageReady is now used to signal the move to the final position (Step 2)
   const [isImageReady, setIsImageReady] = useState(false);
-  
-  // The animated image is now always rendered, but its visibility is controlled by isImageReady and isTransitionComplete
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
   useEffect(() => {
@@ -25,87 +27,73 @@ export default function Page() {
       return;
     }
 
-    // 1. Calculate Target Position & Size
-    const rect = profileSection.getBoundingClientRect();
-    const absoluteTop = rect.top + window.scrollY;
-    const absoluteLeft = rect.left + window.scrollX;
+    // --- Animation Constants ---
+    const SCALE_DOWN_DURATION = 400; // Time for scale 1 -> 0.7 (Quickly signal loading end)
+    const SCALE_DOWN_DELAY = 100;    // Small delay before starting the scale down
+    const MOVE_DURATION = 1200;      // Time for the smooth transition to the final position
+    // Aggressive easing for the "smooth asf" feel
+    const MOVE_EASING = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'; 
 
-    // 2. Set Final Styles (which triggers the CSS transition)
-    // We do this inside a setTimeout of 0 to ensure the initial CSS position
-    // (fixed, centered) is applied before we start the transition.
-    const initialPositionDelay = setTimeout(() => {
-      // Apply the final styles to start the transition
+    // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
+    // We set these via direct style manipulation for precise control over the initial state 
+    // and to set the first, short transition property for the scale down.
+    animatedImg.style.position = 'fixed';
+    animatedImg.style.top = '50vh';
+    animatedImg.style.left = '50vw';
+    animatedImg.style.width = '240px';
+    animatedImg.style.height = '240px';
+    animatedImg.style.borderRadius = '16px';
+    animatedImg.style.zIndex = '100';
+    animatedImg.style.opacity = '1';
+    
+    // Set a short transition property for the scale-down phase (transform property only)
+    animatedImg.style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
+    
+    // --- Phase 1: Scale Down (100% -> 70%) ---
+    const scaleDownStart = setTimeout(() => {
+      setIsScaledDown(true); // Triggers the scale(0.7) via JSX style update
+    }, SCALE_DOWN_DELAY);
+
+    // --- Phase 2: Move to Final Position (Starts after scale-down is complete) ---
+    const moveTransitionStart = setTimeout(() => {
+      // 2. Calculate Target Position & Size
+      const rect = profileSection.getBoundingClientRect();
+      const absoluteTop = rect.top + window.scrollY;
+      const absoluteLeft = rect.left + window.scrollX;
+      
+      // 3. Set Final Styles (Triggers the move)
+      // Override the transition property to the long duration and custom easing for the move
+      animatedImg.style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
+      
+      // Target position and size
       animatedImg.style.top = `${absoluteTop}px`;
       animatedImg.style.left = `${absoluteLeft}px`;
       animatedImg.style.width = `${rect.width}px`;
       animatedImg.style.height = `${rect.height}px`;
-      animatedImg.style.transform = 'none';
-
-      // 3. Signal the Image is ready to start the transition
-      setIsImageReady(true);
       
-      // 4. Complete the Transition after the 1500ms CSS duration
+      // Target shape (assuming 'rounded-2xl' is 8px)
+      animatedImg.style.borderRadius = '8px'; 
+      
+      // The key move: remove the centering and scale transforms. The element now transitions 
+      // its fixed position (top/left) and dimensions (width/height).
+      animatedImg.style.transform = 'none'; 
+      
+      setIsImageReady(true); // Flag: Transition is now moving
+
+      // 4. Complete the Transition
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
-      }, 1500);
+      }, MOVE_DURATION);
 
       return () => clearTimeout(completeDelay);
-    }, 0); // Using 0ms timeout ensures this runs after initial render logic
-
-    return () => clearTimeout(initialPositionDelay);
+    }, SCALE_DOWN_DELAY + SCALE_DOWN_DURATION + 100); // Start move 100ms after scale-down should be complete
+    
+    return () => {
+      clearTimeout(scaleDownStart);
+      clearTimeout(moveTransitionStart);
+    };
   }, []);
-
-  const projects = [
-    {
-      id: "airm",
-      name: "AIRM Brain Tumor System",
-      context: "Clinical AI Platform",
-      year: "2024",
-      description:
-        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
-      tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
-      link: "https://youtu.be/2OeqBKF3X_A",
-      linkText: "Watch Demo",
-      image: "/brain.jpg",
-    },
-    {
-      id: "hemavision",
-      name: "HemaVision",
-      context: "Medical Automation",
-      year: "2023–2024",
-      description:
-        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
-      tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
-      link: "https://youtu.be/YxhA877Wyn0",
-      linkText: "Watch Demo",
-      image: "/blood.jpg",
-    },
-    {
-      id: "healthcost",
-      name: "Healthcare Cost Prediction",
-      context: "Deep Learning Research",
-      year: "2024",
-      description:
-        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
-      tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
-      link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
-      linkText: "View Project",
-      image: "/healthcarecost.png",
-    },
-    {
-      id: "mydailyhealth",
-      name: "My Daily Health",
-      context: "Research Thesis",
-      year: "2023",
-      description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
-      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
-      link: "https://youtu.be/kh7WBjNPpEM",
-      linkText: "Watch Demo",
-      image: "/daily.png",
-    },
-  ];
 
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
@@ -237,22 +225,24 @@ export default function Page() {
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE (Desktop Only) */}
+      {/* ANIMATED PROFILE IMAGE (Desktop Only)
+        The image starts at fixed centered position.
+        1. isScaledDown=true triggers transform: scale(0.7) with a short ease-out transition.
+        2. moveTransitionStart in useEffect overwrites the 'style' to trigger the move/resize.
+        3. Opacity is controlled to hide the animated image once the static one is ready.
+      */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className={`object-cover hidden lg:block transition-all duration-[1500ms] cubic-bezier(0.25, 0.46, 0.45, 0.94) ${
-          isImageReady && !isTransitionComplete ? "opacity-100" : "opacity-0"
-        }`} // Use CSS classes to control visibility based on new states
+        // Remove fixed transition classes and manage transition properties dynamically in useEffect
+        className={`object-cover hidden lg:block ${
+            isTransitionComplete ? "opacity-0" : "opacity-100"
+        }`} 
         style={{
-          position: 'fixed',
-          top: '50vh', // Initial position
-          left: '50vw', // Initial position
-          width: '240px', // Initial size
-          height: '240px', // Initial size
-          borderRadius: '16px',
-          transform: 'translate(-50%, -50%)', // Centering trick
+          // Initial styles are set in useEffect for precision, but the dynamic scale is here:
+          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.7 : 1})`,
+          // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
           zIndex: 100,
           pointerEvents: 'none',
         }}
