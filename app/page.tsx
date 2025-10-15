@@ -159,7 +159,7 @@ export default function Page() {
   }, [isTransitionComplete]);
 
   return (
-    <main className="bg-[#F5F5F7] text-[#212121] min-h-screen overflow-x-hidden">
+    <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
         
@@ -248,8 +248,7 @@ export default function Page() {
           left: 0;
           right: 0;
           height: 80px;
-          /* Updated to Primary Background Color */
-          background: linear-gradient(to bottom, transparent, #F5F5F7 90%);
+          background: linear-gradient(to bottom, transparent, #0a0a0a 90%);
           pointer-events: none;
           z-index: 10;
         }
@@ -257,19 +256,20 @@ export default function Page() {
 
       {/* OVERLAY: Hides all content initially. Fades out when loading is complete. */}
       <div
-        // Updated to Primary Background Color
-        className={`fixed inset-0 bg-[#F5F5F7] z-[90] pointer-events-none transition-opacity duration-700 ${
+        className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
       {/* ANIMATED PROFILE IMAGE - Visible throughout the animation until the seamless hand-off */}
+      {/* We use <img> here, as it allows us to easily set position: fixed and manually manipulate the DOM for the animation */}
       <img
         id="animated-profile"
         src={isTransitionComplete ? '' : "/ahmed.jpg"}
         alt="Ahmed Messaad"
         className={`object-cover ${isTransitionComplete ? 'hidden' : 'block'}`} // Hide instantly on completion
         style={{
+          // Initial centering transform applied here. Other styles are applied in useEffect.
           transform: `translate(-50%, -50%)`,
           zIndex: 100, // Keep it above everything during the move
           pointerEvents: 'none',
@@ -277,12 +277,10 @@ export default function Page() {
       />
 
       <header
-        // Updated to Primary Background Color and Border Color
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#F5F5F7] border-b border-[#E0E0E0] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
-        {/* Text color is inherited from main text-[#212121] */}
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
           AHMED MESSAAD
         </div>
@@ -290,21 +288,29 @@ export default function Page() {
 
       {/* DESKTOP LAYOUT (lg:block) */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
+        {/*
+          --- OPTIMIZED GRID COLUMNS (9fr:6fr:10fr) ---
+          Col 1 (Title/About): 9fr (36% of screen)
+          Col 2 (Profile Pic): 6fr (24% of screen)
+          Col 3 (Projects):   10fr (40% of screen)
+          
+          This gives Row 1 the desired 60:40 split (9fr : 6fr).
+          We handle the Row 2 50:50 split using flex/col-span-2.
+        */}
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* --- ROW 1, COLUMN 1: TITLE/INTRO (36% width) --- */}
+          {/* --- ROW 1, COLUMN 1: TITLE/INTRO (36% width) ---
+          */}
           <section
-            // Updated to Primary Background Color and Border Color
-            className={`bg-[#F5F5F7] border border-[#E0E0E0] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
             }`}
           >
             <div className="flex items-start justify-end">
-              {/* Updated to Muted Icon Color */}
               <svg
-                className="w-16 h-16 xl:w-20 xl:h-20 text-[#AAAAAA]"
+                className="w-16 h-16 xl:w-20 xl:h-20 text-neutral-700"
                 viewBox="0 0 100 100"
                 fill="none"
                 stroke="currentColor"
@@ -322,33 +328,31 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6 text-[#212121]">
+              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
                 <span className="font-mono font-bold">Advancing Clinical Medicine</span>
                 <span className="italic font-serif font-light">through </span>
-                {/* Applied AI Accent Color */}
-                <span className="font-mono font-bold text-[#00A9FF]">Deep Learning Systems</span>
+                <span className="font-mono font-bold">Deep Learning Systems</span>
               </h1>
-              {/* Updated to Muted Secondary Text Color */}
-              <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-[#5C5C5C] font-accent">
+              <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 AI Research • Medical Imaging • Computer Vision
               </div>
             </div>
           </section>
 
-          {/* --- ROW 1, COLUMN 2: PROFILE PIC (24% width) --- */}
+          {/* --- ROW 1, COLUMN 2: PROFILE PIC (24% width) ---
+          */}
           <section 
             id="profile-grid-section" // Target ID for desktop
-            // Updated to Secondary Background Color and Border Color
-            className={`bg-[#FFFFFF] border border-[#E0E0E0] rounded-2xl overflow-hidden relative transition-all duration-700`}
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700`}
           >
             {/* The actual image is now set as a background style in useEffect on completion */}
           </section>
 
-          {/* --- ROW 1 & 2, COLUMN 3: PROJECTS (40% width, row-span-2) --- */}
+          {/* --- ROW 1 & 2, COLUMN 3: PROJECTS (40% width, row-span-2) ---
+          */}
           <aside
             id="projects"
-            // Updated to Primary Background Color and Border Color
-            className={`row-span-2 bg-[#F5F5F7] border border-[#E0E0E0] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
+            className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-900"
@@ -358,9 +362,8 @@ export default function Page() {
               {projects.map((p, idx) => (
                 <div
                   key={p.id}
-                  // Updated Border Color and Active Project BG Color
-                  className={`${idx !== 0 ? 'border-t' : ''} border-[#E0E0E0] transition ${
-                    activeProject === p.id ? "bg-[#E0E0E0]" : ""
+                  className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
+                    activeProject === p.id ? "bg-[#151515]" : ""
                   }`}
                 >
                   <button
@@ -370,13 +373,11 @@ export default function Page() {
                     className="w-full flex justify-between items-center px-8 xl:px-10 py-4 xl:py-5 text-left"
                   >
                     <div className="flex flex-col">
-                      {/* Text color is inherited from main text-[#212121] */}
                       <div className="text-base xl:text-lg font-semibold font-mono">
                         {p.name}
                       </div>
                       <div className="flex items-center gap-4"> 
-                        {/* Updated to Muted Secondary Text Color */}
-                        <div className="text-[10px] xl:text-[11px] text-[#5C5C5C] mt-1 font-accent uppercase tracking-wide">
+                        <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                           {p.context} • {p.year}
                         </div>
                         <a
@@ -384,8 +385,7 @@ export default function Page() {
                           target="_blank"
                           rel="noreferrer"
                           onClick={(e) => e.stopPropagation()} 
-                          // Updated to Primary Text Color, Accent Color on hover
-                          className={`arrow-animate inline-flex items-center gap-2 text-[#212121] hover:text-[#00A9FF] text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
+                          className={`arrow-animate inline-flex items-center gap-2 text-white text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
                             activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
                           } transition-opacity duration-300`}
                         >
@@ -403,7 +403,6 @@ export default function Page() {
                         </a>
                       </div>
                     </div>
-                    {/* Text color is inherited from main text-[#212121] */}
                     <svg
                       className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ml-3 ${
                         activeProject === p.id ? "rotate-90" : ""
@@ -433,16 +432,14 @@ export default function Page() {
                         />
                       </div>
 
-                      {/* Updated to Muted Secondary Text Color */}
-                      <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-[#5C5C5C] leading-relaxed font-sans">
+                      <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-neutral-400 leading-relaxed font-sans">
                         {p.description}
                       </p>
                       <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-4 xl:mb-5">
                         {p.tech.map((t) => (
                           <span
                             key={t}
-                            // Updated BG, Text, Border, and Hover colors
-                            className="bg-[#FFFFFF] text-[#212121] border border-[#E0E0E0] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#F0F0F0] font-mono"
+                            className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#333] font-mono"
                           >
                             {t}
                           </span>
@@ -457,22 +454,24 @@ export default function Page() {
           
           {/*
             --- ROW 2: ABOUT & CONTACT (50:50 SPLIT) ---
+            This container spans both Column 1 and Column 2 (col-span-2) 
+            and uses a FLEX layout to guarantee the 50:50 internal split.
           */}
           <div className="col-span-2 flex gap-3 h-full">
-              {/* --- ROW 2, COLUMN 1: ABOUT (30% width) --- */}
+              {/* --- ROW 2, COLUMN 1: ABOUT (50% of 60% = 30% width) ---
+                The 'flex-1' and 'w-1/2' ensure it takes exactly 50% of the parent (col-span-2) container.
+              */}
               <section
                 id="about"
-                // Updated to Primary Background Color and Border Color
-                className={`flex-1 w-1/2 bg-[#F5F5F7] border border-[#E0E0E0] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+                className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
                   isLoading
                     ? "opacity-0 translate-y-[50px]"
                     : "opacity-100 translate-y-0 delay-1100"
                 }`}
               >
                 <div className="flex items-start justify-start">
-                  {/* Updated to Muted Icon Color */}
                   <svg
-                    className="w-12 h-12 xl:w-14 xl:h-14 text-[#AAAAAA]"
+                    className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700"
                     viewBox="0 0 100 100"
                     fill="none"
                     stroke="currentColor"
@@ -484,36 +483,32 @@ export default function Page() {
                 </div>
                 
                 <div>
-                  {/* Updated to Tertiary Text Color */}
-                  <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-[#787878] mb-4 xl:mb-5 font-accent">
+                  <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
                     About
                   </h3>
-                  {/* Updated to Primary Text Color */}
-                  <p className="text-[#212121] text-[14px] xl:text-[16px] leading-relaxed font-sans">
+                  <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
                     AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
                   </p>
                 </div>
               </section>
 
-              {/* --- ROW 2, COLUMN 2: CONTACT (30% width) --- */}
+              {/* --- ROW 2, COLUMN 2: CONTACT (50% of 60% = 30% width) ---
+              */}
               <section
                 id="contact-section"
                 onClick={() =>
                   (window.location.href = "mailto:ahmed.messaad@outlook.com")
                 }
-                // Updated to Secondary Background Color, Border Color, and Hover BG Color
-                className={`flex-1 w-1/2 bg-[#FFFFFF] border border-[#E0E0E0] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#F0F0F0] transition-all duration-1000 ${
+                className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
                   isLoading
                     ? "opacity-0 translate-y-[50px]"
                     : "opacity-100 translate-y-0 delay-1100"
                 }`}
               >
                 <div className="flex justify-between items-start mb-auto">
-                  {/* Updated to Tertiary Text Color */}
-                  <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-[#787878] font-accent">
+                  <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
                     Let's Connect<br />
                   </div>
-                  {/* Text color is inherited from main text-[#212121] */}
                   <svg
                     className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
                     viewBox="0 0 32 32"
@@ -525,19 +520,18 @@ export default function Page() {
                   </svg>
                 </div>
                 
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8 text-[#212121]">
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
                   <span className="font-mono">Contact </span>
                   <span className="italic font-serif font-light">me</span>
                 </h2>
                 
                 <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-                  {/* Updated to Muted Secondary Text Color, Accent Color on hover */}
                   <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
                     rel="noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+                    className="text-neutral-500 hover:text-white transition"
                   >
                     LINKEDIN
                   </a>
@@ -546,14 +540,14 @@ export default function Page() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+                    className="text-neutral-500 hover:text-white transition"
                   >
                     GITHUB
                   </a>
                   <a
                     href="mailto:ahmed.messaad@outlook.com"
                     onClick={(e) => e.stopPropagation()}
-                    className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+                    className="text-neutral-500 hover:text-white transition"
                   >
                     EMAIL
                   </a>
@@ -563,20 +557,18 @@ export default function Page() {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (lg:hidden) */}
+      {/* MOBILE LAYOUT (lg:hidden) - Unchanged */}
       <div className="lg:hidden pt-16">
         <section
-          // Updated Border Color
-          className={`border-b border-[#E0E0E0] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
         >
           <div className="flex items-start justify-end">
-            {/* Updated to Muted Icon Color */}
             <svg
-              className="w-14 h-14 text-[#AAAAAA]"
+              className="w-14 h-14 text-neutral-700"
               viewBox="0 0 100 100"
               fill="none"
               stroke="currentColor"
@@ -594,14 +586,12 @@ export default function Page() {
           </div>
           
           <div className="mt-auto">
-            {/* Updated to Primary Text Color, Accent Color applied */}
-            <h1 className="text-[34px] leading-[1.2] mb-5 text-[#212121]">
+            <h1 className="text-[34px] leading-[1.2] mb-5">
               <span className="font-mono font-bold">Advancing Clinical Medicine </span>
               <span className="italic font-serif font-light">through </span>
-              <span className="font-mono font-bold text-[#00A9FF]">AI-Driven Design</span>
+              <span className="font-mono font-bold">AI-Driven Design</span>
             </h1>
-            {/* Updated to Muted Secondary Text Color */}
-            <div className="text-[11px] tracking-wider uppercase text-[#5C5C5C] font-accent">
+            <div className="text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
               AI Research • Medical Imaging • Computer Vision
             </div>
           </div>
@@ -609,24 +599,21 @@ export default function Page() {
 
         <section
           id="profile-mobile-section" // Target ID for mobile
-          // Updated to Secondary Background Color and Border Color
-          className={`border-b border-[#E0E0E0] bg-[#FFFFFF] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000`}
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000`}
         >
           {/* The actual image is now set as a background style in useEffect on completion */}
         </section>
 
         <section
-          // Updated Border Color
-          className={`border-b border-[#E0E0E0] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-900"
           }`}
         >
           <div className="flex items-start justify-start">
-            {/* Updated to Muted Icon Color */}
             <svg
-              className="w-10 h-10 text-[#AAAAAA]"
+              className="w-10 h-10 text-neutral-700"
               viewBox="0 0 100 100"
               fill="none"
               stroke="currentColor"
@@ -638,12 +625,10 @@ export default function Page() {
           </div>
           
           <div className="mt-auto">
-            {/* Updated to Tertiary Text Color */}
-            <h3 className="text-[9px] uppercase tracking-wider text-[#787878] mb-3 font-accent">
+            <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
               About
             </h3>
-            {/* Updated to Primary Text Color */}
-            <p className="text-[#212121] text-[14px] leading-relaxed font-sans">
+            <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
               AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
             </p>
           </div>
@@ -651,8 +636,7 @@ export default function Page() {
 
         <aside
           id="projects"
-          // Updated to Primary Background Color and Border Color
-          className={`border-b border-[#E0E0E0] bg-[#F5F5F7] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1100"
@@ -661,9 +645,8 @@ export default function Page() {
           {projects.map((p, idx) => (
             <div
               key={p.id}
-              // Updated Border Color and Active Project BG Color
-              className={`${idx !== 0 ? 'border-t' : ''} border-[#E0E0E0] transition ${
-                activeProject === p.id ? "bg-[#E0E0E0]" : ""
+              className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
+                activeProject === p.id ? "bg-[#151515]" : ""
               }`}
             >
               <button
@@ -673,13 +656,11 @@ export default function Page() {
                 className="w-full flex justify-between items-center px-6 py-4 text-left"
               >
                 <div className="flex flex-col">
-                  {/* Text color is inherited from main text-[#212121] */}
                   <div className="text-sm font-semibold font-mono">
                     {p.name}
                   </div>
                   <div className="flex items-center gap-4"> 
-                    {/* Updated to Muted Secondary Text Color */}
-                    <div className="text-[9px] text-[#5C5C5C] mt-1 font-accent uppercase tracking-wide">
+                    <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                       {p.context} • {p.year}
                     </div>
                     <a
@@ -687,8 +668,7 @@ export default function Page() {
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => e.stopPropagation()} 
-                      // Updated to Primary Text Color, Accent Color on hover
-                      className={`arrow-animate inline-flex items-center gap-2 text-[#212121] hover:text-[#00A9FF] text-[9px] tracking-wide transition font-mono ${
+                      className={`arrow-animate inline-flex items-center gap-2 text-white text-[9px] tracking-wide transition font-mono ${
                         activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
                       } transition-opacity duration-300`}
                     >
@@ -706,7 +686,6 @@ export default function Page() {
                     </a>
                   </div>
                 </div>
-                {/* Text color is inherited from main text-[#212121] */}
                 <svg
                   className={`w-4 h-4 transition-transform flex-shrink-0 ml-3 ${
                     activeProject === p.id ? "rotate-90" : ""
@@ -736,16 +715,14 @@ export default function Page() {
                     />
                   </div>
 
-                  {/* Updated to Muted Secondary Text Color */}
-                  <p className="mb-4 text-sm text-[#5C5C5C] leading-relaxed font-sans">
+                  <p className="mb-4 text-sm text-neutral-400 leading-relaxed font-sans">
                     {p.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {p.tech.map((t) => (
                       <span
                         key={t}
-                        // Updated BG, Text, Border, and Hover colors
-                        className="bg-[#FFFFFF] text-[#212121] border border-[#E0E0E0] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#F0F0F0] font-mono"
+                        className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#333] font-mono"
                       >
                         {t}
                       </span>
@@ -761,19 +738,16 @@ export default function Page() {
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          // Updated to Secondary Background Color, Border Color, and Hover BG Color
-          className={`border-b border-[#E0E0E0] bg-[#FFFFFF] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#F0F0F0] transition-all duration-1000 relative min-h-[280px] ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
           }`}
         >
           <div className="flex justify-between items-start">
-            {/* Updated to Tertiary Text Color */}
-            <div className="text-[9px] tracking-wider uppercase text-[#787878] font-accent">
+            <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
               Let's Connect<br />
             </div>
-            {/* Text color is inherited from main text-[#212121] */}
             <svg
               className="w-5 h-5 arrow-contact-animate"
               viewBox="0 0 32 32"
@@ -785,19 +759,18 @@ export default function Page() {
             </svg>
           </div>
           
-          <h2 className="text-[40px] font-bold leading-none mt-auto mb-5 text-[#212121]">
+          <h2 className="text-[40px] font-bold leading-none mt-auto mb-5">
             <span className="font-mono">Contact </span>
             <span className="italic font-serif font-light">me</span>
           </h2>
           
           <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-            {/* Updated to Muted Secondary Text Color, Accent Color on hover */}
             <a
               href="https://linkedin.com/in/ahmedmessaad"
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+              className="text-neutral-500 hover:text-white transition"
             >
               LINKEDIN
             </a>
@@ -806,14 +779,14 @@ export default function Page() {
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+              className="text-neutral-500 hover:text-white transition"
             >
               GITHUB
             </a>
             <a
               href="mailto:ahmed.messaad@outlook.com"
               onClick={(e) => e.stopPropagation()}
-              className="text-[#5C5C5C] hover:text-[#00A9FF] transition"
+              className="text-neutral-500 hover:text-white transition"
             >
               EMAIL
             </a>
