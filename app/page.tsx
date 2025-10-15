@@ -79,16 +79,14 @@ export default function Page() {
       return;
     }
 
-    // --- Animation Constants ---
+    // --- Animation Constants (ADJUSTED FOR LONGER, SMOOTHER TRANSITION) ---
     const SCALE_DOWN_DURATION = 400; // Time for scale 1 -> 0.7 (Quickly signal loading end)
     const SCALE_DOWN_DELAY = 100;    // Small delay before starting the scale down
-    const MOVE_DURATION = 1200;      // Time for the smooth transition to the final position
-    // Aggressive easing for the "smooth asf" feel
-    const MOVE_EASING = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'; 
+    const MOVE_DURATION = 2000;      // INCREASED: Time for the smooth transition (2.0 seconds)
+    // ADJUSTED: Smoother easing that still has a slight bounce effect
+    const MOVE_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; 
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
-    // We set these via direct style manipulation for precise control over the initial state 
-    // and to set the first, short transition property for the scale down.
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
@@ -114,7 +112,7 @@ export default function Page() {
       const absoluteLeft = rect.left + window.scrollX;
       
       // 3. Set Final Styles (Triggers the move)
-      // Override the transition property to the long duration and custom easing for the move
+      // Override the transition property to the LONG duration and custom easing for the move
       (animatedImg as HTMLElement).style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
       
       // Target position and size
@@ -135,7 +133,7 @@ export default function Page() {
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
-      }, MOVE_DURATION);
+      }, MOVE_DURATION); // Wait the full 2000ms
 
       return () => clearTimeout(completeDelay);
     }, SCALE_DOWN_DELAY + SCALE_DOWN_DURATION + 100); // Start move 100ms after scale-down should be complete
@@ -296,7 +294,7 @@ export default function Page() {
 
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
-          isLoading ? "opacity-0" : "opacity-100 delay-300"
+          isLoading ? "opacity-0" : "opacity-100 delay-[2500ms]"
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
@@ -311,7 +309,7 @@ export default function Page() {
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-500"
+                : "opacity-100 translate-y-0 delay-[3000ms]"
             }`}
           >
             <div className="flex items-start justify-end">
@@ -361,7 +359,7 @@ export default function Page() {
             className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-900"
+                : "opacity-100 translate-y-0 delay-[3400ms]"
             }`}
           >
             <div className="flex-1 overflow-y-auto invisible-scroll">
@@ -463,7 +461,7 @@ export default function Page() {
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-1100"
+                : "opacity-100 translate-y-0 delay-[3400ms]"
             }`}
           >
             <div className="flex items-start justify-start">
@@ -497,7 +495,7 @@ export default function Page() {
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-1100"
+                : "opacity-100 translate-y-0 delay-[3600ms]"
             }`}
           >
             <div className="flex justify-between items-start mb-auto">
