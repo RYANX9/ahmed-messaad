@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -754,6 +753,9 @@ export default function Page() {
               >
                 EMAIL
               </a>
+            </div>
+            <div className="mt-4 text-[8px] text-neutral-600 uppercase tracking-widest font-mono">
+              Designed & Built by Ahmed Messaad
             </div>
           </section>
         </div>
