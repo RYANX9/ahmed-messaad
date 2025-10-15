@@ -69,7 +69,7 @@ export default function Page() {
 
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile') as HTMLImageElement;
-    
+
     // Determine the target section ID based on screen size
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
@@ -88,9 +88,9 @@ export default function Page() {
     }
 
     // --- Animation Constants ---
-    const INITIAL_DELAY = 400;  
+    const INITIAL_DELAY = 400;
     const MOVE_DURATION = 1500; // 1.5 seconds for smoother transition
-    const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';  
+    const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
@@ -100,7 +100,7 @@ export default function Page() {
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
-    imgStyle.borderRadius = '16px';  
+    imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100'; // High z-index to stay on top
     imgStyle.opacity = '1';
     imgStyle.transform = `translate(-50%, -50%)`; // Centering transform
@@ -114,25 +114,25 @@ export default function Page() {
       const rect = profileSection.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
-      
+
       // 3. Set Final Styles (Triggers the combined smooth move and scale)
-      
+
       // Set the transition property just before changing the values.
       imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
-      
+
       // Target position and size (These changes trigger the animation)
       imgStyle.top = `${absoluteTop}px`;
       imgStyle.left = `${absoluteLeft}px`;
       // We make the animated image slightly larger than the target section
       // to ensure it completely covers the section before we hide it.
-      imgStyle.width = `${rect.width + 1}px`;  
+      imgStyle.width = `${rect.width + 1}px`;
       imgStyle.height = `${rect.height + 1}px`;
-      
+
       // Target shape
-      imgStyle.borderRadius = isDesktop ? '8px' : '6px';  
-      
+      imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+
       // Remove the centering transform to complete the move/scale.
-      imgStyle.transform = 'none';  
+      imgStyle.transform = 'none';
 
       // 4. Complete the Transition (Seamless swap)
       const completeDelay = setTimeout(() => {
@@ -141,18 +141,18 @@ export default function Page() {
         profileSection.style.backgroundSize = 'cover';
         profileSection.style.backgroundPosition = 'center';
 
-        // Step 4b: Instantly hide the animated image. The background image  
+        // Step 4b: Instantly hide the animated image. The background image
         // will now be visible in the target section, completing the seamless swap.
         imgStyle.display = 'none';
-        imgStyle.opacity = '0';  
+        imgStyle.opacity = '0';
 
         setIsTransitionComplete(true);
         setIsLoading(false);
       }, MOVE_DURATION + 50); // Add a small buffer after the duration
 
       return () => clearTimeout(completeDelay);
-    }, INITIAL_DELAY);  
-    
+    }, INITIAL_DELAY);
+
     return () => {
       clearTimeout(moveTransitionStart);
     };
@@ -281,16 +281,15 @@ export default function Page() {
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
-        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">  
+        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
           AHMED MESSAAD
         </div>
       </header>
 
       {/* DESKTOP LAYOUT (lg:block) */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        {/* MODIFIED: Changed grid-cols-3 to a custom ratio (3fr_1fr_2fr) to make the hero section wider, 
-           the pic grid narrower, and keep the projects column's overall width relative to the whole container. */}
-        <div className="grid grid-cols-[3fr_1fr_2fr] auto-rows-fr gap-3 h-full">
+        {/* --- OPTIMIZED GRID COLUMNS: 9fr (36%) 6fr (24%) 10fr (40%) --- */}
+        <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
@@ -329,7 +328,7 @@ export default function Page() {
             </div>
           </section>
 
-          <section  
+          <section 
             id="profile-grid-section" // Target ID for desktop
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700`}
           >
@@ -362,7 +361,7 @@ export default function Page() {
                       <div className="text-base xl:text-lg font-semibold font-mono">
                         {p.name}
                       </div>
-                      <div className="flex items-center gap-4">  
+                      <div className="flex items-center gap-4"> 
                         <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                           {p.context} • {p.year}
                         </div>
@@ -370,7 +369,7 @@ export default function Page() {
                           href={p.link}
                           target="_blank"
                           rel="noreferrer"
-                          onClick={(e) => e.stopPropagation()}  
+                          onClick={(e) => e.stopPropagation()} 
                           className={`arrow-animate inline-flex items-center gap-2 text-white text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
                             activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
                           } transition-opacity duration-300`}
@@ -633,7 +632,7 @@ export default function Page() {
                   <div className="text-sm font-semibold font-mono">
                     {p.name}
                   </div>
-                  <div className="flex items-center gap-4">  
+                  <div className="flex items-center gap-4"> 
                     <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                       {p.context} • {p.year}
                     </div>
@@ -641,7 +640,7 @@ export default function Page() {
                       href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}  
+                      onClick={(e) => e.stopPropagation()} 
                       className={`arrow-animate inline-flex items-center gap-2 text-white text-[9px] tracking-wide transition font-mono ${
                         activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
                       } transition-opacity duration-300`}
