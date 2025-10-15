@@ -507,10 +507,11 @@ export default function Page() {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT */}
-      <div className="lg:hidden pt-16">
+      {/* MOBILE LAYOUT - UPDATED */}
+      <div className="lg:hidden pt-16 p-3">
+        {/* Title/Intro Section */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 mb-3 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -547,16 +548,17 @@ export default function Page() {
           </div>
         </section>
 
-        {/* MOBILE PROFILE SECTION - No transition effects */}
+        {/* MOBILE PROFILE SECTION */}
         <section
           id="profile-mobile-section"
-          className="border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative"
+          className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl mb-3 flex items-center justify-center overflow-hidden h-[50vh] relative"
         >
           {/* Background image set via useEffect */}
         </section>
 
+        {/* About Section */}
         <section
-          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 mb-3 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -585,9 +587,10 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Projects Section (Aside) */}
         <aside
           id="projects"
-          className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl mb-3 overflow-hidden transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1100"
@@ -685,11 +688,12 @@ export default function Page() {
           ))}
         </aside>
 
+        {/* Contact Section */}
         <section
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] justify-between ${
+          className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] justify-between ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
