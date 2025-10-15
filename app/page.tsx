@@ -1,52 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  const [showStaticImage, setShowStaticImage] = useState(false);
+  
+  // NEW STATE: Controls when the fixed image has its final calculated position and can start the transition.
+  const [isImageReady, setIsImageReady] = useState(false);
+  
+  // The animated image is now always rendered, but its visibility is controlled by isImageReady and isTransitionComplete
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
+    const animatedImg = document.getElementById('animated-profile');
+    const profileSection = document.getElementById('profile-grid-section');
 
-    if (!isDesktop) {
+    if (!isDesktop || !animatedImg || !profileSection) {
+      // Logic for mobile or if elements aren't found (fallback)
       setIsLoading(false);
-      setShowStaticImage(true);
+      setIsTransitionComplete(true); // Treat as complete to show static content
       return;
     }
 
-    const initialDelay = setTimeout(() => {
-      const animatedImg = document.getElementById('animated-profile');
-      const profileSection = document.getElementById('profile-grid-section');
-      
-      if (!animatedImg || !profileSection) {
-        setIsLoading(false);
-        setShowStaticImage(true);
-        return;
-      }
+    // 1. Calculate Target Position & Size
+    const rect = profileSection.getBoundingClientRect();
+    const absoluteTop = rect.top + window.scrollY;
+    const absoluteLeft = rect.left + window.scrollX;
 
-      const rect = profileSection.getBoundingClientRect();
-      const absoluteTop = rect.top + window.scrollY;
-      const absoluteLeft = rect.left + window.scrollX;
-
+    // 2. Set Final Styles (which triggers the CSS transition)
+    // We do this inside a setTimeout of 0 to ensure the initial CSS position
+    // (fixed, centered) is applied before we start the transition.
+    const initialPositionDelay = setTimeout(() => {
+      // Apply the final styles to start the transition
       animatedImg.style.top = `${absoluteTop}px`;
       animatedImg.style.left = `${absoluteLeft}px`;
       animatedImg.style.width = `${rect.width}px`;
       animatedImg.style.height = `${rect.height}px`;
       animatedImg.style.transform = 'none';
 
+      // 3. Signal the Image is ready to start the transition
+      setIsImageReady(true);
+      
+      // 4. Complete the Transition after the 1500ms CSS duration
       const completeDelay = setTimeout(() => {
-        animatedImg.style.visibility = 'hidden';
-        setShowStaticImage(true);
+        setIsTransitionComplete(true);
         setIsLoading(false);
       }, 1500);
 
       return () => clearTimeout(completeDelay);
-    }, 100);
+    }, 0); // Using 0ms timeout ensures this runs after initial render logic
 
-    return () => clearTimeout(initialDelay);
+    return () => clearTimeout(initialPositionDelay);
   }, []);
 
   const projects = [
@@ -99,6 +106,33 @@ export default function Page() {
       image: "/daily.png",
     },
   ];
+
+  // Logic to determine which image component to show in the grid item
+  const renderProfileImage = (isDesktop: boolean) => {
+    if (isDesktop) {
+      // On desktop, the static image should ONLY be visible AFTER the transition is complete
+      return isTransitionComplete ? (
+        <Image
+          src="/ahmed.jpg"
+          alt="Ahmed Messaad"
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(min-width: 1024px) 33vw, 100vw"
+        />
+      ) : null;
+    } else {
+      // On mobile, show the static image immediately
+      return (
+        <Image
+          src="/ahmed.jpg"
+          alt="Ahmed Messaad"
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="100vw"
+        />
+      );
+    }
+  };
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
@@ -196,28 +230,31 @@ export default function Page() {
         }
       `}</style>
 
+      {/* OVERLAY: Hides all content initially. Fades out when loading is complete. */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
+      {/* ANIMATED PROFILE IMAGE (Desktop Only) */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className="object-cover hidden lg:block" 
+        className={`object-cover hidden lg:block transition-all duration-[1500ms] cubic-bezier(0.25, 0.46, 0.45, 0.94) ${
+          isImageReady && !isTransitionComplete ? "opacity-100" : "opacity-0"
+        }`} // Use CSS classes to control visibility based on new states
         style={{
           position: 'fixed',
-          top: '50vh',
-          left: '50vw',
-          width: '240px',
-          height: '240px',
+          top: '50vh', // Initial position
+          left: '50vw', // Initial position
+          width: '240px', // Initial size
+          height: '240px', // Initial size
           borderRadius: '16px',
-          transform: 'translate(-50%, -50%)',
+          transform: 'translate(-50%, -50%)', // Centering trick
           zIndex: 100,
           pointerEvents: 'none',
-          transition: 'all 1500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         }}
       />
 
@@ -231,6 +268,7 @@ export default function Page() {
         </div>
       </header>
 
+      {/* DESKTOP LAYOUT (lg:block) */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-3 auto-rows-fr gap-3 h-full">
           <section
@@ -260,7 +298,7 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[36px] xl:text-[32px] leading-[1.2] mb-6">
+              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
                 <span className="font-mono font-bold">Advancing Clinical Medicine</span>
                 <span className="italic font-serif font-light">through </span>
                 <span className="font-mono font-bold">Deep Learning Systems</span>
@@ -274,20 +312,12 @@ export default function Page() {
           <section 
             id="profile-grid-section"
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
-              showStaticImage 
+              isTransitionComplete // Show the container's contents only after the transition
                 ? "opacity-100" 
                 : "opacity-0" 
             }`}
           >
-            {showStaticImage && (
-              <Image
-                src="/ahmed.jpg"
-                alt="Ahmed Messaad"
-                fill
-                style={{ objectFit: 'cover' }}
-                sizes="(min-width: 1024px) 33vw, 100vw"
-              />
-            )}
+            {renderProfileImage(true)}
           </section>
 
           <aside
@@ -485,6 +515,7 @@ export default function Page() {
         </div>
       </div>
 
+      {/* MOBILE LAYOUT (lg:hidden) */}
       <div className="lg:hidden pt-16">
         <section
           className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
@@ -531,13 +562,7 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-700"
           }`}
         >
-          <Image
-            src="/ahmed.jpg"
-            alt="Ahmed Messaad"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="100vw"
-          />
+          {renderProfileImage(false)}
         </section>
 
         <section
