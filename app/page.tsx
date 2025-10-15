@@ -17,7 +17,6 @@ export default function Page() {
       return;
     }
 
-    // Wait a bit to ensure DOM is ready
     const initialDelay = setTimeout(() => {
       const animatedImg = document.getElementById('animated-profile');
       const profileSection = document.getElementById('profile-grid-section');
@@ -28,21 +27,16 @@ export default function Page() {
         return;
       }
 
-      // Get the exact position where the profile image should be
       const rect = profileSection.getBoundingClientRect();
-      
-      // Calculate absolute position accounting for current scroll
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
 
-      // Set the animated image to move to this position
       animatedImg.style.top = `${absoluteTop}px`;
       animatedImg.style.left = `${absoluteLeft}px`;
       animatedImg.style.width = `${rect.width}px`;
       animatedImg.style.height = `${rect.height}px`;
       animatedImg.style.transform = 'none';
 
-      // After animation completes, hide animated and show static
       const completeDelay = setTimeout(() => {
         animatedImg.style.visibility = 'hidden';
         setShowStaticImage(true);
@@ -186,15 +180,12 @@ export default function Page() {
         }
       `}</style>
 
-      {/* Loading Overlay */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      {/* Animated Profile Image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
@@ -214,8 +205,6 @@ export default function Page() {
         }}
       />
 
-      // Starting around line 179
-      {/* Header */}
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
@@ -226,9 +215,7 @@ export default function Page() {
         </div>
       </header>
 
-      {/* Desktop Grid Layout */}
-      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[84px]">
-        {/* Hero */}
+      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[68px]">
         <section
           className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
             isLoading
@@ -267,7 +254,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile */}
         <section 
           id="profile-grid-section"
           className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
@@ -287,7 +273,6 @@ export default function Page() {
           )}
         </section>
 
-        {/* Projects */}
         <aside
           id="projects"
           className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 ${
@@ -308,25 +293,20 @@ export default function Page() {
                   onClick={() =>
                     setActiveProject(activeProject === p.id ? null : p.id)
                   }
-                  // Reduced vertical padding (py-4 xl:py-5)
                   className="w-full flex justify-between items-center px-8 xl:px-10 py-4 xl:py-5 text-left"
                 >
                   <div className="flex flex-col">
-                    {/* Reduced title font size (text-base xl:text-lg) */}
                     <div className="text-base xl:text-lg font-semibold font-mono">
                       {p.name}
                     </div>
-                    {/* New wrapper for subtitle and link to align them horizontally */}
                     <div className="flex items-center gap-4"> 
                       <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                         {p.context} • {p.year}
                       </div>
-                      {/* Link, visible only when active */}
                       <a
                         href={p.link}
                         target="_blank"
                         rel="noreferrer"
-                        // Stop propagation to prevent accordion collapse when clicking the link
                         onClick={(e) => e.stopPropagation()} 
                         className={`arrow-animate inline-flex items-center gap-2 text-white text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
                           activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -365,7 +345,6 @@ export default function Page() {
                   }`}
                 >
                   <div className="px-8 xl:px-10 pb-6 xl:pb-7">
-                    {/* Project Image */}
                     <div className="relative w-full h-48 xl:h-56 mb-4 xl:mb-5 rounded-lg overflow-hidden">
                       <Image
                         src={p.image}
@@ -389,7 +368,6 @@ export default function Page() {
                         </span>
                       ))}
                     </div>
-                    {/* Removed duplicated link from expanded content */}
                   </div>
                 </div>
               </div>
@@ -397,7 +375,6 @@ export default function Page() {
           </div>
         </aside>
 
-        {/* About */}
         <section
           id="about"
           className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
@@ -429,7 +406,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Contact */}
         <section
           id="contact-section"
           onClick={() =>
@@ -491,9 +467,7 @@ export default function Page() {
         </section>
       </div>
 
-      {/* Mobile Stack Layout */}
       <div className="lg:hidden pt-16">
-        {/* Hero */}
         <section
           className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[320px] transition-all duration-1000 ${
             isLoading
@@ -532,7 +506,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Profile */}
         <section
           className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[380px] relative transition-all duration-1000 ${
             isLoading
@@ -549,7 +522,6 @@ export default function Page() {
           />
         </section>
 
-        {/* About */}
         <section
           className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[240px] transition-all duration-1000 ${
             isLoading
@@ -580,7 +552,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Projects */}
         <aside
           id="projects"
           className={`border-b border-[#2a2a2a] bg-[#0a0a0a] transition-all duration-1000 ${
@@ -600,25 +571,20 @@ export default function Page() {
                 onClick={() =>
                   setActiveProject(activeProject === p.id ? null : p.id)
                 }
-                // Reduced vertical padding (py-4)
                 className="w-full flex justify-between items-center px-6 py-4 text-left"
               >
                 <div className="flex flex-col">
-                  {/* Reduced title font size (text-sm) */}
                   <div className="text-sm font-semibold font-mono">
                     {p.name}
                   </div>
-                  {/* New wrapper for subtitle and link to align them horizontally */}
                   <div className="flex items-center gap-4"> 
                     <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
                       {p.context} • {p.year}
                     </div>
-                    {/* Link, visible only when active */}
                     <a
                       href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      // Stop propagation to prevent accordion collapse when clicking the link
                       onClick={(e) => e.stopPropagation()} 
                       className={`arrow-animate inline-flex items-center gap-2 text-white text-[9px] tracking-wide transition font-mono ${
                         activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -657,7 +623,6 @@ export default function Page() {
                 }`}
               >
                 <div className="px-6 pb-5">
-                  {/* Project Image Mobile */}
                   <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
                     <Image
                       src={p.image}
@@ -681,14 +646,12 @@ export default function Page() {
                       </span>
                     ))}
                   </div>
-                  {/* Removed duplicated link from expanded content */}
                 </div>
               </div>
             </div>
           ))}
         </aside>
 
-        {/* Contact */}
         <section
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
