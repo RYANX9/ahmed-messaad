@@ -13,10 +13,10 @@ export default function Page() {
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
-      context: "Clinical AI Platform",
+      context: "Clinical AI Research",
       year: "2024",
       description:
-        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+        "Clinical-grade diagnostic system achieving 99% four-class tumor classification with radiologist-validated interface. End-to-end DICOM pipeline development investigating optimal preprocessing strategies for limited medical imaging datasets. Deployment-ready architecture with clinical workflow integration.",
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -28,7 +28,7 @@ export default function Page() {
       context: "Medical Automation",
       year: "2023–2024",
       description:
-        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+        "Automated hematology platform combining YOLOv8 detection with U-Net segmentation, achieving 97% multi-class accuracy. Research contribution: validated 15× throughput improvement while maintaining clinical-grade precision, demonstrating viability of computer vision automation for microscopy workflows.",
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -37,10 +37,10 @@ export default function Page() {
     {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
-      context: "Deep Learning Research",
+      context: "Deep Learning Methodology",
       year: "2024",
       description:
-        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+        "Investigating convolutional architectures for tabular healthcare data, achieving R² = 0.88 through novel feature engineering. SHAP interpretability analysis identified non-linear cost driver interactions, contributing to understanding of deep learning applicability in healthcare economics.",
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
@@ -52,7 +52,7 @@ export default function Page() {
       context: "Research Thesis",
       year: "2023",
       description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+        "Systematic transfer learning study across CNN architectures for multi-disease classification (90-99% accuracy, five disease domains). Methodological contribution: validated architecture selection criteria based on clinical false-negative cost analysis and domain-specific performance characteristics..",
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -286,15 +286,17 @@ export default function Page() {
                 <line x1="80" y1="20" x2="20" y2="80" />
               </svg>
             </div>
-            
+            <div className="text-[8px] text-neutral-700 font-mono mt-1 tracking-widest">
+              AM • 2024
+            </div>
             <div>
               <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
-                <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">Deep Learning Systems</span>
+                <span className="font-mono font-bold">Engineering Explainable AI</span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
@@ -442,6 +444,10 @@ export default function Page() {
                   AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
                 </p>
               </div>
+              {/* Inside the About section, after the main paragraph */}
+              <div className="text-[9px] text-neutral-600 font-mono tracking-wide mt-6 pt-4 border-t border-[#2a2a2a]">
+                Portfolio designed & developed by Ahmed Messaad
+              </div>
             </section>
 
             {/* CONTACT SECTION */}
@@ -543,12 +549,12 @@ export default function Page() {
             
             <div className="mt-auto">
               <h1 className="text-[34px] leading-[1.2] mb-5">
-                <span className="font-mono font-bold">Advancing Clinical Medicine </span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">AI-Driven Design</span>
+                <span className="font-mono font-bold">Advancing Diagnostic Intelligence</span>
+                <span className="italic font-serif font-light">through</span>
+                <span className="font-mono font-bold">Clinical AI Research</span>
               </h1>
               <div className="text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                AI Research • Clinical Computer Vision • Computational Medicine
               </div>
             </div>
           </section>
@@ -587,7 +593,7 @@ export default function Page() {
                 About
               </h3>
               <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
-                AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                Researching interpretable deep learning architectures for clinical deployment, with focus on transfer learning optimization and explainable diagnostic systems in resource-constrained medical environments. Published work in medical AI validation methodologies.
               </p>
             </div>
           </section>
