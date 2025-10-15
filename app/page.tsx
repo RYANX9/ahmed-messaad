@@ -84,22 +84,20 @@ export default function Page() {
       return;
     }
 
-    // --- Animation Constants (FIXED FOR SMOOTHNESS AND 0.5S DURATION) ---
-    const INITIAL_DELAY = 500; // Delay before the move starts
-    const MOVE_DURATION = 500; // 0.5 seconds for the smooth transition
-    // Smoother easing: standard cubic bezier for ease-in-out effect
+    // --- Animation Constants (FIXED FOR 1.5s DURATION) ---
+    const INITIAL_DELAY = 400; // Delay before the move starts
+    const MOVE_DURATION = 1500; // INCREASED: 1.5 seconds for smoother transition
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)'; 
     const INITIAL_SIZE = isDesktop ? 240 : 180;
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
-    // We set the initial state without applying any transition property yet.
     const imgStyle = (animatedImg as HTMLElement).style;
     imgStyle.position = 'fixed';
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
-    imgStyle.borderRadius = '16px'; // Initial large border-radius
+    imgStyle.borderRadius = '16px'; 
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
     imgStyle.transform = `translate(-50%, -50%)`; // Centering transform
@@ -125,11 +123,10 @@ export default function Page() {
       // Target shape
       imgStyle.borderRadius = isDesktop ? '8px' : '6px'; 
       
-      // The key move: remove the centering transform, which shifts the origin
-      // and triggers the movement to the target coordinates.
+      // Remove the centering transform to complete the move/scale.
       imgStyle.transform = 'none'; 
       
-      setIsImageReady(true); // Flag: Transition is now moving
+      setIsImageReady(true); 
 
       // 4. Complete the Transition
       const completeDelay = setTimeout(() => {
@@ -138,7 +135,7 @@ export default function Page() {
       }, MOVE_DURATION + 50); // Add a small buffer after the duration
 
       return () => clearTimeout(completeDelay);
-    }, INITIAL_DELAY); // Start move after the initial delay
+    }, INITIAL_DELAY); 
     
     return () => {
       clearTimeout(moveTransitionStart);
@@ -148,7 +145,7 @@ export default function Page() {
   // --- HELPER FUNCTION ---
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
-    // Show the static image ONLY after the transition is complete
+    // Show the static Image component ONLY after the transition is complete
     return isTransitionComplete ? (
       <Image
         src="/ahmed.jpg"
@@ -263,8 +260,7 @@ export default function Page() {
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE */}
-      {/* It is only rendered while the transition is not complete, preventing it from lingering. */}
+      {/* ANIMATED PROFILE IMAGE - Visible until the transition is complete */}
       {!isTransitionComplete && (
         <img
           id="animated-profile"
@@ -333,12 +329,10 @@ export default function Page() {
 
           <section 
             id="profile-grid-section" // Target ID for desktop
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
-              isTransitionComplete // Show the container's contents only after the transition
-                ? "opacity-100" 
-                : "opacity-0" 
-            }`}
+            // REMOVED: opacity-0 class to ensure the container is always visible
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700`}
           >
+            {/* The renderProfileImage function ensures the static image only loads after the transition */}
             {renderProfileImage(true)}
           </section>
 
@@ -579,12 +573,10 @@ export default function Page() {
 
         <section
           id="profile-mobile-section" // Target ID for mobile
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000 ${
-            isTransitionComplete // Show the container's contents only after the transition
-              ? "opacity-100" 
-              : "opacity-0" 
-          }`}
+          // REMOVED: opacity-0 class to ensure the container is always visible
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000`}
         >
+          {/* The renderProfileImage function ensures the static image only loads after the transition */}
           {renderProfileImage(false)}
         </section>
 
