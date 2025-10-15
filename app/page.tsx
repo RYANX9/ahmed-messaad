@@ -178,6 +178,22 @@ export default function Page() {
           height: 0 !important;
           background: transparent !important;
         }
+
+        .scroll-fade-bottom {
+          position: relative;
+        }
+
+        .scroll-fade-bottom::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 80px;
+          background: linear-gradient(to bottom, transparent, #0a0a0a 90%);
+          pointer-events: none;
+          z-index: 10;
+        }
       `}</style>
 
       <div
@@ -215,7 +231,7 @@ export default function Page() {
         </div>
       </header>
 
-      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[68px]">
+      <div className="hidden lg:grid lg:grid-cols-3 lg:auto-rows-fr gap-3 h-screen p-3 pt-[92px]">
         <section
           className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
             isLoading
@@ -275,7 +291,7 @@ export default function Page() {
 
         <aside
           id="projects"
-          className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 ${
+          className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -469,7 +485,7 @@ export default function Page() {
 
       <div className="lg:hidden pt-16">
         <section
-          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[320px] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -495,12 +511,12 @@ export default function Page() {
           </div>
           
           <div className="mt-auto">
-            <h1 className="text-[22px] leading-[1.2] mb-4">
+            <h1 className="text-[28px] leading-[1.2] mb-4">
               <span className="font-mono font-bold">Advancing Clinical Medicine </span>
               <span className="italic font-serif font-light">through </span>
               <span className="font-mono font-bold">AI-Driven Design</span>
             </h1>
-            <div className="text-[9px] tracking-wider uppercase text-neutral-400 font-accent">
+            <div className="text-[10px] tracking-wider uppercase text-neutral-400 font-accent">
               AI Research • Medical Imaging • Computer Vision
             </div>
           </div>
