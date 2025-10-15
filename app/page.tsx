@@ -7,10 +7,14 @@ export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
+  // The intermediate scale state (isScaledDown) is removed to ensure a single, smooth motion.
+  // const [isScaledDown, setIsScaledDown] = useState(false); 
+
   // Existing states repurposed for transition flow
+  const [isImageReady, setIsImageReady] = useState(false);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  // --- PROJECT DATA DEFINITION ---
+  // --- PROJECT DATA DEFINITION (MOVED UP) ---
   const projects = [
     {
       id: "airm",
@@ -67,25 +71,26 @@ export default function Page() {
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile');
     
-    if (isTransitionComplete || !animatedImg) {
+    // Determine the target section ID based on screen size
+    const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
+    const profileSection = document.getElementById(targetSectionId);
+
+    // Only run the complex animation logic if the animation is not yet complete
+    if (isTransitionComplete || !animatedImg || !profileSection) {
+      // Fallback for missing elements or if already complete
       setIsLoading(false);
       setIsTransitionComplete(true);
       return;
     }
 
-    const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
-    const profileSection = document.getElementById(targetSectionId);
-    if (!profileSection) return;
-
     // --- Animation Constants ---
-    const CENTERED_DELAY = 1000;       // Initial delay
-    const SCALE_DOWN_DURATION = 400;   // Time for scale 1 -> 0.8
-    const MOVE_DURATION = 1200;        // Time for the smooth transition
+    const CENTERED_DELAY = 1000;       // Initial delay for the image to remain centered
+    const MOVE_DURATION = 1200;        // Time for the smooth transition to the final position
     const MOVE_EASING = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'; 
-    const INITIAL_SIZE = isDesktop ? 240 : 180; // Size at scale(1)
-    const SCALE_TARGET = 0.8; // The intermediate scale factor
+    const INITIAL_SIZE = isDesktop ? 240 : 180; // Smaller initial size for mobile
 
-    // 1. Initial Styles (Scale 1)
+    // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
+    // We set the initial state without applying any transition property yet.
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
@@ -95,58 +100,49 @@ export default function Page() {
     (animatedImg as HTMLElement).style.zIndex = '100';
     (animatedImg as HTMLElement).style.opacity = '1';
     
-    // Start with the centering translation, but scale(1)
-    (animatedImg as HTMLElement).style.transform = `translate(-50%, -50%) scale(1)`; 
-    
-    // Set a short transition property for the scale-down phase
-    (animatedImg as HTMLElement).style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
-    
-    // --- Phase 1: Initial Delay & Smooth Scale Down (1 -> 0.8) ---
-    const scaleDownStart = setTimeout(() => {
-      // Trigger the scale down by updating the transform property
-      (animatedImg as HTMLElement).style.transform = `translate(-50%, -50%) scale(${SCALE_TARGET})`;
-    }, CENTERED_DELAY);
+    // The image starts with transform: translate(-50%, -50%) (for centering)
 
-    // --- Phase 2: Move and Enlarge to Final Position (Starts after scale-down completes) ---
+    // --- Phase 1: Initial Delay & Start Combined Move/Scale ---
     const moveTransitionStart = setTimeout(() => {
+      // 2. Calculate Target Position & Size
       const rect = profileSection.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
       
-      // 3. Set Final Styles (Triggers the move and final scale)
-      // Switch the transition property to the long duration and custom easing
+      // 3. Set Final Styles (Triggers the combined smooth move and scale)
+      // CRITICAL FIX: We set the transition property *just* before changing the values.
       (animatedImg as HTMLElement).style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
       
-      // Target position and size
+      // Target position and size (These changes trigger the animation)
       (animatedImg as HTMLElement).style.top = `${absoluteTop}px`;
       (animatedImg as HTMLElement).style.left = `${absoluteLeft}px`;
       (animatedImg as HTMLElement).style.width = `${rect.width}px`;
       (animatedImg as HTMLElement).style.height = `${rect.height}px`;
       
-      // Target shape
+      // Target shape (8px for desktop, maybe 6px for mobile 'rounded-lg')
       (animatedImg as HTMLElement).style.borderRadius = isDesktop ? '8px' : '6px'; 
       
-      // CRITICAL FIX: The transform is set to 'none'.
-      // The browser will now smoothly transition all properties (top, left, width, height, borderRadius)
-      // from their scale(0.8) state (relative to the viewport center) to the final
-      // target state (absolute top/left/width/height/borderRadius), achieving the smooth unscale-and-move.
+      // The key move: remove the centering transform. This combines the move and scale into one transition.
       (animatedImg as HTMLElement).style.transform = 'none'; 
       
+      setIsImageReady(true); // Flag: Transition is now moving
+
+      // 4. Complete the Transition
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
       }, MOVE_DURATION);
 
       return () => clearTimeout(completeDelay);
-    }, CENTERED_DELAY + SCALE_DOWN_DURATION + 50); // Start move 50ms after scale-down should be complete
+    }, CENTERED_DELAY); // Start move after the initial delay
     
     return () => {
-      clearTimeout(scaleDownStart);
       clearTimeout(moveTransitionStart);
     };
   }, [isTransitionComplete]);
 
-  // --- HELPER FUNCTION ---
+  // --- HELPER FUNCTION (MOVED UP) ---
+  // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
     // Show the static image ONLY after the transition is complete
     return isTransitionComplete ? (
@@ -264,6 +260,7 @@ export default function Page() {
       />
 
       {/* ANIMATED PROFILE IMAGE */}
+      {/* It is only rendered while the transition is not complete, preventing it from lingering. */}
       {!isTransitionComplete && (
         <img
           id="animated-profile"
@@ -271,10 +268,12 @@ export default function Page() {
           alt="Ahmed Messaad"
           className={`object-cover`} 
           style={{
+            // Initial centering transform. This is cleared by 'transform: none' in useEffect
+            // which triggers the move/scale animation.
+            transform: `translate(-50%, -50%)`,
+            // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
             zIndex: 100,
             pointerEvents: 'none',
-            // CRITICAL FIX: Transform is now managed entirely within useEffect,
-            // preventing the unwanted second scale motion.
           }}
         />
       )}
