@@ -458,9 +458,9 @@ export default function Page() {
                   : "opacity-100 translate-y-0 delay-1100"
               }`}
             >
-              <div className="flex justify-between items-start mb-auto">
+              <div className="flex justify-between items-start">
                 <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
-                  Let's Connect<br />
+                  Start a Conversation<br />
                 </div>
                 <svg
                   className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
@@ -473,39 +473,44 @@ export default function Page() {
                 </svg>
               </div>
               
-              <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-              </h2>
+              <div className="flex-1"></div>
               
-              <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-                <a
-                  href="https://linkedin.com/in/ahmedmessaad"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  LINKEDIN
-                </a>
-                <a
-                  href="https://github.com/RYANX9"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  GITHUB 
-                </a>
-                <a
-                  href="mailto:ahmed.messaad@outlook.com"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  EMAIL
-                </a>
-              </div>
-              <div className="mt-6 text-[8px] text-neutral-600 uppercase tracking-widest font-mono">
-                Designed & Built by Ahmed Messaad
+              <div className="mt-auto">
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
+                    <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+                </h2>
+                
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
+                  <a
+                    href="https://linkedin.com/in/ahmedmessaad"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    LINKEDIN
+                  </a>
+                  <a
+                    href="https://github.com/RYANX9"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    GITHUB 
+                  </a>
+                  <a
+                    href="mailto:ahmed.messaad@outlook.com"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    EMAIL
+                  </a>
+                </div>
+                
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                  Designed & Built by Ahmed Messaad
+                </div>
               </div>
             </section>
           </div>
@@ -702,7 +707,7 @@ export default function Page() {
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[240px] justify-between ${
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between ${
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-1300"
@@ -710,7 +715,7 @@ export default function Page() {
           >
             <div className="flex justify-between items-start">
               <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-                Let's Connect<br />
+                Start a Conversation<br />
               </div>
               <svg
                 className="w-5 h-5 arrow-contact-animate"
@@ -723,39 +728,44 @@ export default function Page() {
               </svg>
             </div>
             
-            <h2 className="text-[48px] font-bold leading-none">
-                <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-            </h2>
+            <div className="flex-1"></div>
             
-            <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-              <a
-                href="https://linkedin.com/in/ahmedmessaad"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                LINKEDIN
-              </a>
-              <a
-                href="https://github.com/RYANX9"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                GITHUB
-              </a>
-              <a
-                href="mailto:ahmed.messaad@outlook.com"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                EMAIL
-              </a>
-            </div>
-            <div className="mt-4 text-[8px] text-neutral-600 uppercase tracking-widest font-mono">
-              Designed & Built by Ahmed Messaad
+            <div className="mt-auto">
+              <h2 className="text-[48px] font-bold leading-none mb-5">
+                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              </h2>
+              
+              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-2">
+                <a
+                  href="https://linkedin.com/in/ahmedmessaad"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  LINKEDIN
+                </a>
+                <a
+                  href="https://github.com/RYANX9"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  GITHUB
+                </a>
+                <a
+                  href="mailto:ahmed.messaad@outlook.com"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  EMAIL
+                </a>
+              </div>
+              
+              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                Designed & Built by Ahmed Messaad
+              </div>
             </div>
           </section>
         </div>
