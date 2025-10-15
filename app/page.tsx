@@ -10,6 +10,7 @@ export default function Page() {
 
   React.useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
+
     if (!isDesktop) {
       setIsLoading(false);
       setShowStaticImage(true);
@@ -27,8 +28,11 @@ export default function Page() {
       }
 
       const rect = profileSection.getBoundingClientRect();
-      animatedImg.style.top = `${rect.top + window.scrollY}px`;
-      animatedImg.style.left = `${rect.left + window.scrollX}px`;
+      const absoluteTop = rect.top + window.scrollY;
+      const absoluteLeft = rect.left + window.scrollX;
+
+      animatedImg.style.top = `${absoluteTop}px`;
+      animatedImg.style.left = `${absoluteLeft}px`;
       animatedImg.style.width = `${rect.width}px`;
       animatedImg.style.height = `${rect.height}px`;
       animatedImg.style.transform = 'none';
@@ -51,7 +55,8 @@ export default function Page() {
       name: "AIRM Brain Tumor System",
       context: "Clinical AI Platform",
       year: "2024",
-      description: "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+      description:
+        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -62,7 +67,8 @@ export default function Page() {
       name: "HemaVision",
       context: "Medical Automation",
       year: "2023–2024",
-      description: "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+      description:
+        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -73,7 +79,8 @@ export default function Page() {
       name: "Healthcare Cost Prediction",
       context: "Deep Learning Research",
       year: "2024",
-      description: "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+      description:
+        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
@@ -84,87 +91,14 @@ export default function Page() {
       name: "My Daily Health",
       context: "Research Thesis",
       year: "2023",
-      description: "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+      description:
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
       image: "/daily.png",
     },
   ];
-
-  const ProjectItem = ({ p, isMobile }: { p: typeof projects[0]; isMobile?: boolean }) => {
-    const isActive = activeProject === p.id;
-    const sizes = isMobile ? {
-      text: "text-sm",
-      meta: "text-[9px]",
-      px: "px-6",
-      py: "py-4",
-      image: "h-40",
-      tag: "text-[10px] px-2.5 py-1",
-      arrow: "12"
-    } : {
-      text: "text-base xl:text-lg",
-      meta: "text-[10px] xl:text-[11px]",
-      px: "px-8 xl:px-10",
-      py: "py-4 xl:py-5",
-      image: "h-48 xl:h-56",
-      tag: "text-[11px] xl:text-[12px] px-3 py-1.5",
-      arrow: "14"
-    };
-
-    return (
-      <div className={`${p.id !== "airm" ? 'border-t' : ''} border-[#2a2a2a] transition ${isActive ? "bg-[#151515]" : ""}`}>
-        <button
-          onClick={() => setActiveProject(isActive ? null : p.id)}
-          className={`w-full flex justify-between items-center ${sizes.px} ${sizes.py} text-left`}
-        >
-          <div className="flex flex-col">
-            <div className={`${sizes.text} font-semibold font-mono`}>{p.name}</div>
-            <div className="flex items-center gap-4">
-              <div className={`${sizes.meta} text-neutral-500 mt-1 font-accent uppercase tracking-wide`}>
-                {p.context} • {p.year}
-              </div>
-              <a
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className={`arrow-animate inline-flex items-center gap-2 text-white ${sizes.meta} tracking-wide transition font-mono ${
-                  isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                } transition-opacity duration-300`}
-              >
-                {p.linkText}
-                <svg width={sizes.arrow} height={sizes.arrow} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
-            </div>
-          </div>
-          <svg className={`${isMobile ? 'w-4 h-4' : 'w-5 h-5 xl:w-6 xl:h-6'} transition-transform flex-shrink-0 ml-3 ${isActive ? "rotate-90" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-
-        <div className={`overflow-hidden transition-all duration-500 ${isActive ? isMobile ? "max-h-[800px]" : "max-h-[900px]" : "max-h-0"}`}>
-          <div className={`${sizes.px} ${isMobile ? 'pb-5' : 'pb-6 xl:pb-7'}`}>
-            <div className={`relative w-full ${sizes.image} ${isMobile ? 'mb-4' : 'mb-4 xl:mb-5'} rounded-lg overflow-hidden`}>
-              <Image src={p.image} alt={p.name} fill style={{ objectFit: 'cover' }} sizes={isMobile ? "100vw" : "(min-width: 1024px) 20vw, 100vw"} />
-            </div>
-            <p className={`${isMobile ? 'mb-4 text-sm' : 'mb-4 xl:mb-5 text-[13px] xl:text-[14px]'} text-neutral-400 leading-relaxed font-sans`}>
-              {p.description}
-            </p>
-            <div className={`flex flex-wrap ${isMobile ? 'gap-2 mb-4' : 'gap-2 xl:gap-2.5 mb-4 xl:mb-5'}`}>
-              {p.tech.map((t) => (
-                <span key={t} className={`bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded ${sizes.tag} transition hover:bg-[#333] font-mono`}>
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
@@ -365,8 +299,95 @@ export default function Page() {
             }`}
           >
             <div className="flex-1 overflow-y-auto invisible-scroll">
-              {projects.map((p) => (
-                <ProjectItem key={p.id} p={p} />
+              {projects.map((p, idx) => (
+                <div
+                  key={p.id}
+                  className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
+                    activeProject === p.id ? "bg-[#151515]" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() =>
+                      setActiveProject(activeProject === p.id ? null : p.id)
+                    }
+                    className="w-full flex justify-between items-center px-8 xl:px-10 py-4 xl:py-5 text-left"
+                  >
+                    <div className="flex flex-col">
+                      <div className="text-base xl:text-lg font-semibold font-mono">
+                        {p.name}
+                      </div>
+                      <div className="flex items-center gap-4"> 
+                        <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                          {p.context} • {p.year}
+                        </div>
+                        <a
+                          href={p.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()} 
+                          className={`arrow-animate inline-flex items-center gap-2 text-white text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
+                            activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                          } transition-opacity duration-300`}
+                        >
+                          {p.linkText}
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                    <svg
+                      className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ml-3 ${
+                        activeProject === p.id ? "rotate-90" : ""
+                      }`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ${
+                      activeProject === p.id ? "max-h-[900px]" : "max-h-0"
+                    }`}
+                  >
+                    <div className="px-8 xl:px-10 pb-6 xl:pb-7">
+                      <div className="relative w-full h-48 xl:h-56 mb-4 xl:mb-5 rounded-lg overflow-hidden">
+                        <Image
+                          src={p.image}
+                          alt={p.name}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                          sizes="(min-width: 1024px) 20vw, 100vw"
+                        />
+                      </div>
+
+                      <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-neutral-400 leading-relaxed font-sans">
+                        {p.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-4 xl:mb-5">
+                        {p.tech.map((t) => (
+                          <span
+                            key={t}
+                            className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#333] font-mono"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </aside>
@@ -466,7 +487,7 @@ export default function Page() {
 
       <div className="lg:hidden pt-16">
         <section
-          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 h-[50vh] transition-all duration-1000 ${
+          className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-500"
@@ -492,10 +513,10 @@ export default function Page() {
           </div>
           
           <div className="mt-auto">
-            <h1 className="text-[42px] leading-[1.15] mb-5">
+            <h1 className="text-[34px] leading-[1.2] mb-5">
               <span className="font-mono font-bold">Advancing Clinical Medicine </span>
               <span className="italic font-serif font-light">through </span>
-              <span className="font-mono font-bold">Deep Learning</span>
+              <span className="font-mono font-bold">AI-Driven Design</span>
             </h1>
             <div className="text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
               AI Research • Medical Imaging • Computer Vision
@@ -557,8 +578,95 @@ export default function Page() {
               : "opacity-100 translate-y-0 delay-1100"
           }`}
         >
-          {projects.map((p) => (
-            <ProjectItem key={p.id} p={p} isMobile />
+          {projects.map((p, idx) => (
+            <div
+              key={p.id}
+              className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
+                activeProject === p.id ? "bg-[#151515]" : ""
+              }`}
+            >
+              <button
+                onClick={() =>
+                  setActiveProject(activeProject === p.id ? null : p.id)
+                }
+                className="w-full flex justify-between items-center px-6 py-4 text-left"
+              >
+                <div className="flex flex-col">
+                  <div className="text-sm font-semibold font-mono">
+                    {p.name}
+                  </div>
+                  <div className="flex items-center gap-4"> 
+                    <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
+                      {p.context} • {p.year}
+                    </div>
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()} 
+                      className={`arrow-animate inline-flex items-center gap-2 text-white text-[9px] tracking-wide transition font-mono ${
+                        activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                      } transition-opacity duration-300`}
+                    >
+                      {p.linkText}
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                <svg
+                  className={`w-4 h-4 transition-transform flex-shrink-0 ml-3 ${
+                    activeProject === p.id ? "rotate-90" : ""
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+
+              <div
+                className={`overflow-hidden transition-all duration-500 ${
+                  activeProject === p.id ? "max-h-[800px]" : "max-h-0"
+                }`}
+              >
+                <div className="px-6 pb-5">
+                  <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="100vw"
+                    />
+                  </div>
+
+                  <p className="mb-4 text-sm text-neutral-400 leading-relaxed font-sans">
+                    {p.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {p.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#333] font-mono"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </aside>
 
