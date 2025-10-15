@@ -521,7 +521,7 @@ export default function Page() {
                 </div>
                 
                 <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-                  <span className="font-mono">Contact </span>
+                  <span className="font-mono">Contact</span>
                   <span className="italic font-serif font-light">me</span>
                 </h2>
                 
@@ -760,7 +760,7 @@ export default function Page() {
           </div>
           
           <h2 className="text-[40px] font-bold leading-none mt-auto mb-5">
-            <span className="font-mono">Contact </span>
+            <span className="font-mono">Contact</span>
             <span className="italic font-serif font-light">me</span>
           </h2>
           
