@@ -263,7 +263,7 @@ export default function Page() {
               <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
                 <span className="font-mono font-bold">Advancing Clinical Medicine</span>
                 <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">AI-Driven Design</span>
+                <span className="font-mono font-bold">Deep Learning Systems</span>
               </h1>
               <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 AI Research • Medical Imaging • Computer Vision
@@ -436,7 +436,7 @@ export default function Page() {
           >
             <div className="flex justify-between items-start mb-auto">
               <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
-                Have some<br />questions?
+                Let's Connect<br />
               </div>
               <svg
                 className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
@@ -682,7 +682,7 @@ export default function Page() {
         >
           <div className="flex justify-between items-start">
             <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-              Have some<br />questions?
+              Let's Connect<br />
             </div>
             <svg
               className="w-5 h-5 arrow-contact-animate"
