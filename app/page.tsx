@@ -715,7 +715,7 @@ export default function Page() {
           </h2>
           
           <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-            
+            <a
               href="https://linkedin.com/in/ahmedmessaad"
               target="_blank"
               rel="noreferrer"
@@ -724,7 +724,7 @@ export default function Page() {
             >
               LINKEDIN
             </a>
-            
+            <a
               href="https://github.com/RYANX9"
               target="_blank"
               rel="noreferrer"
@@ -733,7 +733,7 @@ export default function Page() {
             >
               GITHUB
             </a>
-            
+            <a
               href="mailto:ahmed.messaad@outlook.com"
               onClick={(e) => e.stopPropagation()}
               className="text-neutral-500 hover:text-white transition"
