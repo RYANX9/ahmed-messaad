@@ -7,14 +7,11 @@ export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
-  // NEW STATE: Controls the scale down animation (Step 1)
-  const [isScaledDown, setIsScaledDown] = useState(false);
-
-  // Existing states repurposed for transition flow
-  const [isImageReady, setIsImageReady] = useState(false);
+  // Replaced previous state with a single flag for the move start
+  const [isMoveStarted, setIsMoveStarted] = useState(false); 
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  // --- PROJECT DATA DEFINITION (MOVED UP) ---
+  // --- PROJECT DATA DEFINITION ---
   const projects = [
     {
       id: "airm",
@@ -75,18 +72,17 @@ export default function Page() {
     if (!isDesktop || !animatedImg || !profileSection) {
       // Logic for mobile or if elements aren't found (fallback)
       setIsLoading(false);
-      setIsTransitionComplete(true); // Treat as complete to show static content
+      setIsTransitionComplete(true);
       return;
     }
 
-    // --- Animation Constants (ADJUSTED FOR LONGER, SMOOTHER TRANSITION) ---
-    const SCALE_DOWN_DURATION = 400; // Time for scale 1 -> 0.7 (Quickly signal loading end)
-    const SCALE_DOWN_DELAY = 100;    // Small delay before starting the scale down
-    const MOVE_DURATION = 2000;      // INCREASED: Time for the smooth transition (2.0 seconds)
-    // ADJUSTED: Smoother easing that still has a slight bounce effect
-    const MOVE_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; 
+    // --- Animation Constants ---
+    const TOTAL_MOVE_DURATION = 2500; // Increased to 2.5 seconds
+    const INITIAL_DELAY = 100;        // Start a small delay before the move begins
+    // Aggressive easing for a very smooth and heavy feel
+    const MOVE_EASING = 'cubic-bezier(0.86, 0, 0.07, 1)'; 
 
-    // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
+    // 1. Initial Styles (Ensures the image is centered, large, and fully opaque at the start)
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
@@ -95,27 +91,19 @@ export default function Page() {
     (animatedImg as HTMLElement).style.borderRadius = '16px';
     (animatedImg as HTMLElement).style.zIndex = '100';
     (animatedImg as HTMLElement).style.opacity = '1';
-    
-    // Set a short transition property for the scale-down phase (transform property only)
-    (animatedImg as HTMLElement).style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
-    
-    // --- Phase 1: Scale Down (100% -> 70%) ---
-    const scaleDownStart = setTimeout(() => {
-      setIsScaledDown(true); // Triggers the scale(0.7) via JSX style update
-    }, SCALE_DOWN_DELAY);
+    (animatedImg as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1)'; // Centered and full size
 
-    // --- Phase 2: Move to Final Position (Starts after scale-down is complete) ---
+    // 2. Set the long, smooth transition property for ALL styles
+    (animatedImg as HTMLElement).style.transition = `all ${TOTAL_MOVE_DURATION}ms ${MOVE_EASING}`; 
+
+    // --- Phase 1: Start the Single, Seamless Move ---
     const moveTransitionStart = setTimeout(() => {
-      // 2. Calculate Target Position & Size
+      // a. Calculate Target Position & Size
       const rect = profileSection.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
       
-      // 3. Set Final Styles (Triggers the move)
-      // Override the transition property to the LONG duration and custom easing for the move
-      (animatedImg as HTMLElement).style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
-      
-      // Target position and size
+      // b. Apply Final Styles (Triggers the transition for all properties)
       (animatedImg as HTMLElement).style.top = `${absoluteTop}px`;
       (animatedImg as HTMLElement).style.left = `${absoluteLeft}px`;
       (animatedImg as HTMLElement).style.width = `${rect.width}px`;
@@ -124,27 +112,26 @@ export default function Page() {
       // Target shape (assuming 'rounded-2xl' is 8px)
       (animatedImg as HTMLElement).style.borderRadius = '8px'; 
       
-      // The key move: remove the centering and scale transforms. 
+      // Remove the centering transform and scale
       (animatedImg as HTMLElement).style.transform = 'none'; 
       
-      setIsImageReady(true); // Flag: Transition is now moving
+      setIsMoveStarted(true); // Flag: Transition is now moving
 
-      // 4. Complete the Transition
+      // --- Phase 2: Complete the Transition ---
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
-      }, MOVE_DURATION); // Wait the full 2000ms
+      }, TOTAL_MOVE_DURATION + 100); // Wait for transition duration + a small buffer
 
       return () => clearTimeout(completeDelay);
-    }, SCALE_DOWN_DELAY + SCALE_DOWN_DURATION + 100); // Start move 100ms after scale-down should be complete
+    }, INITIAL_DELAY);
     
     return () => {
-      clearTimeout(scaleDownStart);
       clearTimeout(moveTransitionStart);
     };
   }, []);
 
-  // --- HELPER FUNCTION (MOVED UP) ---
+  // --- HELPER FUNCTION ---
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
     if (isDesktop) {
@@ -281,12 +268,10 @@ export default function Page() {
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
         className={`object-cover hidden lg:block ${
-            isTransitionComplete ? "opacity-0" : "opacity-100"
+            isTransitionComplete ? "opacity-0" : "opacity-100" // Hide once finished
         }`} 
         style={{
-          // Initial styles are set in useEffect for precision, but the dynamic scale is here:
-          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.7 : 1})`,
-          // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
+          // Initial styles are set in useEffect for precision
           zIndex: 100,
           pointerEvents: 'none',
         }}
@@ -294,7 +279,7 @@ export default function Page() {
 
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
-          isLoading ? "opacity-0" : "opacity-100 delay-[2500ms]"
+          isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider"> 
@@ -309,7 +294,7 @@ export default function Page() {
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-[3000ms]"
+                : "opacity-100 translate-y-0 delay-500"
             }`}
           >
             <div className="flex items-start justify-end">
@@ -359,7 +344,7 @@ export default function Page() {
             className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-[3400ms]"
+                : "opacity-100 translate-y-0 delay-900"
             }`}
           >
             <div className="flex-1 overflow-y-auto invisible-scroll">
@@ -461,7 +446,7 @@ export default function Page() {
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-[3400ms]"
+                : "opacity-100 translate-y-0 delay-1100"
             }`}
           >
             <div className="flex items-start justify-start">
@@ -495,7 +480,7 @@ export default function Page() {
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-[3600ms]"
+                : "opacity-100 translate-y-0 delay-1100"
             }`}
           >
             <div className="flex justify-between items-start mb-auto">
