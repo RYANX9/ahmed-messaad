@@ -507,8 +507,8 @@ export default function Page() {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (UPDATED) */}
-      <div className="lg:hidden mt-20 p-3">
+      {/* MOBILE LAYOUT (FIXED GAP) */}
+      <div className="lg:hidden **pt-16** p-3">
         <div className="flex flex-col gap-3">
           
           {/* TITLE/INTRO SECTION */}
