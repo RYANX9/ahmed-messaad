@@ -75,8 +75,9 @@ export default function Page() {
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId);
 
-    if (!animatedImg || !profileSection) {
-      // Fallback for missing elements
+    // Only run the complex animation logic if the animation is not yet complete
+    if (isTransitionComplete || !animatedImg || !profileSection) {
+      // Fallback for missing elements or if already complete
       setIsLoading(false);
       setIsTransitionComplete(true);
       return;
@@ -90,6 +91,8 @@ export default function Page() {
     const INITIAL_SIZE = isDesktop ? 240 : 180; // Smaller initial size for mobile
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
+    // We set these via direct style manipulation for precise control over the initial state 
+    // and to set the first, short transition property for the scale down.
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
@@ -136,6 +139,7 @@ export default function Page() {
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
+        // CRITICAL FIX: The element will now unmount due to conditional rendering in JSX
       }, MOVE_DURATION);
 
       return () => clearTimeout(completeDelay);
@@ -145,7 +149,7 @@ export default function Page() {
       clearTimeout(scaleDownStart);
       clearTimeout(moveTransitionStart);
     };
-  }, []);
+  }, [isTransitionComplete]); // Re-run effect only if transition state changes (though setting it to true stops the logic)
 
   // --- HELPER FUNCTION (MOVED UP) ---
   // Logic to determine which image component to show in the grid item
@@ -266,22 +270,24 @@ export default function Page() {
       />
 
       {/* ANIMATED PROFILE IMAGE (Shared between Desktop and Mobile) */}
-      {/* We use visibility/opacity control to hide it once transition is complete */}
-      <img
-        id="animated-profile"
-        src="/ahmed.jpg"
-        alt="Ahmed Messaad"
-        className={`object-cover ${
-            isTransitionComplete ? "opacity-0" : "opacity-100"
-        }`} 
-        style={{
-          // The dynamic scale is here:
-          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.8 : 1})`,
-          // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
-          zIndex: 100,
-          pointerEvents: 'none',
-        }}
-      />
+      {/* FIX: Only render the animated image WHILE the transition is not complete.
+        Once isTransitionComplete is true, this component unmounts, fixing the lingering image issue.
+      */}
+      {!isTransitionComplete && (
+        <img
+          id="animated-profile"
+          src="/ahmed.jpg"
+          alt="Ahmed Messaad"
+          className={`object-cover`} 
+          style={{
+            // The dynamic scale is here:
+            transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.8 : 1})`,
+            // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
+            zIndex: 100,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
 
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
