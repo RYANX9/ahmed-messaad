@@ -507,8 +507,11 @@ export default function Page() {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (FIXED GAP) */}
-      <div className="lg:hidden **pt-16** p-3">
+      {/* MOBILE LAYOUT (UPDATED) */}
+      {/* - Replaced mt-20 with pt-16 (to account for h-16 fixed header)
+        - The p-3 on the container + p-6 on the first card ensures the right spacing 
+      */}
+      <div className="lg:hidden pt-16 p-3">
         <div className="flex flex-col gap-3">
           
           {/* TITLE/INTRO SECTION */}
