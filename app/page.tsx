@@ -689,7 +689,7 @@ export default function Page() {
           onClick={() =>
             (window.location.href = "mailto:ahmed.messaad@outlook.com")
           }
-          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col gap-5 cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] ${
+          className={`border-b border-[#2a2a2a] bg-[#1a1a1a] p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[280px] justify-between ${
             isLoading
               ? "opacity-0 translate-y-[30px]"
               : "opacity-100 translate-y-0 delay-1300"
@@ -710,12 +710,12 @@ export default function Page() {
             </svg>
           </div>
           
-          <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
+          <h2 className="text-[48px] font-bold leading-none">
               <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
           </h2>
           
           <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-            <a
+            
               href="https://linkedin.com/in/ahmedmessaad"
               target="_blank"
               rel="noreferrer"
@@ -724,7 +724,7 @@ export default function Page() {
             >
               LINKEDIN
             </a>
-            <a
+            
               href="https://github.com/RYANX9"
               target="_blank"
               rel="noreferrer"
@@ -733,7 +733,7 @@ export default function Page() {
             >
               GITHUB
             </a>
-            <a
+            
               href="mailto:ahmed.messaad@outlook.com"
               onClick={(e) => e.stopPropagation()}
               className="text-neutral-500 hover:text-white transition"
