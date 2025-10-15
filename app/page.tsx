@@ -260,7 +260,7 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
+              <h1 className="text-[36px] xl:text-[32px] leading-[1.2] mb-6">
                 <span className="font-mono font-bold">Advancing Clinical Medicine</span>
                 <span className="italic font-serif font-light">through </span>
                 <span className="font-mono font-bold">Deep Learning Systems</span>
