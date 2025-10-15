@@ -288,8 +288,19 @@ export default function Page() {
 
       {/* DESKTOP LAYOUT (lg:block) */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        {/* --- OPTIMIZED GRID COLUMNS: 9fr (36%) 6fr (24%) 10fr (40%) --- */}
+        {/*
+          --- OPTIMIZED GRID COLUMNS (9fr:6fr:10fr) ---
+          Col 1 (Title/About): 9fr (36% of screen)
+          Col 2 (Profile Pic): 6fr (24% of screen)
+          Col 3 (Projects):   10fr (40% of screen)
+          
+          This gives Row 1 the desired 60:40 split (9fr : 6fr).
+          We handle the Row 2 50:50 split using flex/col-span-2.
+        */}
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
+          
+          {/* --- ROW 1, COLUMN 1: TITLE/INTRO (36% width) ---
+          */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
@@ -328,6 +339,8 @@ export default function Page() {
             </div>
           </section>
 
+          {/* --- ROW 1, COLUMN 2: PROFILE PIC (24% width) ---
+          */}
           <section 
             id="profile-grid-section" // Target ID for desktop
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700`}
@@ -335,6 +348,8 @@ export default function Page() {
             {/* The actual image is now set as a background style in useEffect on completion */}
           </section>
 
+          {/* --- ROW 1 & 2, COLUMN 3: PROJECTS (40% width, row-span-2) ---
+          */}
           <aside
             id="projects"
             className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
@@ -436,101 +451,113 @@ export default function Page() {
               ))}
             </div>
           </aside>
+          
+          {/*
+            --- ROW 2: ABOUT & CONTACT (50:50 SPLIT) ---
+            This container spans both Column 1 and Column 2 (col-span-2) 
+            and uses a FLEX layout to guarantee the 50:50 internal split.
+          */}
+          <div className="col-span-2 flex gap-3 h-full">
+              {/* --- ROW 2, COLUMN 1: ABOUT (50% of 60% = 30% width) ---
+                The 'flex-1' and 'w-1/2' ensure it takes exactly 50% of the parent (col-span-2) container.
+              */}
+              <section
+                id="about"
+                className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+                  isLoading
+                    ? "opacity-0 translate-y-[50px]"
+                    : "opacity-100 translate-y-0 delay-1100"
+                }`}
+              >
+                <div className="flex items-start justify-start">
+                  <svg
+                    className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  >
+                    <circle cx="50" cy="50" r="20" />
+                    <circle cx="50" cy="50" r="5" />
+                  </svg>
+                </div>
+                
+                <div>
+                  <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
+                    About
+                  </h3>
+                  <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
+                    AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                  </p>
+                </div>
+              </section>
 
-          <section
-            id="about"
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
-              isLoading
-                ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-1100"
-            }`}
-          >
-            <div className="flex items-start justify-start">
-              <svg
-                className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
+              {/* --- ROW 2, COLUMN 2: CONTACT (50% of 60% = 30% width) ---
+              */}
+              <section
+                id="contact-section"
+                onClick={() =>
+                  (window.location.href = "mailto:ahmed.messaad@outlook.com")
+                }
+                className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+                  isLoading
+                    ? "opacity-0 translate-y-[50px]"
+                    : "opacity-100 translate-y-0 delay-1100"
+                }`}
               >
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="5" />
-              </svg>
-            </div>
-            
-            <div>
-              <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
-                About
-              </h3>
-              <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
-                AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
-              </p>
-            </div>
-          </section>
-
-          <section
-            id="contact-section"
-            onClick={() =>
-              (window.location.href = "mailto:ahmed.messaad@outlook.com")
-            }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
-              isLoading
-                ? "opacity-0 translate-y-[50px]"
-                : "opacity-100 translate-y-0 delay-1100"
-            }`}
-          >
-            <div className="flex justify-between items-start mb-auto">
-              <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
-                Let's Connect<br />
-              </div>
-              <svg
-                className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
-                viewBox="0 0 32 32"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M8 24L24 8M24 8H8M24 8V24" />
-              </svg>
-            </div>
-            
-            <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-              <span className="font-mono">Contact </span>
-              <span className="italic font-serif font-light">me</span>
-            </h2>
-            
-            <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-              <a
-                href="https://linkedin.com/in/ahmedmessaad"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                LINKEDIN
-              </a>
-              <a
-                href="https://github.com/RYANX9"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                GITHUB
-              </a>
-              <a
-                href="mailto:ahmed.messaad@outlook.com"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                EMAIL
-              </a>
-            </div>
-          </section>
+                <div className="flex justify-between items-start mb-auto">
+                  <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
+                    Let's Connect<br />
+                  </div>
+                  <svg
+                    className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M8 24L24 8M24 8H8M24 8V24" />
+                  </svg>
+                </div>
+                
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
+                  <span className="font-mono">Contact </span>
+                  <span className="italic font-serif font-light">me</span>
+                </h2>
+                
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
+                  <a
+                    href="https://linkedin.com/in/ahmedmessaad"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    LINKEDIN
+                  </a>
+                  <a
+                    href="https://github.com/RYANX9"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    GITHUB
+                  </a>
+                  <a
+                    href="mailto:ahmed.messaad@outlook.com"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    EMAIL
+                  </a>
+                </div>
+              </section>
+          </div>
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (lg:hidden) */}
+      {/* MOBILE LAYOUT (lg:hidden) - Unchanged */}
       <div className="lg:hidden pt-16">
         <section
           className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 min-h-[60vh] transition-all duration-1000 ${
