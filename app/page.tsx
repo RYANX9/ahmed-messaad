@@ -70,30 +70,31 @@ export default function Page() {
   useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile');
-    const profileSection = document.getElementById('profile-grid-section');
+    
+    // Determine the target section ID based on screen size
+    const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
+    const profileSection = document.getElementById(targetSectionId);
 
-    if (!isDesktop || !animatedImg || !profileSection) {
-      // Logic for mobile or if elements aren't found (fallback)
+    if (!animatedImg || !profileSection) {
+      // Fallback for missing elements
       setIsLoading(false);
-      setIsTransitionComplete(true); // Treat as complete to show static content
+      setIsTransitionComplete(true);
       return;
     }
 
     // --- Animation Constants ---
-    const CENTERED_DELAY = 1000;       // Initial delay for the image to remain centered (NEW)
+    const CENTERED_DELAY = 1000;       // Initial delay for the image to remain centered
     const SCALE_DOWN_DURATION = 400;   // Time for scale 1 -> 0.8
     const MOVE_DURATION = 1200;        // Time for the smooth transition to the final position
-    // Aggressive easing for the "smooth asf" feel
     const MOVE_EASING = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'; 
+    const INITIAL_SIZE = isDesktop ? 240 : 180; // Smaller initial size for mobile
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
-    // We set these via direct style manipulation for precise control over the initial state 
-    // and to set the first, short transition property for the scale down.
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
-    (animatedImg as HTMLElement).style.width = '240px';
-    (animatedImg as HTMLElement).style.height = '240px';
+    (animatedImg as HTMLElement).style.width = `${INITIAL_SIZE}px`;
+    (animatedImg as HTMLElement).style.height = `${INITIAL_SIZE}px`;
     (animatedImg as HTMLElement).style.borderRadius = '16px';
     (animatedImg as HTMLElement).style.zIndex = '100';
     (animatedImg as HTMLElement).style.opacity = '1';
@@ -104,11 +105,11 @@ export default function Page() {
     // --- Phase 1: Initial Delay & Scale Down (100% -> 80%) ---
     const scaleDownStart = setTimeout(() => {
       setIsScaledDown(true); // Triggers the scale(0.8) via JSX style update
-    }, CENTERED_DELAY); // Wait for the CENTERED_DELAY
+    }, CENTERED_DELAY);
 
     // --- Phase 2: Move to Final Position (Starts after scale-down is complete) ---
     const moveTransitionStart = setTimeout(() => {
-      // 2. Calculate Target Position & Size (Precomputation of final destination)
+      // 2. Calculate Target Position & Size
       const rect = profileSection.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
@@ -123,8 +124,8 @@ export default function Page() {
       (animatedImg as HTMLElement).style.width = `${rect.width}px`;
       (animatedImg as HTMLElement).style.height = `${rect.height}px`;
       
-      // Target shape (assuming 'rounded-2xl' is 8px)
-      (animatedImg as HTMLElement).style.borderRadius = '8px'; 
+      // Target shape (8px for desktop, maybe 6px for mobile 'rounded-lg')
+      (animatedImg as HTMLElement).style.borderRadius = isDesktop ? '8px' : '6px'; 
       
       // The key move: remove the centering and scale transforms. 
       (animatedImg as HTMLElement).style.transform = 'none'; 
@@ -149,29 +150,16 @@ export default function Page() {
   // --- HELPER FUNCTION (MOVED UP) ---
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
-    if (isDesktop) {
-      // On desktop, the static image should ONLY be visible AFTER the transition is complete
-      return isTransitionComplete ? (
-        <Image
-          src="/ahmed.jpg"
-          alt="Ahmed Messaad"
-          fill
-          style={{ objectFit: 'cover' }}
-          sizes="(min-width: 1024px) 33vw, 100vw"
-        />
-      ) : null;
-    } else {
-      // On mobile, show the static image immediately
-      return (
-        <Image
-          src="/ahmed.jpg"
-          alt="Ahmed Messaad"
-          fill
-          style={{ objectFit: 'cover' }}
-          sizes="100vw"
-        />
-      );
-    }
+    // Show the static image ONLY after the transition is complete
+    return isTransitionComplete ? (
+      <Image
+        src="/ahmed.jpg"
+        alt="Ahmed Messaad"
+        fill
+        style={{ objectFit: 'cover' }}
+        sizes={isDesktop ? "(min-width: 1024px) 33vw, 100vw" : "100vw"}
+      />
+    ) : null;
   };
 
   return (
@@ -277,17 +265,18 @@ export default function Page() {
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE (Desktop Only) */}
+      {/* ANIMATED PROFILE IMAGE (Shared between Desktop and Mobile) */}
+      {/* We use visibility/opacity control to hide it once transition is complete */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        className={`object-cover hidden lg:block ${
+        className={`object-cover ${
             isTransitionComplete ? "opacity-0" : "opacity-100"
         }`} 
         style={{
-          // Initial styles are set in useEffect for precision, but the dynamic scale is here:
-          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.8 : 1})`, // CHANGED 0.7 to 0.8
+          // The dynamic scale is here:
+          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.8 : 1})`,
           // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
           zIndex: 100,
           pointerEvents: 'none',
@@ -346,7 +335,7 @@ export default function Page() {
           </section>
 
           <section 
-            id="profile-grid-section"
+            id="profile-grid-section" // Target ID for desktop
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700 ${
               isTransitionComplete // Show the container's contents only after the transition
                 ? "opacity-100" 
@@ -592,10 +581,11 @@ export default function Page() {
         </section>
 
         <section
+          id="profile-mobile-section" // Target ID for mobile
           className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000 ${
-            isLoading
-              ? "opacity-0 translate-y-[30px]"
-              : "opacity-100 translate-y-0 delay-700"
+            isTransitionComplete // Show the container's contents only after the transition
+              ? "opacity-100" 
+              : "opacity-0" 
           }`}
         >
           {renderProfileImage(false)}
