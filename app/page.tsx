@@ -298,7 +298,7 @@ export default function Page() {
       </div>
 
       <div className="lg:hidden pt-16">
-        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 h-[50vh] ${mobileFadeClass(500)}`}>
+        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 h-[40vh] ${mobileFadeClass(500)}`}>
           <div className="flex items-start justify-end">
             <DecorativeSVG className="w-14 h-14 text-neutral-700" strokeWidth="0.5">
               <circle cx="50" cy="50" r="40" />
