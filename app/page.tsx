@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,10 +14,10 @@ export default function Page() {
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
-      context: "Clinical AI Platform",
+      context: "Clinical AI Research",
       year: "2024",
       description:
-        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+        "Clinical-grade diagnostic system achieving 99% four-class tumor classification with radiologist-validated interface. End-to-end DICOM pipeline development investigating optimal preprocessing strategies for limited medical imaging datasets. Deployment-ready architecture with clinical workflow integration.",
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -28,7 +29,7 @@ export default function Page() {
       context: "Medical Automation",
       year: "2023–2024",
       description:
-        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+        "Automated hematology platform achieving 97% multi-class blood cell classification. Reduced diagnostic time from 45 minutes to 3 minutes through optimized detection pipeline. Research investigating efficient segmentation architectures for microscopy imaging in clinical workflows.",
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -37,10 +38,10 @@ export default function Page() {
     {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
-      context: "Deep Learning Research",
+      context: "Deep Learning Methodology",
       year: "2024",
       description:
-        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers. Systematic ablation study investigating optimal temporal convolution strategies for healthcare prediction tasks.",
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
@@ -52,7 +53,7 @@ export default function Page() {
       context: "Research Thesis",
       year: "2023",
       description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic comparative evaluation of 12 deep learning architectures using stratified cross-validation. Transfer learning investigation for multi-domain medical classification.",
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -252,7 +253,7 @@ export default function Page() {
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
-          AHMED MESSAAD
+          AHMED MESSAAD • AI RESEARCHER
         </div>
       </header>
 
@@ -289,12 +290,12 @@ export default function Page() {
             
             <div>
               <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
-                <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">Deep Learning Systems</span>
+                <span className="font-mono font-bold">Engineering Explainable AI </span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
@@ -439,7 +440,9 @@ export default function Page() {
                   About
                 </h3>
                 <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
-                  AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                  Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                  My work investigates explainable deep learning architectures, transfer learning optimization, 
+                  and diagnostic system design for resource-constrained clinical environments.
                 </p>
               </div>
             </section>
@@ -492,7 +495,7 @@ export default function Page() {
                   onClick={(e) => e.stopPropagation()}
                   className="text-neutral-500 hover:text-white transition"
                 >
-                  GITHUB
+                  GITHUB 
                 </a>
                 <a
                   href="mailto:ahmed.messaad@outlook.com"
@@ -502,15 +505,15 @@ export default function Page() {
                   EMAIL
                 </a>
               </div>
+              <div className="mt-6 text-[8px] text-neutral-600 uppercase tracking-widest font-mono">
+                Designed & Built by Ahmed Messaad
+              </div>
             </section>
           </div>
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (UPDATED) */}
-      {/* - Replaced mt-20 with pt-16 (to account for h-16 fixed header)
-        - The p-3 on the container + p-6 on the first card ensures the right spacing 
-      */}
+      {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
           
@@ -543,12 +546,12 @@ export default function Page() {
             
             <div className="mt-auto">
               <h1 className="text-[34px] leading-[1.2] mb-5">
-                <span className="font-mono font-bold">Advancing Clinical Medicine </span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">AI-Driven Design</span>
+                <span className="font-mono font-bold">Engineering Explainable AI </span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
@@ -587,7 +590,9 @@ export default function Page() {
                 About
               </h3>
               <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
-                AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                My work investigates explainable deep learning architectures, transfer learning optimization, 
+                and diagnostic system design for resource-constrained clinical environments.
               </p>
             </div>
           </section>
