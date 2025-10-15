@@ -98,8 +98,8 @@ export default function Page() {
   const mobileFadeClass = (delay: number) => 
     `transition-all duration-1000 ${isLoading ? "opacity-0 translate-y-[30px]" : `opacity-100 translate-y-0 delay-${delay}`}`;
 
-  const DecorativeSVG = ({ className, children }: { className: string; children: React.ReactNode }) => (
-    <svg className={className} viewBox="0 0 100 100" fill="none" stroke="currentColor">
+  const DecorativeSVG = ({ className, strokeWidth, children }: { className: string; strokeWidth?: string; children: React.ReactNode }) => (
+    <svg className={className} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth={strokeWidth}>
       {children}
     </svg>
   );
@@ -298,7 +298,7 @@ export default function Page() {
       </div>
 
       <div className="lg:hidden pt-16">
-        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 h-[35vh] ${mobileFadeClass(500)}`}>
+        <section className={`border-b border-[#2a2a2a] p-6 flex flex-col gap-6 h-[50vh] ${mobileFadeClass(500)}`}>
           <div className="flex items-start justify-end">
             <DecorativeSVG className="w-14 h-14 text-neutral-700" strokeWidth="0.5">
               <circle cx="50" cy="50" r="40" />
