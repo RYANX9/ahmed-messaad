@@ -7,7 +7,7 @@ export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
-  const [isImageReady, setIsImageReady] = useState(false);
+  // isTransitionComplete is the key state now
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
   // --- PROJECT DATA DEFINITION ---
@@ -68,39 +68,45 @@ export default function Page() {
     if (typeof window === "undefined") return;
 
     const isDesktop = window.innerWidth >= 1024;
-    const animatedImg = document.getElementById('animated-profile');
+    const animatedImg = document.getElementById('animated-profile') as HTMLImageElement;
     
     // Determine the target section ID based on screen size
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
-    const profileSection = document.getElementById(targetSectionId);
+    const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
     // Only run the complex animation logic if the animation is not yet complete
     if (isTransitionComplete || !animatedImg || !profileSection) {
-      // Fallback for missing elements or if already complete
       if (!isTransitionComplete) {
          setIsLoading(false);
+         // Ensure the background image is set on the target section if skipping animation
+         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
+         profileSection.style.backgroundSize = 'cover';
+         profileSection.style.backgroundPosition = 'center';
          setIsTransitionComplete(true);
       }
       return;
     }
 
-    // --- Animation Constants (FIXED FOR 1.5s DURATION) ---
-    const INITIAL_DELAY = 400; // Delay before the move starts
-    const MOVE_DURATION = 1500; // INCREASED: 1.5 seconds for smoother transition
+    // --- Animation Constants ---
+    const INITIAL_DELAY = 400; 
+    const MOVE_DURATION = 1500; // 1.5 seconds for smoother transition
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)'; 
     const INITIAL_SIZE = isDesktop ? 240 : 180;
 
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
-    const imgStyle = (animatedImg as HTMLElement).style;
+    const imgStyle = animatedImg.style;
     imgStyle.position = 'fixed';
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
     imgStyle.borderRadius = '16px'; 
-    imgStyle.zIndex = '100';
+    imgStyle.zIndex = '100'; // High z-index to stay on top
     imgStyle.opacity = '1';
     imgStyle.transform = `translate(-50%, -50%)`; // Centering transform
+    // Ensure the image element is visible and has the correct image source
+    animatedImg.src = '/ahmed.jpg';
+
 
     // --- Phase 1: Initial Delay & Start Combined Move/Scale ---
     const moveTransitionStart = setTimeout(() => {
@@ -111,25 +117,35 @@ export default function Page() {
       
       // 3. Set Final Styles (Triggers the combined smooth move and scale)
       
-      // CRITICAL FIX: Set the transition property just before changing the values.
+      // Set the transition property just before changing the values.
       imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
       
       // Target position and size (These changes trigger the animation)
       imgStyle.top = `${absoluteTop}px`;
       imgStyle.left = `${absoluteLeft}px`;
-      imgStyle.width = `${rect.width}px`;
-      imgStyle.height = `${rect.height}px`;
+      // We make the animated image slightly larger than the target section
+      // to ensure it completely covers the section before we hide it.
+      imgStyle.width = `${rect.width + 1}px`; 
+      imgStyle.height = `${rect.height + 1}px`;
       
       // Target shape
       imgStyle.borderRadius = isDesktop ? '8px' : '6px'; 
       
       // Remove the centering transform to complete the move/scale.
       imgStyle.transform = 'none'; 
-      
-      setIsImageReady(true); 
 
-      // 4. Complete the Transition
+      // 4. Complete the Transition (Seamless swap)
       const completeDelay = setTimeout(() => {
+        // Step 4a: Set the static background image on the target section
+        profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
+        profileSection.style.backgroundSize = 'cover';
+        profileSection.style.backgroundPosition = 'center';
+
+        // Step 4b: Instantly hide the animated image. The background image 
+        // will now be visible in the target section, completing the seamless swap.
+        imgStyle.display = 'none';
+        imgStyle.opacity = '0'; 
+
         setIsTransitionComplete(true);
         setIsLoading(false);
       }, MOVE_DURATION + 50); // Add a small buffer after the duration
@@ -141,21 +157,6 @@ export default function Page() {
       clearTimeout(moveTransitionStart);
     };
   }, [isTransitionComplete]);
-
-  // --- HELPER FUNCTION ---
-  // Logic to determine which image component to show in the grid item
-  const renderProfileImage = (isDesktop: boolean) => {
-    // Show the static Image component ONLY after the transition is complete
-    return isTransitionComplete ? (
-      <Image
-        src="/ahmed.jpg"
-        alt="Ahmed Messaad"
-        fill
-        style={{ objectFit: 'cover' }}
-        sizes={isDesktop ? "(min-width: 1024px) 33vw, 100vw" : "100vw"}
-      />
-    ) : null;
-  };
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
@@ -260,21 +261,20 @@ export default function Page() {
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE - Visible until the transition is complete */}
-      {!isTransitionComplete && (
-        <img
-          id="animated-profile"
-          src="/ahmed.jpg"
-          alt="Ahmed Messaad"
-          className={`object-cover`} 
-          style={{
-            // Initial centering transform applied here. Other styles are applied in useEffect.
-            transform: `translate(-50%, -50%)`,
-            zIndex: 100,
-            pointerEvents: 'none',
-          }}
-        />
-      )}
+      {/* ANIMATED PROFILE IMAGE - Visible throughout the animation until the seamless hand-off */}
+      {/* We use <img> here, as it allows us to easily set position: fixed and manually manipulate the DOM for the animation */}
+      <img
+        id="animated-profile"
+        src={isTransitionComplete ? '' : "/ahmed.jpg"}
+        alt="Ahmed Messaad"
+        className={`object-cover ${isTransitionComplete ? 'hidden' : 'block'}`} // Hide instantly on completion
+        style={{
+          // Initial centering transform applied here. Other styles are applied in useEffect.
+          transform: `translate(-50%, -50%)`,
+          zIndex: 100, // Keep it above everything during the move
+          pointerEvents: 'none',
+        }}
+      />
 
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
@@ -329,11 +329,9 @@ export default function Page() {
 
           <section 
             id="profile-grid-section" // Target ID for desktop
-            // REMOVED: opacity-0 class to ensure the container is always visible
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative transition-all duration-700`}
           >
-            {/* The renderProfileImage function ensures the static image only loads after the transition */}
-            {renderProfileImage(true)}
+            {/* The actual image is now set as a background style in useEffect on completion */}
           </section>
 
           <aside
@@ -573,11 +571,9 @@ export default function Page() {
 
         <section
           id="profile-mobile-section" // Target ID for mobile
-          // REMOVED: opacity-0 class to ensure the container is always visible
           className={`border-b border-[#2a2a2a] bg-[#1a1a1a] flex items-center justify-center overflow-hidden h-[50vh] relative transition-all duration-1000`}
         >
-          {/* The renderProfileImage function ensures the static image only loads after the transition */}
-          {renderProfileImage(false)}
+          {/* The actual image is now set as a background style in useEffect on completion */}
         </section>
 
         <section
