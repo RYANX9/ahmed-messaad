@@ -7,11 +7,14 @@ export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Replaced previous state with a single flag for the move start
-  const [isMoveStarted, setIsMoveStarted] = useState(false); 
+  // NEW STATE: Controls the scale down animation (Step 1)
+  const [isScaledDown, setIsScaledDown] = useState(false);
+
+  // Existing states repurposed for transition flow
+  const [isImageReady, setIsImageReady] = useState(false);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  // --- PROJECT DATA DEFINITION ---
+  // --- PROJECT DATA DEFINITION (MOVED UP) ---
   const projects = [
     {
       id: "airm",
@@ -72,17 +75,20 @@ export default function Page() {
     if (!isDesktop || !animatedImg || !profileSection) {
       // Logic for mobile or if elements aren't found (fallback)
       setIsLoading(false);
-      setIsTransitionComplete(true);
+      setIsTransitionComplete(true); // Treat as complete to show static content
       return;
     }
 
     // --- Animation Constants ---
-    const TOTAL_MOVE_DURATION = 2500; // Increased to 2.5 seconds
-    const INITIAL_DELAY = 100;        // Start a small delay before the move begins
-    // Aggressive easing for a very smooth and heavy feel
-    const MOVE_EASING = 'cubic-bezier(0.86, 0, 0.07, 1)'; 
+    const CENTERED_DELAY = 1000;       // Initial delay for the image to remain centered (NEW)
+    const SCALE_DOWN_DURATION = 400;   // Time for scale 1 -> 0.8
+    const MOVE_DURATION = 1200;        // Time for the smooth transition to the final position
+    // Aggressive easing for the "smooth asf" feel
+    const MOVE_EASING = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'; 
 
-    // 1. Initial Styles (Ensures the image is centered, large, and fully opaque at the start)
+    // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
+    // We set these via direct style manipulation for precise control over the initial state 
+    // and to set the first, short transition property for the scale down.
     (animatedImg as HTMLElement).style.position = 'fixed';
     (animatedImg as HTMLElement).style.top = '50vh';
     (animatedImg as HTMLElement).style.left = '50vw';
@@ -91,19 +97,27 @@ export default function Page() {
     (animatedImg as HTMLElement).style.borderRadius = '16px';
     (animatedImg as HTMLElement).style.zIndex = '100';
     (animatedImg as HTMLElement).style.opacity = '1';
-    (animatedImg as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1)'; // Centered and full size
+    
+    // Set a short transition property for the scale-down phase (transform property only)
+    (animatedImg as HTMLElement).style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
+    
+    // --- Phase 1: Initial Delay & Scale Down (100% -> 80%) ---
+    const scaleDownStart = setTimeout(() => {
+      setIsScaledDown(true); // Triggers the scale(0.8) via JSX style update
+    }, CENTERED_DELAY); // Wait for the CENTERED_DELAY
 
-    // 2. Set the long, smooth transition property for ALL styles
-    (animatedImg as HTMLElement).style.transition = `all ${TOTAL_MOVE_DURATION}ms ${MOVE_EASING}`; 
-
-    // --- Phase 1: Start the Single, Seamless Move ---
+    // --- Phase 2: Move to Final Position (Starts after scale-down is complete) ---
     const moveTransitionStart = setTimeout(() => {
-      // a. Calculate Target Position & Size
+      // 2. Calculate Target Position & Size (Precomputation of final destination)
       const rect = profileSection.getBoundingClientRect();
       const absoluteTop = rect.top + window.scrollY;
       const absoluteLeft = rect.left + window.scrollX;
       
-      // b. Apply Final Styles (Triggers the transition for all properties)
+      // 3. Set Final Styles (Triggers the move)
+      // Override the transition property to the long duration and custom easing for the move
+      (animatedImg as HTMLElement).style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
+      
+      // Target position and size
       (animatedImg as HTMLElement).style.top = `${absoluteTop}px`;
       (animatedImg as HTMLElement).style.left = `${absoluteLeft}px`;
       (animatedImg as HTMLElement).style.width = `${rect.width}px`;
@@ -112,26 +126,27 @@ export default function Page() {
       // Target shape (assuming 'rounded-2xl' is 8px)
       (animatedImg as HTMLElement).style.borderRadius = '8px'; 
       
-      // Remove the centering transform and scale
+      // The key move: remove the centering and scale transforms. 
       (animatedImg as HTMLElement).style.transform = 'none'; 
       
-      setIsMoveStarted(true); // Flag: Transition is now moving
+      setIsImageReady(true); // Flag: Transition is now moving
 
-      // --- Phase 2: Complete the Transition ---
+      // 4. Complete the Transition
       const completeDelay = setTimeout(() => {
         setIsTransitionComplete(true);
         setIsLoading(false);
-      }, TOTAL_MOVE_DURATION + 100); // Wait for transition duration + a small buffer
+      }, MOVE_DURATION);
 
       return () => clearTimeout(completeDelay);
-    }, INITIAL_DELAY);
+    }, CENTERED_DELAY + SCALE_DOWN_DURATION + 50); // Start move 50ms after scale-down should be complete
     
     return () => {
+      clearTimeout(scaleDownStart);
       clearTimeout(moveTransitionStart);
     };
   }, []);
 
-  // --- HELPER FUNCTION ---
+  // --- HELPER FUNCTION (MOVED UP) ---
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
     if (isDesktop) {
@@ -268,10 +283,12 @@ export default function Page() {
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
         className={`object-cover hidden lg:block ${
-            isTransitionComplete ? "opacity-0" : "opacity-100" // Hide once finished
+            isTransitionComplete ? "opacity-0" : "opacity-100"
         }`} 
         style={{
-          // Initial styles are set in useEffect for precision
+          // Initial styles are set in useEffect for precision, but the dynamic scale is here:
+          transform: `translate(-50%, -50%) scale(${isScaledDown ? 0.8 : 1})`, // CHANGED 0.7 to 0.8
+          // All other initial/dynamic styles (position, size, transition, etc.) are applied in useEffect
           zIndex: 100,
           pointerEvents: 'none',
         }}
