@@ -11,10 +11,62 @@ export default function Page() {
   const [isScaledDown, setIsScaledDown] = useState(false);
 
   // Existing states repurposed for transition flow
-  // isImageReady is now used to signal the move to the final position (Step 2)
   const [isImageReady, setIsImageReady] = useState(false);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
+  // --- PROJECT DATA DEFINITION (MOVED UP) ---
+  const projects = [
+    {
+      id: "airm",
+      name: "AIRM Brain Tumor System",
+      context: "Clinical AI Platform",
+      year: "2024",
+      description:
+        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+      tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
+      link: "https://youtu.be/2OeqBKF3X_A",
+      linkText: "Watch Demo",
+      image: "/brain.jpg",
+    },
+    {
+      id: "hemavision",
+      name: "HemaVision",
+      context: "Medical Automation",
+      year: "2023–2024",
+      description:
+        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+      tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
+      link: "https://youtu.be/YxhA877Wyn0",
+      linkText: "Watch Demo",
+      image: "/blood.jpg",
+    },
+    {
+      id: "healthcost",
+      name: "Healthcare Cost Prediction",
+      context: "Deep Learning Research",
+      year: "2024",
+      description:
+        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+      tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
+      link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
+      linkText: "View Project",
+      image: "/healthcarecost.png",
+    },
+    {
+      id: "mydailyhealth",
+      name: "My Daily Health",
+      context: "Research Thesis",
+      year: "2023",
+      description:
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
+      link: "https://youtu.be/kh7WBjNPpEM",
+      linkText: "Watch Demo",
+      image: "/daily.png",
+    },
+  ];
+
+  // --- EFFECTS ---
   useEffect(() => {
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile');
@@ -37,17 +89,17 @@ export default function Page() {
     // 1. Initial Styles (Ensures the image is centered, square, and fully opaque at the start)
     // We set these via direct style manipulation for precise control over the initial state 
     // and to set the first, short transition property for the scale down.
-    animatedImg.style.position = 'fixed';
-    animatedImg.style.top = '50vh';
-    animatedImg.style.left = '50vw';
-    animatedImg.style.width = '240px';
-    animatedImg.style.height = '240px';
-    animatedImg.style.borderRadius = '16px';
-    animatedImg.style.zIndex = '100';
-    animatedImg.style.opacity = '1';
+    (animatedImg as HTMLElement).style.position = 'fixed';
+    (animatedImg as HTMLElement).style.top = '50vh';
+    (animatedImg as HTMLElement).style.left = '50vw';
+    (animatedImg as HTMLElement).style.width = '240px';
+    (animatedImg as HTMLElement).style.height = '240px';
+    (animatedImg as HTMLElement).style.borderRadius = '16px';
+    (animatedImg as HTMLElement).style.zIndex = '100';
+    (animatedImg as HTMLElement).style.opacity = '1';
     
     // Set a short transition property for the scale-down phase (transform property only)
-    animatedImg.style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
+    (animatedImg as HTMLElement).style.transition = `transform ${SCALE_DOWN_DURATION}ms ease-out, opacity 300ms`; 
     
     // --- Phase 1: Scale Down (100% -> 70%) ---
     const scaleDownStart = setTimeout(() => {
@@ -63,20 +115,19 @@ export default function Page() {
       
       // 3. Set Final Styles (Triggers the move)
       // Override the transition property to the long duration and custom easing for the move
-      animatedImg.style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
+      (animatedImg as HTMLElement).style.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
       
       // Target position and size
-      animatedImg.style.top = `${absoluteTop}px`;
-      animatedImg.style.left = `${absoluteLeft}px`;
-      animatedImg.style.width = `${rect.width}px`;
-      animatedImg.style.height = `${rect.height}px`;
+      (animatedImg as HTMLElement).style.top = `${absoluteTop}px`;
+      (animatedImg as HTMLElement).style.left = `${absoluteLeft}px`;
+      (animatedImg as HTMLElement).style.width = `${rect.width}px`;
+      (animatedImg as HTMLElement).style.height = `${rect.height}px`;
       
       // Target shape (assuming 'rounded-2xl' is 8px)
-      animatedImg.style.borderRadius = '8px'; 
+      (animatedImg as HTMLElement).style.borderRadius = '8px'; 
       
-      // The key move: remove the centering and scale transforms. The element now transitions 
-      // its fixed position (top/left) and dimensions (width/height).
-      animatedImg.style.transform = 'none'; 
+      // The key move: remove the centering and scale transforms. 
+      (animatedImg as HTMLElement).style.transform = 'none'; 
       
       setIsImageReady(true); // Flag: Transition is now moving
 
@@ -95,6 +146,7 @@ export default function Page() {
     };
   }, []);
 
+  // --- HELPER FUNCTION (MOVED UP) ---
   // Logic to determine which image component to show in the grid item
   const renderProfileImage = (isDesktop: boolean) => {
     if (isDesktop) {
@@ -225,17 +277,11 @@ export default function Page() {
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE (Desktop Only)
-        The image starts at fixed centered position.
-        1. isScaledDown=true triggers transform: scale(0.7) with a short ease-out transition.
-        2. moveTransitionStart in useEffect overwrites the 'style' to trigger the move/resize.
-        3. Opacity is controlled to hide the animated image once the static one is ready.
-      */}
+      {/* ANIMATED PROFILE IMAGE (Desktop Only) */}
       <img
         id="animated-profile"
         src="/ahmed.jpg"
         alt="Ahmed Messaad"
-        // Remove fixed transition classes and manage transition properties dynamically in useEffect
         className={`object-cover hidden lg:block ${
             isTransitionComplete ? "opacity-0" : "opacity-100"
         }`} 
