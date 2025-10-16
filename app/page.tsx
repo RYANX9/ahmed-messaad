@@ -317,7 +317,8 @@ export default function Page() {
       {/* ========================== DESKTOP LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
+        {/* CHANGE: Updated the grid-cols to give the main content (first column) more space: 9fr -> 10fr, and projects (third column) slightly less: 10fr -> 9fr */}
+        <div className="grid grid-cols-[10fr_6fr_9fr] auto-rows-fr gap-3 h-full">
           
           {/* ========== TITLE/INTRO SECTION ========== */}
           <section
@@ -352,7 +353,11 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
+              {/* FIX: Replaced fixed pixel sizes with clamp() for responsive scaling */}
+              <h1 
+                className="leading-[1.2] mb-6"
+                style={{ fontSize: 'clamp(24px, 2.5vw, 36px)' /* Min 24px, Max 36px, scales with 2.5% of viewport width */ }}
+              >
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
@@ -441,9 +446,13 @@ export default function Page() {
                 >
                   About
                 </h3>
+                {/* FIX: Replaced fixed pixel sizes with clamp() for responsive scaling */}
                 <p 
-                  className="text-[14px] xl:text-[16px] leading-relaxed font-sans"
-                  style={{ color: theme.textSecondary }}
+                  className="leading-relaxed font-sans"
+                  style={{ 
+                    color: theme.textSecondary,
+                    fontSize: 'clamp(14px, 1.2vw, 17px)' /* Min 14px, Max 17px, scales with 1.2% of viewport width */
+                  }}
                 >
                   Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
                   My work investigates explainable deep learning architectures, transfer learning optimization, 
