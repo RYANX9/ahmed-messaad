@@ -247,13 +247,43 @@ export default function Page() {
       />
 
       <header
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         }`}
       >
         <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
           AHMED MESSAAD • AI RESEARCHER
         </div>
+      
+        {/* CV DOWNLOAD LINK */}
+        <a
+          href="/ahmed_messad_cv.pdf"
+          download
+          className="flex items-center text-white transition-colors duration-200"
+        >
+          {/* DESKTOP LINK: Text only */}
+          <span className="hidden lg:block text-[11px] tracking-wider uppercase font-accent hover:text-neutral-400">
+            DOWNLOAD CV
+          </span>
+          
+          {/* MOBILE LINK: Icon with "CV" text in a styled badge */}
+          <div className="lg:hidden flex items-center bg-[#151515] border border-[#2a2a2a] rounded-md px-3 py-1 text-[12px] font-mono tracking-wide hover:bg-[#252525] transition">
+            CV
+            <svg
+              className="w-3 h-3 ml-1"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 15L12 3M12 15L8 11M12 15L16 11M20 17H4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </a>
       </header>
 
       {/* DESKTOP LAYOUT */}
