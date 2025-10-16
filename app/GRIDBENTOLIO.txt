@@ -13,10 +13,10 @@ export default function Page() {
     {
       id: "airm",
       name: "AIRM Brain Tumor System",
-      context: "Clinical AI Platform",
+      context: "Clinical AI Research",
       year: "2024",
       description:
-        "Production-ready diagnostic system achieving 99% accuracy across four tumor categories. Built end-to-end DICOM pipeline with clinical interface validated by radiologists.",
+        "Clinical-grade diagnostic system achieving 99% four-class tumor classification with radiologist-validated interface. End-to-end DICOM pipeline development investigating optimal preprocessing strategies for limited medical imaging datasets. Deployment-ready architecture with clinical workflow integration.",
       tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
       link: "https://youtu.be/2OeqBKF3X_A",
       linkText: "Watch Demo",
@@ -28,7 +28,7 @@ export default function Page() {
       context: "Medical Automation",
       year: "2023–2024",
       description:
-        "Automated hematology platform with 97% classification accuracy. Reduced diagnostic time from 45 minutes to 3 minutes while maintaining clinical-grade precision.",
+        "Automated hematology platform achieving 97% multi-class blood cell classification. Reduced diagnostic time from 45 minutes to 3 minutes through optimized detection pipeline. Research investigating efficient segmentation architectures for microscopy imaging in clinical workflows.",
       tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
       link: "https://youtu.be/YxhA877Wyn0",
       linkText: "Watch Demo",
@@ -37,10 +37,10 @@ export default function Page() {
     {
       id: "healthcost",
       name: "Healthcare Cost Prediction",
-      context: "Deep Learning Research",
+      context: "Deep Learning Methodology",
       year: "2024",
       description:
-        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers.",
+        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers. Systematic ablation study investigating optimal temporal convolution strategies for healthcare prediction tasks.",
       tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
       link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
       linkText: "View Project",
@@ -52,7 +52,7 @@ export default function Page() {
       context: "Research Thesis",
       year: "2023",
       description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic evaluation of 12 architectures using stratified cross-validation.",
+        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic comparative evaluation of 12 deep learning architectures using stratified cross-validation. Transfer learning investigation for multi-domain medical classification.",
       tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
       link: "https://youtu.be/kh7WBjNPpEM",
       linkText: "Watch Demo",
@@ -123,7 +123,7 @@ export default function Page() {
       }, MOVE_DURATION + 50);
 
       return () => clearTimeout(completeDelay);
-    }, INITIAL_DELAY);
+    }, MOVE_DURATION + INITIAL_DELAY); // Wait for the initial delay plus the move duration
 
     return () => {
       clearTimeout(moveTransitionStart);
@@ -247,12 +247,46 @@ export default function Page() {
       />
 
       <header
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-center items-center px-4 lg:px-10 transition-opacity duration-700 ${
+        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
-        }`}
+        } lg:grid lg:grid-cols-3`}
       >
-        <div className="font-mono text-sm lg:text-xl font-bold tracking-wider">
-          AHMED MESSAAD
+        {/* Left spacer / Mobile Title */}
+        <div className="lg:col-span-1 lg:hidden font-mono text-sm font-bold tracking-wider">
+          AHMED MESSAAD • AI RESEARCHER
+        </div>
+      
+        {/* CENTER TITLE (Desktop Only) */}
+        <div className="hidden lg:block lg:col-span-1 lg:col-start-2 text-center font-mono text-xl font-bold tracking-wider">
+          AHMED MESSAAD • AI RESEARCHER
+        </div>
+      
+        {/* CV DOWNLOAD LINK (Right side on Desktop, Re-positioned on Mobile) */}
+        <div className="flex justify-end items-center lg:col-span-1">
+          <a
+            href="/ahmed_messad_cv.pdf"
+            download
+            className="flex items-center text-white transition-colors duration-200"
+          >
+            {/* DESKTOP & MOBILE STYLED BUTTON */}
+            <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 lg:px-4 py-1.5 lg:py-2 text-[12px] lg:text-[14px] font-mono tracking-wide hover:bg-[#252525] transition">
+              <span className="hidden lg:inline">DOWNLOAD CV</span>
+              <span className="lg:hidden inline">CV</span>
+              <svg
+                className="w-3 h-3 lg:w-4 lg:h-4 ml-2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 15L12 3M12 15L8 11M12 15L16 11M20 17H4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </a>
         </div>
       </header>
 
@@ -289,12 +323,12 @@ export default function Page() {
             
             <div>
               <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
-                <span className="font-mono font-bold">Advancing Clinical Medicine</span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">Deep Learning Systems</span>
+                <span className="font-mono font-bold">Engineering Explainable AI </span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
@@ -439,12 +473,14 @@ export default function Page() {
                   About
                 </h3>
                 <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
-                  AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                  Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                  My work investigates explainable deep learning architectures, transfer learning optimization, 
+                  and diagnostic system design for resource-constrained clinical environments.
                 </p>
               </div>
             </section>
 
-            {/* CONTACT SECTION */}
+            {/* CONTACT SECTION - **FIXED DESKTOP** */}
             <section
               id="contact-section"
               onClick={() =>
@@ -456,9 +492,9 @@ export default function Page() {
                   : "opacity-100 translate-y-0 delay-1100"
               }`}
             >
-              <div className="flex justify-between items-start mb-auto">
+              <div className="flex justify-between items-start">
                 <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
-                  Let's Connect<br />
+                  Start a Conversation<br />
                 </div>
                 <svg
                   className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
@@ -471,46 +507,53 @@ export default function Page() {
                 </svg>
               </div>
               
-              <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
-                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-              </h2>
+              {/* This spacer pushes content to the bottom */}
+              <div className="flex-1"></div>
               
-              <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent">
-                <a
-                  href="https://linkedin.com/in/ahmedmessaad"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  LINKEDIN
-                </a>
-                <a
-                  href="https://github.com/RYANX9"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  GITHUB
-                </a>
-                <a
-                  href="mailto:ahmed.messaad@outlook.com"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  EMAIL
-                </a>
+              {/* Bottom content container - positioned at very bottom */}
+              <div className="mt-auto"> 
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-2">
+                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+                </h2>
+                
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-1">
+                  <a
+                    href="https://linkedin.com/in/ahmedmessaad"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    LINKEDIN
+                  </a>
+                  <a
+                    href="https://github.com/RYANX9"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    GITHUB 
+                  </a>
+                  <a
+                    href="mailto:ahmed.messaad@outlook.com"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    EMAIL
+                  </a>
+                </div>
+                
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                  Designed & Built by Ahmed Messaad
+                </div>
               </div>
             </section>
           </div>
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (UPDATED) */}
-      {/* - Replaced mt-20 with pt-16 (to account for h-16 fixed header)
-        - The p-3 on the container + p-6 on the first card ensures the right spacing 
-      */}
+      {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
           
@@ -543,12 +586,12 @@ export default function Page() {
             
             <div className="mt-auto">
               <h1 className="text-[34px] leading-[1.2] mb-5">
-                <span className="font-mono font-bold">Advancing Clinical Medicine </span>
-                <span className="italic font-serif font-light">through </span>
-                <span className="font-mono font-bold">AI-Driven Design</span>
+                <span className="font-mono font-bold">Engineering Explainable AI </span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
-                AI Research • Medical Imaging • Computer Vision
+                Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
@@ -587,7 +630,9 @@ export default function Page() {
                 About
               </h3>
               <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
-                AI research engineer specializing in clinically-deployable computer vision systems. Focused on transfer learning optimization and interpretable medical AI for resource-constrained environments.
+                Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                My work investigates explainable deep learning architectures, transfer learning optimization, 
+                and diagnostic system design for resource-constrained clinical environments.
               </p>
             </div>
           </section>
@@ -693,12 +738,13 @@ export default function Page() {
             ))}
           </aside>
 
-          {/* CONTACT SECTION */}
+          {/* CONTACT SECTION - **FIXED MOBILE** */}
           <section
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative min-h-[240px] justify-between ${
+            // Added flex-col to enable full height
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-1300"
@@ -706,7 +752,7 @@ export default function Page() {
           >
             <div className="flex justify-between items-start">
               <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-                Let's Connect<br />
+                Start a Conversation<br />
               </div>
               <svg
                 className="w-5 h-5 arrow-contact-animate"
@@ -719,36 +765,47 @@ export default function Page() {
               </svg>
             </div>
             
-            <h2 className="text-[48px] font-bold leading-none">
-                <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-            </h2>
+            {/* This spacer pushes the remaining content to the bottom */}
+            <div className="flex-1"></div>
             
-            <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent">
-              <a
-                href="https://linkedin.com/in/ahmedmessaad"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                LINKEDIN
-              </a>
-              <a
-                href="https://github.com/RYANX9"
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                GITHUB
-              </a>
-              <a
-                href="mailto:ahmed.messaad@outlook.com"
-                onClick={(e) => e.stopPropagation()}
-                className="text-neutral-500 hover:text-white transition"
-              >
-                EMAIL
-              </a>
+            {/* This div contains the large title and the social links */}
+            <div className="mt-auto flex flex-col items-start">
+              <h2 className="text-[48px] font-bold leading-none mb-4">
+                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              </h2>
+              
+              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
+                <a
+                  href="https://linkedin.com/in/ahmedmessaad"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  LINKEDIN
+                </a>
+                <a
+                  href="https://github.com/RYANX9"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  GITHUB
+                </a>
+                <a
+                  href="mailto:ahmed.messaad@outlook.com"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  EMAIL
+                </a>
+              </div>
+            </div>
+            
+            {/* THIS LINE IS NOW CORRECTLY POSITIONED AT THE VERY BOTTOM */}
+            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
+              Designed & Built by Ahmed Messaad
             </div>
           </section>
         </div>
