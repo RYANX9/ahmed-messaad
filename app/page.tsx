@@ -452,7 +452,6 @@ export default function Page() {
               onClick={() =>
                 (window.location.href = "mailto:ahmed.messaad@outlook.com")
               }
-              // Added flex-col to enable full height
               className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
@@ -474,16 +473,16 @@ export default function Page() {
                 </svg>
               </div>
               
-              {/* This spacer pushes the remaining content to the bottom */}
+              {/* This spacer pushes content to the bottom */}
               <div className="flex-1"></div>
               
-              {/* This div contains the large title and the social links */}
-              <div className="mt-auto flex flex-col items-start"> 
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-4 xl:mb-5">
-                    <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              {/* Bottom content container - positioned at very bottom */}
+              <div className="mt-auto"> 
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-3 xl:mb-4">
+                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-4">
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-2 xl:mb-3">
                   <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
@@ -511,11 +510,9 @@ export default function Page() {
                   </a>
                 </div>
                 
-              </div>
-              
-              {/* THIS LINE IS NOW CORRECTLY POSITIONED AT THE VERY BOTTOM */}
-              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
-                Designed & Built by Ahmed Messaad
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                  Designed & Built by Ahmed Messaad
+                </div>
               </div>
             </section>
           </div>
