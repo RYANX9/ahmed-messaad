@@ -478,11 +478,11 @@ export default function Page() {
               
               {/* Bottom content container - positioned at very bottom */}
               <div className="mt-auto"> 
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-3 xl:mb-4">
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-2">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-2 xl:mb-3">
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-1">
                   <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
