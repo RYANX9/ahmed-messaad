@@ -396,7 +396,7 @@ export default function Page() {
                 </div>
                 
                 <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
-                  Built by Ahmed Messaad
+                  Designed & Built by Ahmed Messaad
                 </div>
               </div>
             </section>
@@ -565,7 +565,7 @@ export default function Page() {
             </div>
             
             <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
-              Built by Ahmed Messaad
+              Designed & Built by Ahmed Messaad
             </div>
           </section>
         </div>
@@ -573,4 +573,3 @@ export default function Page() {
     </main>
   );
 }
-              
