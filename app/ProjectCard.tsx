@@ -5,6 +5,7 @@
 import React from "react";
 import Image from "next/image";
 import { Project } from "./data";
+import { Theme } from "./colors";
 
 interface ProjectCardProps {
   project: Project;
@@ -12,6 +13,7 @@ interface ProjectCardProps {
   activeProject: string | null;
   onToggle: (id: string) => void;
   isMobile?: boolean;
+  theme: Theme;
 }
 
 export default function ProjectCard({
