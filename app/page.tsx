@@ -477,7 +477,7 @@ export default function Page() {
               <div className="flex-1"></div>
               
               {/* Bottom content group */}
-              <div className="mt-auto pb-2">
+              <div className="mt-auto pb-1">
                 <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-4 xl:mb-5">
                     <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
@@ -734,7 +734,7 @@ export default function Page() {
             <div className="flex-1"></div>
             
             {/* Bottom content group */}
-            <div className="mt-auto pb-2">
+            <div className="mt-auto pb-1">
               <h2 className="text-[48px] font-bold leading-none mb-4">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
