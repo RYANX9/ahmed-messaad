@@ -123,7 +123,7 @@ export default function Page() {
       }, MOVE_DURATION + 50);
 
       return () => clearTimeout(completeDelay);
-    }, INITIAL_DELAY);
+    }, MOVE_DURATION + INITIAL_DELAY); // Wait for the initial delay plus the move duration
 
     return () => {
       clearTimeout(moveTransitionStart);
@@ -446,12 +446,13 @@ export default function Page() {
               </div>
             </section>
 
-            {/* CONTACT SECTION - UPDATED */}
+            {/* CONTACT SECTION - **FIXED DESKTOP** */}
             <section
               id="contact-section"
               onClick={() =>
                 (window.location.href = "mailto:ahmed.messaad@outlook.com")
               }
+              // Added flex-col to enable full height
               className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
@@ -473,12 +474,12 @@ export default function Page() {
                 </svg>
               </div>
               
-              {/* This spacer pushes content to bottom */}
+              {/* This spacer pushes the remaining content to the bottom */}
               <div className="flex-1"></div>
               
-              {/* Bottom content group */}
-              <div className="mt-auto"> 
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-2">
+              {/* This div contains the large title and the social links */}
+              <div className="mt-auto flex flex-col items-start"> 
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-4 xl:mb-5">
                     <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
@@ -509,10 +510,11 @@ export default function Page() {
                     EMAIL
                   </a>
                 </div>
-                {/* MOVED THIS LINE OUTSIDE THE PREVIOUS DIV AND REMOVED THE mb-4 CLASS ABOVE */}
+                
               </div>
               
-              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+              {/* THIS LINE IS NOW CORRECTLY POSITIONED AT THE VERY BOTTOM */}
+              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
                 Designed & Built by Ahmed Messaad
               </div>
             </section>
@@ -705,11 +707,12 @@ export default function Page() {
             ))}
           </aside>
 
-          {/* CONTACT SECTION - UPDATED FOR MOBILE - 30% TALLER */}
+          {/* CONTACT SECTION - **FIXED MOBILE** */}
           <section
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
+            // Added flex-col to enable full height
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
               isLoading
                 ? "opacity-0 translate-y-[30px]"
@@ -731,11 +734,11 @@ export default function Page() {
               </svg>
             </div>
             
-            {/* This spacer pushes content to bottom */}
+            {/* This spacer pushes the remaining content to the bottom */}
             <div className="flex-1"></div>
             
-            {/* Bottom content group */}
-            <div className="mt-auto">
+            {/* This div contains the large title and the social links */}
+            <div className="mt-auto flex flex-col items-start">
               <h2 className="text-[48px] font-bold leading-none mb-4">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
@@ -769,7 +772,8 @@ export default function Page() {
               </div>
             </div>
             
-            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+            {/* THIS LINE IS NOW CORRECTLY POSITIONED AT THE VERY BOTTOM */}
+            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
               Designed & Built by Ahmed Messaad
             </div>
           </section>
