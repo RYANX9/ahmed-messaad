@@ -49,17 +49,17 @@ export const themes: Record<ThemeType, Theme> = {
   },
 
   retro: {
-    // Two-Tone Palette: Sage Green & Dusty Rose
-    background: '#f1edea',     // warm soft base
-    surface: '#e6dfdc',        // lighter blend
-    surfaceHover: '#d9d1ce',   // slightly deeper tone
-    border: '#c8b9b3',         // muted rose-beige
+    // Daring Two-Tone Palette: Deep Teal & Burnt Orange
+    background: '#0e3b43',     // dark teal base
+    surface: '#14565f',        // medium teal for surfaces
+    surfaceHover: '#1b6b74',   // brighter teal hover
+    border: '#f28f3b',         // warm burnt orange accent border
 
-    textPrimary: '#3a3431',    // deep brown-gray
-    textSecondary: '#5b534f',  // muted warm gray
-    textTertiary: '#7a716d',   // faded mid-tone
+    textPrimary: '#fdf3e7',    // warm cream text
+    textSecondary: '#e8d9c9',  // softer cream
+    textTertiary: '#cdb8a4',   // muted warm beige
 
-    accentLight: '#a8b6a3',    // soft sage green
-    accentDark: '#c79a9a',     // dusty rose
+    accentLight: '#f7b267',    // lighter orange accent
+    accentDark: '#f4845f',     // strong burnt orange highlight
   },
 };
