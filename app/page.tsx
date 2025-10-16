@@ -1,66 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import { projects } from "./data";
+import ProjectCard from "./ProjectCard";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-  // --- PROJECT DATA DEFINITION ---
-  const projects = [
-    {
-      id: "airm",
-      name: "AIRM Brain Tumor System",
-      context: "Clinical AI Research",
-      year: "2024",
-      description:
-        "Clinical-grade diagnostic system achieving 99% four-class tumor classification with radiologist-validated interface. End-to-end DICOM pipeline development investigating optimal preprocessing strategies for limited medical imaging datasets. Deployment-ready architecture with clinical workflow integration.",
-      tech: ["EfficientNet-B7", "PyDICOM", "PyQt5", "SQL"],
-      link: "https://youtu.be/2OeqBKF3X_A",
-      linkText: "Watch Demo",
-      image: "/brain.jpg",
-    },
-    {
-      id: "hemavision",
-      name: "HemaVision",
-      context: "Medical Automation",
-      year: "2023–2024",
-      description:
-        "Automated hematology platform achieving 97% multi-class blood cell classification. Reduced diagnostic time from 45 minutes to 3 minutes through optimized detection pipeline. Research investigating efficient segmentation architectures for microscopy imaging in clinical workflows.",
-      tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
-      link: "https://youtu.be/YxhA877Wyn0",
-      linkText: "Watch Demo",
-      image: "/blood.jpg",
-    },
-    {
-      id: "healthcost",
-      name: "Healthcare Cost Prediction",
-      context: "Deep Learning Methodology",
-      year: "2024",
-      description:
-        "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers. Systematic ablation study investigating optimal temporal convolution strategies for healthcare prediction tasks.",
-      tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
-      link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
-      linkText: "View Project",
-      image: "/healthcarecost.png",
-    },
-    {
-      id: "mydailyhealth",
-      name: "My Daily Health",
-      context: "Research Thesis",
-      year: "2023",
-      description:
-        "Multi-disease diagnostic platform with 90-99% accuracy across five disease domains. Systematic comparative evaluation of 12 deep learning architectures using stratified cross-validation. Transfer learning investigation for multi-domain medical classification.",
-      tech: ["TensorFlow", "ResNet", "EfficientNet", "Flask"],
-      link: "https://youtu.be/kh7WBjNPpEM",
-      linkText: "Watch Demo",
-      image: "/daily.png",
-    },
-  ];
-
-  // --- EFFECTS ---
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -80,7 +28,6 @@ export default function Page() {
       return;
     }
 
-    // Set profile section background immediately (before animation starts)
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
@@ -123,7 +70,7 @@ export default function Page() {
       }, MOVE_DURATION + 50);
 
       return () => clearTimeout(completeDelay);
-    }, MOVE_DURATION + INITIAL_DELAY); // Wait for the initial delay plus the move duration
+    }, MOVE_DURATION + INITIAL_DELAY);
 
     return () => {
       clearTimeout(moveTransitionStart);
@@ -226,14 +173,12 @@ export default function Page() {
         }
       `}</style>
 
-      {/* OVERLAY: Hides all content initially. Fades out when loading is complete. */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      {/* ANIMATED PROFILE IMAGE */}
       <img
         id="animated-profile"
         src={isTransitionComplete ? '' : "/ahmed.jpg"}
@@ -251,24 +196,20 @@ export default function Page() {
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         } lg:grid lg:grid-cols-3`}
       >
-        {/* Left spacer / Mobile Title */}
         <div className="lg:col-span-1 lg:hidden font-mono text-sm font-bold tracking-wider">
           AHMED MESSAAD • AI RESEARCHER
         </div>
       
-        {/* CENTER TITLE (Desktop Only) */}
         <div className="hidden lg:block lg:col-span-1 lg:col-start-2 text-center font-mono text-xl font-bold tracking-wider">
           AHMED MESSAAD • AI RESEARCHER
         </div>
       
-        {/* CV DOWNLOAD LINK (Right side on Desktop, Re-positioned on Mobile) */}
         <div className="flex justify-end items-center lg:col-span-1">
           <a
             href="/ahmed_messad_cv.pdf"
             download
             className="flex items-center text-white transition-colors duration-200"
           >
-            {/* DESKTOP & MOBILE STYLED BUTTON */}
             <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 lg:px-4 py-1.5 lg:py-2 text-[12px] lg:text-[14px] font-mono tracking-wide hover:bg-[#252525] transition">
               <span className="hidden lg:inline">DOWNLOAD CV</span>
               <span className="lg:hidden inline">CV</span>
@@ -294,7 +235,6 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* TITLE/INTRO SECTION */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
@@ -333,15 +273,11 @@ export default function Page() {
             </div>
           </section>
 
-          {/* PROFILE PICTURE SECTION - No transition effects */}
           <section 
             id="profile-grid-section"
             className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
-          >
-            {/* Background image set via useEffect */}
-          </section>
+          />
 
-          {/* PROJECTS SECTION */}
           <aside
             id="projects"
             className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
@@ -352,101 +288,19 @@ export default function Page() {
           >
             <div className="flex-1 overflow-y-auto invisible-scroll">
               {projects.map((p, idx) => (
-                <div
+                <ProjectCard
                   key={p.id}
-                  className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
-                    activeProject === p.id ? "bg-[#151515]" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() =>
-                      setActiveProject(activeProject === p.id ? null : p.id)
-                    }
-                    className="w-full flex justify-between items-center px-8 xl:px-10 py-4 xl:py-5 text-left"
-                  >
-                    <div className="flex flex-col">
-                      <div className="text-base xl:text-lg font-semibold font-mono">
-                        {p.name}
-                      </div>
-                      <div className="flex items-center gap-4"> 
-                        <div className="text-[10px] xl:text-[11px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
-                          {p.context} • {p.year}
-                        </div>
-                        <a
-                          href={p.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) => e.stopPropagation()} 
-                          className={`arrow-animate inline-flex items-center gap-2 text-white text-[10px] xl:text-[11px] tracking-wide transition font-mono ${
-                            activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                          } transition-opacity duration-300`}
-                        >
-                          {p.linkText}
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M7 17L17 7M17 7H7M17 7V17" />
-                          </svg>
-                        </a>
-                      </div>
-                    </div>
-                    <svg
-                      className={`w-5 h-5 xl:w-6 xl:h-6 transition-transform flex-shrink-0 ml-3 ${
-                        activeProject === p.id ? "rotate-90" : ""
-                      }`}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </button>
-
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ${
-                      activeProject === p.id ? "max-h-[900px]" : "max-h-0"
-                    }`}
-                  >
-                    <div className="px-8 xl:px-10 pb-6 xl:pb-7">
-                      <div className="relative w-full h-48 xl:h-56 mb-4 xl:mb-5 rounded-lg overflow-hidden">
-                        <Image
-                          src={p.image}
-                          alt={p.name}
-                          fill
-                          style={{ objectFit: 'cover' }}
-                          sizes="(min-width: 1024px) 20vw, 100vw"
-                        />
-                      </div>
-
-                      <p className="mb-4 xl:mb-5 text-[13px] xl:text-[14px] text-neutral-400 leading-relaxed font-sans">
-                        {p.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2 xl:gap-2.5 mb-4 xl:mb-5">
-                        {p.tech.map((t) => (
-                          <span
-                            key={t}
-                            className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[11px] xl:text-[12px] px-3 py-1.5 transition hover:bg-[#333] font-mono"
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  project={p}
+                  index={idx}
+                  activeProject={activeProject}
+                  onToggle={setActiveProject}
+                  isMobile={false}
+                />
               ))}
             </div>
           </aside>
           
-          {/* ABOUT & CONTACT ROW */}
           <div className="col-span-2 flex gap-3 h-full">
-            {/* ABOUT SECTION */}
             <section
               id="about"
               className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
@@ -480,7 +334,6 @@ export default function Page() {
               </div>
             </section>
 
-            {/* CONTACT SECTION - **FIXED DESKTOP** */}
             <section
               id="contact-section"
               onClick={() =>
@@ -507,10 +360,8 @@ export default function Page() {
                 </svg>
               </div>
               
-              {/* This spacer pushes content to the bottom */}
               <div className="flex-1"></div>
               
-              {/* Bottom content container - positioned at very bottom */}
               <div className="mt-auto"> 
                 <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-2">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
@@ -557,7 +408,6 @@ export default function Page() {
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
           
-          {/* TITLE/INTRO SECTION */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col gap-6 min-h-[30vh] transition-all duration-1000 ${
               isLoading
@@ -596,15 +446,11 @@ export default function Page() {
             </div>
           </section>
 
-          {/* MOBILE PROFILE SECTION - No transition effects */}
           <section
             id="profile-mobile-section"
             className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] relative"
-          >
-            {/* Background image set via useEffect */}
-          </section>
+          />
 
-          {/* ABOUT SECTION */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col gap-6 min-h-[200px] transition-all duration-1000 ${
               isLoading
@@ -637,7 +483,6 @@ export default function Page() {
             </div>
           </section>
 
-          {/* PROJECTS SECTION */}
           <aside
             id="projects"
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 ${
@@ -647,103 +492,21 @@ export default function Page() {
             }`}
           >
             {projects.map((p, idx) => (
-              <div
+              <ProjectCard
                 key={p.id}
-                className={`${idx !== 0 ? 'border-t' : ''} border-[#2a2a2a] transition ${
-                  activeProject === p.id ? "bg-[#151515]" : ""
-                }`}
-              >
-                <button
-                  onClick={() =>
-                    setActiveProject(activeProject === p.id ? null : p.id)
-                  }
-                  className="w-full flex justify-between items-center px-6 py-4 text-left"
-                >
-                  <div className="flex flex-col">
-                    <div className="text-sm font-semibold font-mono">
-                      {p.name}
-                    </div>
-                    <div className="flex items-center gap-4"> 
-                      <div className="text-[9px] text-neutral-500 mt-1 font-accent uppercase tracking-wide">
-                        {p.context} • {p.year}
-                      </div>
-                      <a
-                        href={p.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()} 
-                        className={`arrow-animate inline-flex items-center gap-2 text-white text-[9px] tracking-wide transition font-mono ${
-                          activeProject === p.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                        } transition-opacity duration-300`}
-                      >
-                        {p.linkText}
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M7 17L17 7M17 7H7M17 7V17" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                  <svg
-                    className={`w-4 h-4 transition-transform flex-shrink-0 ml-3 ${
-                      activeProject === p.id ? "rotate-90" : ""
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </button>
-
-                <div
-                  className={`overflow-hidden transition-all duration-500 ${
-                    activeProject === p.id ? "max-h-[800px]" : "max-h-0"
-                  }`}
-                >
-                  <div className="px-6 pb-5">
-                    <div className="relative w-full h-40 mb-4 rounded-lg overflow-hidden">
-                      <Image
-                        src={p.image}
-                        alt={p.name}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        sizes="100vw"
-                      />
-                    </div>
-
-                    <p className="mb-4 text-sm text-neutral-400 leading-relaxed font-sans">
-                      {p.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {p.tech.map((t) => (
-                        <span
-                          key={t}
-                          className="bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded text-[10px] px-2.5 py-1 transition hover:bg-[#333] font-mono"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                project={p}
+                index={idx}
+                activeProject={activeProject}
+                onToggle={setActiveProject}
+                isMobile={true}
+              />
             ))}
           </aside>
 
-          {/* CONTACT SECTION - **FIXED MOBILE** */}
           <section
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
-            // Added flex-col to enable full height
             className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
               isLoading
                 ? "opacity-0 translate-y-[30px]"
@@ -765,10 +528,8 @@ export default function Page() {
               </svg>
             </div>
             
-            {/* This spacer pushes the remaining content to the bottom */}
             <div className="flex-1"></div>
             
-            {/* This div contains the large title and the social links */}
             <div className="mt-auto flex flex-col items-start">
               <h2 className="text-[48px] font-bold leading-none mb-4">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
@@ -803,7 +564,6 @@ export default function Page() {
               </div>
             </div>
             
-            {/* THIS LINE IS NOW CORRECTLY POSITIONED AT THE VERY BOTTOM */}
             <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
               Designed & Built by Ahmed Messaad
             </div>
@@ -813,3 +573,4 @@ export default function Page() {
     </main>
   );
 }
+              
