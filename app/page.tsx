@@ -478,7 +478,7 @@ export default function Page() {
               
               {/* Bottom content group */}
               <div className="mt-auto pb-0">
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-1">
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-2 xl:mb-2">
                     <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
