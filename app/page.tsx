@@ -319,9 +319,9 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* ========== TITLE/INTRO SECTION (FIXED) ========== */}
+          {/* ========== TITLE/INTRO SECTION (MODIFIED FOR TEXT FIT) ========== */}
           <section
-            className={`border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${
+            className={`border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${ // Reduced padding: p-8 -> p-6, xl:p-10 -> xl:p-8
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
@@ -333,7 +333,7 @@ export default function Page() {
           >
             <div className="flex items-start justify-end">
               <svg
-                className="w-14 h-14 xl:w-16 xl:h-16" {/* Reduced size slightly */}
+                className="w-16 h-16 xl:w-20 xl:h-20"
                 style={{ color: theme.accentLight }}
                 viewBox="0 0 100 100"
                 fill="none"
@@ -352,7 +352,7 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[24px] xl:text-[30px] leading-[1.3] mb-5"> {/* Adjusted text size and line height */}
+              <h1 className="text-[24px] xl:text-[30px] leading-[1.2] mb-6"> {/* Reduced text-[26px] to text-[24px] and xl:text-[32px] to xl:text-[30px] */}
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
@@ -376,7 +376,7 @@ export default function Page() {
             }}
           />
 
-          {/* ========== PROJECTS SECTION (No change needed) ========== */}
+          {/* ========== PROJECTS SECTION ========== */}
           <aside
             id="projects"
             className={`row-span-2 border rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
@@ -407,10 +407,10 @@ export default function Page() {
           {/* ========== ABOUT & CONTACT ROW ========== */}
           <div className="col-span-2 flex gap-3 h-full">
             
-            {/* ========== ABOUT SECTION (FIXED) ========== */}
+            {/* ========== ABOUT SECTION (MODIFIED FOR TEXT FIT) ========== */}
             <section
               id="about"
-              className={`flex-1 w-1/2 border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${
+              className={`flex-1 w-1/2 border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${ // Reduced padding: p-8 -> p-6, xl:p-10 -> xl:p-8
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
@@ -422,7 +422,7 @@ export default function Page() {
             >
               <div className="flex items-start justify-start">
                 <svg
-                  className="w-10 h-10 xl:w-12 xl:h-12" {/* Reduced size slightly */}
+                  className="w-12 h-12 xl:w-14 xl:h-14"
                   style={{ color: theme.accentLight }}
                   viewBox="0 0 100 100"
                   fill="none"
@@ -436,13 +436,13 @@ export default function Page() {
               
               <div>
                 <h3 
-                  className="text-[10px] xl:text-[11px] uppercase tracking-wider mb-3 xl:mb-4 font-accent"
+                  className="text-[10px] xl:text-[11px] uppercase tracking-wider mb-4 xl:mb-5 font-accent"
                   style={{ color: theme.textTertiary }}
                 >
                   About
                 </h3>
                 <p 
-                  className="text-[13px] xl:text-[15px] leading-relaxed font-sans" {/* Adjusted text size for better fit */}
+                  className="text-[13px] xl:text-[15px] leading-relaxed font-sans" // Reduced text-[14px] to text-[13px] and xl:text-[16px] to xl:text-[15px]
                   style={{ color: theme.textSecondary }}
                 >
                   Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
@@ -452,7 +452,7 @@ export default function Page() {
               </div>
             </section>
 
-            {/* ========== CONTACT SECTION (No change needed) ========== */}
+            {/* ========== CONTACT SECTION (Theme-aware hover effects) ========== */}
             <section
               id="contact-section"
               onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")}
@@ -543,12 +543,12 @@ export default function Page() {
       </div>
 
       {/* ========================================================================== */}
-      {/* =========================== MOBILE LAYOUT (No change needed for mobile layout) =============================== */}
+      {/* =========================== MOBILE LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
           
-          {/* ========== TITLE/INTRO SECTION ========== */}
+          {/* ========== TITLE/INTRO SECTION (MODIFIED FOR TEXT FIT) ========== */}
           <section
             className={`border rounded-2xl p-6 flex flex-col gap-6 min-h-[30vh] transition-all duration-1000 ${
               isLoading
@@ -581,7 +581,7 @@ export default function Page() {
             </div>
             
             <div className="mt-auto">
-              <h1 className="text-[34px] leading-[1.2] mb-5">
+              <h1 className="text-[32px] leading-[1.2] mb-5"> {/* Reduced text-[34px] to text-[32px] */}
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
@@ -605,9 +605,9 @@ export default function Page() {
             }}
           />
 
-          {/* ========== ABOUT SECTION ========== */}
+          {/* ========== ABOUT SECTION (MODIFIED FOR TEXT FIT) ========== */}
           <section
-            className={`border rounded-2xl p-6 flex flex-col gap-6 min-h-[200px] transition-all duration-1000 ${
+            className={`border rounded-2xl p-6 flex flex-col gap-6 min-h-[180px] transition-all duration-1000 ${ // Reduced min-height to 180px
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-900"
@@ -639,7 +639,7 @@ export default function Page() {
                 About
               </h3>
               <p 
-                className="text-[14px] leading-relaxed font-sans"
+                className="text-[13px] leading-relaxed font-sans" // Reduced text-[14px] to text-[13px]
                 style={{ color: theme.textSecondary }}
               >
                 Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
