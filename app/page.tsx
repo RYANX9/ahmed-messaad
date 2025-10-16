@@ -709,7 +709,7 @@ export default function Page() {
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[65vh] ${
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-1300"
