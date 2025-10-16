@@ -48,7 +48,7 @@ export const themes: Record<ThemeType, Theme> = {
     background: '#faf8f5',
     surface: '#f5f1eb',
     surfaceHover: '#ebe7e0',
-    border: '#e0dbd3',
+    border: '#2a2a2a',
     textPrimary: '#2c2420',
     textSecondary: '#4a443f',
     textTertiary: '#6b6560',
