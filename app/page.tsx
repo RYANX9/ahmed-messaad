@@ -1,11 +1,12 @@
 // =============================================================================
-// PAGE.TSX - Main Portfolio Page with Theme Support
+// PAGE.TSX - Main Portfolio Page with Theme Support (Working)
 // =============================================================================
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react"; // Added useCallback for better practice
-import { projects } from "./data";
+import React, { useState, useEffect, useCallback } from "react";
+// Assuming 'data' and 'colors' are in the same directory or accessible path
+import { projects } from "./data"; 
 import ProjectCard from "./ProjectCard";
 import { themes, ThemeType } from "./colors";
 
@@ -18,6 +19,7 @@ export default function Page() {
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<ThemeType>('dark');
   
+  // CRITICAL: This line correctly retrieves the active theme object
   const theme = themes[currentTheme];
 
   // ========== PROFILE IMAGE ANIMATION EFFECT ==========
@@ -94,9 +96,9 @@ export default function Page() {
   // ========== THEME TOGGLE FUNCTION (FIXED) ==========
   const toggleTheme = useCallback(() => {
     setCurrentTheme(prevTheme => {
-        const currentIndex = themeCycle.indexOf(prevTheme);
-        const nextIndex = (currentIndex + 1) % themeCycle.length;
-        return themeCycle[nextIndex];
+      const currentIndex = themeCycle.indexOf(prevTheme);
+      const nextIndex = (currentIndex + 1) % themeCycle.length;
+      return themeCycle[nextIndex];
     });
   }, []); // Added useCallback for stability
 
@@ -116,6 +118,9 @@ export default function Page() {
       }}
     >
       {/* ========== GLOBAL STYLES (Dynamic parts use theme colors) ========== */}
+      {/* NOTE: The global style block correctly injects theme.background 
+        into the .scroll-fade-bottom::after pseudo-element.
+      */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
         
@@ -393,7 +398,7 @@ export default function Page() {
                   activeProject={activeProject}
                   onToggle={setActiveProject}
                   isMobile={false}
-                  theme={theme}
+                  theme={theme} // Pass the theme object
                 />
               ))}
             </div>
@@ -665,7 +670,7 @@ export default function Page() {
                 activeProject={activeProject}
                 onToggle={setActiveProject}
                 isMobile={true}
-                theme={theme}
+                theme={theme} // Pass the theme object
               />
             ))}
           </aside>
