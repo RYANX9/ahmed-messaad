@@ -447,75 +447,77 @@ export default function Page() {
             </section>
 
             {/* CONTACT SECTION - UPDATED */}
-            <section
-              id="contact-section"
-              onClick={() =>
-                (window.location.href = "mailto:ahmed.messaad@outlook.com")
-              }
-              className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
-                isLoading
-                  ? "opacity-0 translate-y-[50px]"
-                  : "opacity-100 translate-y-0 delay-1100"
-              }`}
-            >
-              <div className="flex justify-between items-start">
-                <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
-                  Start a Conversation<br />
-                </div>
-                <svg
-                  className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M8 24L24 8M24 8H8M24 8V24" />
-                </svg>
-              </div>
-              
-              {/* This spacer pushes content to bottom */}
-              <div className="flex-1"></div>
-              
-              {/* Bottom content group */}
-              <div className="mt-auto"> {/* REMOVED pb-1 here */}
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-2"> {/* REDUCED bottom margin here */}
-                    <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-                </h2>
-                
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-4">
-                  <a
-                    href="https://linkedin.com/in/ahmedmessaad"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-neutral-500 hover:text-white transition"
-                  >
-                    LINKEDIN
-                  </a>
-                  <a
-                    href="https://github.com/RYANX9"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-neutral-500 hover:text-white transition"
-                  >
-                    GITHUB 
-                  </a>
-                  <a
-                    href="mailto:ahmed.messaad@outlook.com"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-neutral-500 hover:text-white transition"
-                  >
-                    EMAIL
-                  </a>
-                </div>
-                
-                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
-                  Designed & Built by Ahmed Messaad
-                </div>
-              </div>
-            </section>
-
+            <section
+              id="contact-section"
+              onClick={() =>
+                (window.location.href = "mailto:ahmed.messaad@outlook.com")
+              }
+              className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+                isLoading
+                  ? "opacity-0 translate-y-[50px]"
+                  : "opacity-100 translate-y-0 delay-1100"
+              }`}
+            >
+              <div className="flex justify-between items-start">
+                <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
+                  Start a Conversation<br />
+                </div>
+                <svg
+                  className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M8 24L24 8M24 8H8M24 8V24" />
+                </svg>
+              </div>
+              
+              {/* This spacer pushes content to bottom */}
+              <div className="flex-1"></div>
+              
+              {/* Bottom content group */}
+              <div className="mt-auto">
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-2">
+                    <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+                </h2>
+                
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-4">
+                  <a
+                    href="https://linkedin.com/in/ahmedmessaad"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    LINKEDIN
+                  </a>
+                  <a
+                    href="https://github.com/RYANX9"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    GITHUB 
+                  </a>
+                  <a
+                    href="mailto:ahmed.messaad@outlook.com"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-neutral-500 hover:text-white transition"
+                  >
+                    EMAIL
+                  </a>
+                </div>
+                
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                  Designed & Built by Ahmed Messaad
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
 
       {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
