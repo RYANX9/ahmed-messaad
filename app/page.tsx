@@ -477,7 +477,7 @@ export default function Page() {
               <div className="flex-1"></div>
               
               {/* Bottom content group */}
-              <div className="mt-auto">
+              <div className="mt-auto"> 
                 <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-2">
                     <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
@@ -509,10 +509,11 @@ export default function Page() {
                     EMAIL
                   </a>
                 </div>
-                
-                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
-                  Designed & Built by Ahmed Messaad
-                </div>
+                {/* MOVED THIS LINE OUTSIDE THE PREVIOUS DIV AND REMOVED THE mb-4 CLASS ABOVE */}
+              </div>
+              
+              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+                Designed & Built by Ahmed Messaad
               </div>
             </section>
           </div>
@@ -734,7 +735,7 @@ export default function Page() {
             <div className="flex-1"></div>
             
             {/* Bottom content group */}
-            <div className="mt-auto pb-1">
+            <div className="mt-auto">
               <h2 className="text-[48px] font-bold leading-none mb-4">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
@@ -766,10 +767,10 @@ export default function Page() {
                   EMAIL
                 </a>
               </div>
-              
-              <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
-                Designed & Built by Ahmed Messaad
-              </div>
+            </div>
+            
+            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+              Designed & Built by Ahmed Messaad
             </div>
           </section>
         </div>
