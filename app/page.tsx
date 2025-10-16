@@ -11,7 +11,7 @@ import ProjectCard from "./ProjectCard";
 import { themes, ThemeType } from "./colors";
 
 // Define the cycle order for the themes
-export const themeCycle: ThemeType[] = ['dark', 'cream', 'retro', 'midnight', 'neon', 'forest', 'sakura', 'cyberpunk', 'sandstorm', 'aqua', 'royal', 'mono', 'sunset', 'velvet', 'ice'];
+const themeCycle: ThemeType[] = ['dark', 'cream', 'retro', 'midnight', 'neon', 'forest', 'sakura', 'cyberpunk', 'sandstorm', 'aqua', 'royal', 'mono', 'sunset', 'velvet', 'ice'];
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
