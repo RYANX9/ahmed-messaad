@@ -11,7 +11,7 @@ import ProjectCard from "./ProjectCard";
 import { themes, ThemeType } from "./colors";
 
 // Define the cycle order for the themes
-const themeCycle: ThemeType[] = ['dark', 'cream', 'retro', 'aqua', 'royal', 'mono'];
+const themeCycle: ThemeType[] = ['dark', 'cream', 'retro', 'midnight', 'neon', 'forest', 'sakura', 'cyberpunk', 'sandstorm', 'aqua', 'royal', 'mono', 'sunset', 'velvet', 'ice'];
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -317,12 +317,11 @@ export default function Page() {
       {/* ========================== DESKTOP LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        {/* FIX: Changed 'auto-rows-fr h-full' to 'grid-rows-2' for fixed, stable row height distribution */}
-        <div className="grid grid-cols-[9fr_6fr_10fr] grid-rows-2 gap-3 h-full">
+        <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* ========== TITLE/INTRO SECTION (Row 1, Col 1) ========== */}
+          {/* ========== TITLE/INTRO SECTION (FIXED) ========== */}
           <section
-            className={`border rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 h-full ${
+            className={`border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
@@ -334,7 +333,7 @@ export default function Page() {
           >
             <div className="flex items-start justify-end">
               <svg
-                className="w-16 h-16 xl:w-20 xl:h-20"
+                className="w-14 h-14 xl:w-16 xl:h-16" {/* Reduced size slightly */}
                 style={{ color: theme.accentLight }}
                 viewBox="0 0 100 100"
                 fill="none"
@@ -353,7 +352,7 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
+              <h1 className="text-[24px] xl:text-[30px] leading-[1.3] mb-5"> {/* Adjusted text size and line height */}
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
@@ -367,21 +366,20 @@ export default function Page() {
             </div>
           </section>
 
-          {/* ========== PROFILE PICTURE SECTION (Row 1, Col 2) ========== */}
+          {/* ========== PROFILE PICTURE SECTION ========== */}
           <section 
             id="profile-grid-section"
-            className="border rounded-2xl overflow-hidden relative h-full"
+            className="border rounded-2xl overflow-hidden relative"
             style={{
               backgroundColor: theme.surface,
               borderColor: theme.border
             }}
           />
 
-          {/* ========== PROJECTS SECTION (Spans 2 Rows, Col 3) ========== */}
-          {/* FIX: Replaced row-span-2 for Projects sidebar with h-full and explicit row-span-2 in grid */}
+          {/* ========== PROJECTS SECTION (No change needed) ========== */}
           <aside
             id="projects"
-            className={`row-span-2 border rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom h-full ${
+            className={`row-span-2 border rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-900"
@@ -406,14 +404,13 @@ export default function Page() {
             </div>
           </aside>
           
-          {/* ========== ABOUT & CONTACT ROW (Row 2, Spans 2 Columns) ========== */}
-          {/* FIX: h-full is now necessary on the wrapper because the parent grid row has a fixed height */}
+          {/* ========== ABOUT & CONTACT ROW ========== */}
           <div className="col-span-2 flex gap-3 h-full">
             
-            {/* ========== ABOUT SECTION (Row 2, Col 1) ========== */}
+            {/* ========== ABOUT SECTION (FIXED) ========== */}
             <section
               id="about"
-              className={`flex-1 w-1/2 border rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 h-full ${
+              className={`flex-1 w-1/2 border rounded-2xl p-6 xl:p-8 flex flex-col justify-between transition-all duration-1000 ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
@@ -425,7 +422,7 @@ export default function Page() {
             >
               <div className="flex items-start justify-start">
                 <svg
-                  className="w-12 h-12 xl:w-14 xl:h-14"
+                  className="w-10 h-10 xl:w-12 xl:h-12" {/* Reduced size slightly */}
                   style={{ color: theme.accentLight }}
                   viewBox="0 0 100 100"
                   fill="none"
@@ -439,13 +436,13 @@ export default function Page() {
               
               <div>
                 <h3 
-                  className="text-[10px] xl:text-[11px] uppercase tracking-wider mb-4 xl:mb-5 font-accent"
+                  className="text-[10px] xl:text-[11px] uppercase tracking-wider mb-3 xl:mb-4 font-accent"
                   style={{ color: theme.textTertiary }}
                 >
                   About
                 </h3>
                 <p 
-                  className="text-[14px] xl:text-[16px] leading-relaxed font-sans"
+                  className="text-[13px] xl:text-[15px] leading-relaxed font-sans" {/* Adjusted text size for better fit */}
                   style={{ color: theme.textSecondary }}
                 >
                   Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
@@ -455,11 +452,11 @@ export default function Page() {
               </div>
             </section>
 
-            {/* ========== CONTACT SECTION (Row 2, Col 2) (Theme-aware hover effects) ========== */}
+            {/* ========== CONTACT SECTION (No change needed) ========== */}
             <section
               id="contact-section"
               onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")}
-              className={`flex-1 w-1/2 border rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative transition-all duration-1000 h-full ${
+              className={`flex-1 w-1/2 border rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative transition-all duration-1000 ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
@@ -546,7 +543,7 @@ export default function Page() {
       </div>
 
       {/* ========================================================================== */}
-      {/* =========================== MOBILE LAYOUT (Theme-aware) =============================== */}
+      {/* =========================== MOBILE LAYOUT (No change needed for mobile layout) =============================== */}
       {/* ========================================================================== */}
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
