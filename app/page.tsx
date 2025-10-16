@@ -477,12 +477,14 @@ export default function Page() {
               <div className="flex-1"></div>
               
               {/* Bottom content group */}
-              <div className=" pb-1">
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-2 xl:mb-2">
-                    <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              {/* Bottom content group - absolutely positioned near bottom */}
+              <div className="absolute left-8 right-8 bottom-2 pb-0"> {/* removed mt-auto */}
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-1">
+                  <span className="font-mono">Contact</span>&thinsp;
+                  <span className="italic font-serif font-light">me</span>
                 </h2>
-                
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-4">
+            
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-1">
                   <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
@@ -499,7 +501,7 @@ export default function Page() {
                     onClick={(e) => e.stopPropagation()}
                     className="text-neutral-500 hover:text-white transition"
                   >
-                    GITHUB 
+                    GITHUB
                   </a>
                   <a
                     href="mailto:ahmed.messaad@outlook.com"
@@ -509,15 +511,12 @@ export default function Page() {
                     EMAIL
                   </a>
                 </div>
-                
-                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
+            
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mb-0">
                   Designed & Built by Ahmed Messaad
                 </div>
               </div>
             </section>
-          </div>
-        </div>
-      </div>
 
       {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
