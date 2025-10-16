@@ -317,10 +317,10 @@ export default function Page() {
       {/* ========================== DESKTOP LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        {/* CHANGE: Updated the grid-cols to give the main content (first column) more space: 9fr -> 10fr, and projects (third column) slightly less: 10fr -> 9fr */}
+        {/* FIX: Adjusted the grid fractions for better content distribution: 9fr_6fr_10fr -> 10fr_6fr_9fr */}
         <div className="grid grid-cols-[10fr_6fr_9fr] auto-rows-fr gap-3 h-full">
           
-          {/* ========== TITLE/INTRO SECTION ========== */}
+          {/* ========== TITLE/INTRO SECTION (HERO) ========== */}
           <section
             className={`border rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
@@ -353,10 +353,10 @@ export default function Page() {
             </div>
             
             <div>
-              {/* FIX: Replaced fixed pixel sizes with clamp() for responsive scaling */}
+              {/* FIX: Removed fixed pixel classes (text-[26px] xl:text-[32px]) and used a more conservative clamp for better scaling and less chance of overflowing the container padding. */}
               <h1 
                 className="leading-[1.2] mb-6"
-                style={{ fontSize: 'clamp(24px, 2.5vw, 36px)' /* Min 24px, Max 36px, scales with 2.5% of viewport width */ }}
+                style={{ fontSize: 'clamp(28px, 2.2vw, 38px)' }}
               >
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
@@ -446,12 +446,12 @@ export default function Page() {
                 >
                   About
                 </h3>
-                {/* FIX: Replaced fixed pixel sizes with clamp() for responsive scaling */}
+                {/* FIX: Removed fixed pixel classes (text-[14px] xl:text-[16px]) and used a more conservative clamp for better scaling and less chance of overflowing the container padding. */}
                 <p 
                   className="leading-relaxed font-sans"
                   style={{ 
                     color: theme.textSecondary,
-                    fontSize: 'clamp(14px, 1.2vw, 17px)' /* Min 14px, Max 17px, scales with 1.2% of viewport width */
+                    fontSize: 'clamp(14px, 1.1vw, 16px)'
                   }}
                 >
                   Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
