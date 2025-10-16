@@ -472,11 +472,9 @@ export default function Page() {
                   <path d="M8 24L24 8M24 8H8M24 8V24" />
                 </svg>
               </div>
-              
-              {/* This spacer pushes content to bottom */}
-              <div className="flex-1"></div>
-              
-              {/* Bottom content group */}
+            
+              {/* REMOVED: <div className="flex-1"></div> */}
+            
               {/* Bottom content group - absolutely positioned near bottom */}
               <div className="absolute left-8 right-8 bottom-2 pb-0"> {/* removed mt-auto */}
                 <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-1 xl:mb-1">
@@ -517,6 +515,7 @@ export default function Page() {
                 </div>
               </div>
             </section>
+
 
       {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
