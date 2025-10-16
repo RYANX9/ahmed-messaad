@@ -4,10 +4,13 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Added useCallback for better practice
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 import { themes, ThemeType } from "./colors";
+
+// Define the cycle order for the themes
+const themeCycle: ThemeType[] = ['dark', 'cream', 'retro'];
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -58,37 +61,50 @@ export default function Page() {
     imgStyle.transform = `translate(-50%, -50%)`;
     animatedImg.src = '/ahmed.jpg';
 
-    const moveTransitionStart = setTimeout(() => {
-      const rect = profileSection.getBoundingClientRect();
-      const absoluteTop = rect.top + window.scrollY;
-      const absoluteLeft = rect.left + window.scrollX;
+    // Simplified the cleanup logic and moved the start inside the check
+    const timeout = setTimeout(() => {
+        const rect = profileSection.getBoundingClientRect();
+        const absoluteTop = rect.top + window.scrollY;
+        const absoluteLeft = rect.left + window.scrollX;
 
-      imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
-      imgStyle.top = `${absoluteTop}px`;
-      imgStyle.left = `${absoluteLeft}px`;
-      imgStyle.width = `${rect.width + 1}px`;
-      imgStyle.height = `${rect.height + 1}px`;
-      imgStyle.borderRadius = isDesktop ? '8px' : '6px';
-      imgStyle.transform = 'none';
+        imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}`;
+        imgStyle.top = `${absoluteTop}px`;
+        imgStyle.left = `${absoluteLeft}px`;
+        imgStyle.width = `${rect.width + 1}px`;
+        imgStyle.height = `${rect.height + 1}px`;
+        imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+        imgStyle.transform = 'none';
 
-      const completeDelay = setTimeout(() => {
-        imgStyle.display = 'none';
-        imgStyle.opacity = '0';
-        setIsTransitionComplete(true);
-        setIsLoading(false);
-      }, MOVE_DURATION + 50);
+        const completeDelay = setTimeout(() => {
+          imgStyle.display = 'none';
+          imgStyle.opacity = '0';
+          setIsTransitionComplete(true);
+          setIsLoading(false);
+        }, MOVE_DURATION + 50);
 
-      return () => clearTimeout(completeDelay);
-    }, MOVE_DURATION + INITIAL_DELAY);
+        // Cleanup for the inner timeout
+        return () => clearTimeout(completeDelay);
+    }, INITIAL_DELAY);
 
-    return () => {
-      clearTimeout(moveTransitionStart);
-    };
+    // Cleanup for the outer timeout
+    return () => clearTimeout(timeout);
   }, [isTransitionComplete]);
 
-  // ========== THEME TOGGLE FUNCTION ==========
-  const toggleTheme = () => {
-    setCurrentTheme(prev => prev === 'dark' ? 'cream' : 'dark');
+
+  // ========== THEME TOGGLE FUNCTION (FIXED) ==========
+  const toggleTheme = useCallback(() => {
+    setCurrentTheme(prevTheme => {
+        const currentIndex = themeCycle.indexOf(prevTheme);
+        const nextIndex = (currentIndex + 1) % themeCycle.length;
+        return themeCycle[nextIndex];
+    });
+  }, []); // Added useCallback for stability
+
+  // Helper to determine the *next* theme name for the button label
+  const getNextThemeName = (current: ThemeType) => {
+    const currentIndex = themeCycle.indexOf(current);
+    const nextIndex = (currentIndex + 1) % themeCycle.length;
+    return themeCycle[nextIndex].toUpperCase();
   };
 
   return (
@@ -99,7 +115,7 @@ export default function Page() {
         color: theme.textPrimary
       }}
     >
-      {/* ========== GLOBAL STYLES ========== */}
+      {/* ========== GLOBAL STYLES (Dynamic parts use theme colors) ========== */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
         
@@ -169,6 +185,7 @@ export default function Page() {
           position: relative;
         }
 
+        /* DYNAMIC THEME COLOR INJECTION FOR SCROLL FADE */
         .scroll-fade-bottom::after {
           content: '';
           position: absolute;
@@ -182,7 +199,7 @@ export default function Page() {
         }
       `}</style>
 
-      {/* ========== LOADING OVERLAY ========== */}
+      {/* ========== LOADING OVERLAY (Theme-aware) ========== */}
       <div
         className={`fixed inset-0 z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
@@ -203,7 +220,7 @@ export default function Page() {
         }}
       />
 
-      {/* ========== HEADER ========== */}
+      {/* ========== HEADER (Theme-aware) ========== */}
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 border-b z-50 flex justify-between items-center px-4 lg:px-10 transition-all duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
@@ -225,7 +242,7 @@ export default function Page() {
       
         {/* Right Side Buttons */}
         <div className="flex justify-end items-center gap-2 lg:col-span-1">
-          {/* Theme Toggle Button */}
+          {/* Theme Toggle Button (Updated Text) */}
           <button
             onClick={toggleTheme}
             className="flex items-center border rounded-lg px-3 lg:px-4 py-1.5 lg:py-2 text-[12px] lg:text-[14px] font-mono tracking-wide transition"
@@ -237,8 +254,12 @@ export default function Page() {
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surfaceHover}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface}
           >
-            <span className="hidden lg:inline">{currentTheme === 'dark' ? 'CREAM' : 'DARK'}</span>
-            <span className="lg:hidden inline">{currentTheme === 'dark' ? '☀️' : '🌙'}</span>
+            {/* Show the next theme name on desktop */}
+            <span className="hidden lg:inline">{getNextThemeName(currentTheme)}</span>
+            {/* Show emoji based on current theme for mobile */}
+            <span className="lg:hidden inline">
+              {currentTheme === 'dark' ? '☀️' : currentTheme === 'cream' ? '📜' : '📺'}
+            </span>
             <svg
               className="w-3 h-3 lg:w-4 lg:h-4 ml-2"
               fill="none"
@@ -251,7 +272,7 @@ export default function Page() {
             </svg>
           </button>
 
-          {/* CV Download Button */}
+          {/* CV Download Button (Theme-aware hover effects) */}
           <a
             href="/ahmed_messad_cv.pdf"
             download
@@ -288,7 +309,7 @@ export default function Page() {
       </header>
 
       {/* ========================================================================== */}
-      {/* ========================== DESKTOP LAYOUT =============================== */}
+      {/* ========================== DESKTOP LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
@@ -426,7 +447,7 @@ export default function Page() {
               </div>
             </section>
 
-            {/* ========== CONTACT SECTION ========== */}
+            {/* ========== CONTACT SECTION (Theme-aware hover effects) ========== */}
             <section
               id="contact-section"
               onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")}
@@ -517,7 +538,7 @@ export default function Page() {
       </div>
 
       {/* ========================================================================== */}
-      {/* =========================== MOBILE LAYOUT =============================== */}
+      {/* =========================== MOBILE LAYOUT (Theme-aware) =============================== */}
       {/* ========================================================================== */}
       <div className="lg:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
@@ -649,7 +670,7 @@ export default function Page() {
             ))}
           </aside>
 
-          {/* ========== CONTACT SECTION ========== */}
+          {/* ========== CONTACT SECTION (Theme-aware hover effects) ========== */}
           <section
             onClick={() => (window.location.href = "mailto:ahmed.messaad@outlook.com")}
             className={`border rounded-2xl p-6 flex flex-col cursor-pointer transition-all duration-1000 relative justify-between min-h-[35vh] ${
