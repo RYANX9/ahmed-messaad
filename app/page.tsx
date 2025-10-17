@@ -199,11 +199,11 @@ export default function Page() {
         <div className="lg:col-span-1 lg:hidden font-mono text-sm font-bold tracking-wider">
           AHMED MESSAAD • AI RESEARCHER
         </div>
-      
+        
         <div className="hidden lg:block lg:col-span-1 lg:col-start-2 text-center font-mono text-xl font-bold tracking-wider">
           AHMED MESSAAD • AI RESEARCHER
         </div>
-      
+        
         <div className="flex justify-end items-center lg:col-span-1">
           <a
             href="/ahmed_messad_cv.pdf"
@@ -370,7 +370,7 @@ export default function Page() {
                 </h2>
                 
                 <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
-                  
+                  <a // <-- FIXED: Added missing <a> tag
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
                     rel="noreferrer"
@@ -380,6 +380,7 @@ export default function Page() {
                     LINKEDIN
                   </a>
                   
+                  <a // <-- FIXED: Added missing <a> tag
                     href="https://github.com/RYANX9"
                     target="_blank"
                     rel="noreferrer"
@@ -389,6 +390,7 @@ export default function Page() {
                     GITHUB 
                   </a>
                   
+                  <a // <-- FIXED: Added missing <a> tag
                     href="mailto:ahmed.messaad@outlook.com"
                     onClick={(e) => e.stopPropagation()}
                     className="text-neutral-500 hover:text-white transition"
