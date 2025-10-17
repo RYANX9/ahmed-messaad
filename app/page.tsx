@@ -4,6 +4,11 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
+export default function Page() {
+  const [activeProject, setActiveProject] = useState<string | null>("airm");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
+
 useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -113,6 +118,7 @@ useEffect(() => {
       if (moveTransitionStart) clearTimeout(moveTransitionStart);
       if (completeDelay) clearTimeout(completeDelay);
     };
+
   }, [isTransitionComplete]);
 
   return (
