@@ -341,13 +341,13 @@ export default function Page() {
               onClick={() =>
                 (window.location.href = "mailto:ahmed.messaad@outlook.com")
               }
-              className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 ${
+              className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 overflow-hidden ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
               }`}
             >
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start flex-shrink-0">
                 <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
                   Start a Conversation<br />
                 </div>
@@ -364,13 +364,13 @@ export default function Page() {
               
               <div className="flex-1"></div>
               
-              <div className="mt-auto pb-1"> 
-                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-3">
+              <div className="mt-auto flex-shrink-0"> 
+                <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-2">
-                  <a
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
+                  
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
                     rel="noreferrer"
@@ -379,7 +379,7 @@ export default function Page() {
                   >
                     LINKEDIN
                   </a>
-                  <a
+                  
                     href="https://github.com/RYANX9"
                     target="_blank"
                     rel="noreferrer"
@@ -388,7 +388,7 @@ export default function Page() {
                   >
                     GITHUB 
                   </a>
-                  <a
+                  
                     href="mailto:ahmed.messaad@outlook.com"
                     onClick={(e) => e.stopPropagation()}
                     className="text-neutral-500 hover:text-white transition"
