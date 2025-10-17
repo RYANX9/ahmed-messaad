@@ -7,132 +7,119 @@ import ProjectCard from "./ProjectCard";
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
+  const [animationPhase, setAnimationPhase] = useState<'initial' | 'shrink' | 'move' | 'complete'>('initial');
 
   useEffect(() => {
-    // Standard early exit for server-side rendering
     if (typeof window === "undefined") return;
 
-    // Determine environment and target elements
     const isDesktop = window.innerWidth >= 1024;
-    const animatedImg = document.getElementById('animated-profile') as HTMLImageElement;
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
-    // Cleanup/Completion Logic
-    if (isTransitionComplete || !animatedImg || !profileSection) {
-      if (!isTransitionComplete) {
-        setIsLoading(false);
-        profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
-        profileSection.style.backgroundSize = 'cover';
-        profileSection.style.backgroundPosition = 'center';
-        setIsTransitionComplete(true);
-      }
-      return;
-    }
+    if (!profileSection) return;
 
-    // Set final background immediately (will be visible once the animated image fades out)
-    profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
-    profileSection.style.backgroundSize = 'cover';
-    profileSection.style.backgroundPosition = 'center';
-
-    // Get target dimensions FIRST
-    const rect = profileSection.getBoundingClientRect();
-    
-    // Animation Constants
+    // Animation timing
     const INITIAL_DELAY = 400;
-    const SCALE_DOWN_DURATION = 300;
-    const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    const SHRINK_DURATION = 300;
+    const SHRINK_WAIT = 50;
     const MOVE_DURATION = 1500;
-    const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+    let timer1: NodeJS.Timeout;
+    let timer2: NodeJS.Timeout;
+    let timer3: NodeJS.Timeout;
+
+    // Start animation sequence
+    timer1 = setTimeout(() => {
+      setAnimationPhase('shrink');
+      
+      timer2 = setTimeout(() => {
+        setAnimationPhase('move');
+        
+        timer3 = setTimeout(() => {
+          setAnimationPhase('complete');
+          setIsLoading(false);
+        }, MOVE_DURATION + 100);
+        
+      }, SHRINK_DURATION + SHRINK_WAIT);
+      
+    }, INITIAL_DELAY);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
+  // Calculate styles based on animation phase and viewport
+  const getProfileStyles = () => {
+    if (typeof window === "undefined") return {};
+    
+    const isDesktop = window.innerWidth >= 1024;
     const INITIAL_SIZE = isDesktop ? 240 : 180;
     const SHRINK_SCALE = 0.8;
     
-    // Calculate EXACT final dimensions and position
-    const screenCenterX = window.innerWidth / 2;
-    const screenCenterY = window.innerHeight / 2;
-    const targetCenterX = rect.left + rect.width / 2;
-    const targetCenterY = rect.top + rect.height / 2;
-    const moveX = targetCenterX - screenCenterX;
-    const moveY = targetCenterY - screenCenterY;
-    
-    // Final scale to match the section WIDTH exactly
-    const finalScale = rect.width / INITIAL_SIZE;
-    const finalBorderRadius = isDesktop ? '8px' : '6px';
-
-    const imgStyle = animatedImg.style;
-    let moveTransitionStart: NodeJS.Timeout | null = null;
-    let completeDelay: NodeJS.Timeout | null = null;
-
-    // --- Step 1: Initial Fixed State (Centered) ---
-    imgStyle.position = 'fixed';
-    imgStyle.top = '50vh';
-    imgStyle.left = '50vw';
-    imgStyle.width = `${INITIAL_SIZE}px`;
-    imgStyle.height = `${INITIAL_SIZE}px`;
-    imgStyle.borderRadius = '16px';
-    imgStyle.zIndex = '100';
-    imgStyle.opacity = '1';
-    imgStyle.transform = `translate(-50%, -50%) scale(1)`;
-    imgStyle.objectFit = 'cover';
-    imgStyle.objectPosition = 'center';
-    imgStyle.overflow = 'hidden';
-    
-    animatedImg.src = '/ahmed.jpg';
-    imgStyle.display = 'block';
-
-    // --- Step 2: Scale Down Animation (shrink to 80%) ---
-    const initialDelayTimer = setTimeout(() => {
-      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
-      imgStyle.transform = `translate(-50%, -50%) scale(${SHRINK_SCALE})`;
-      imgStyle.borderRadius = '8px';
-
-      // --- Step 3: Move and scale to final position ---
-      moveTransitionStart = setTimeout(() => {
-        
-        // Set transition for the move/scale
-        imgStyle.transition = `
-          transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
-          border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
-          width ${MOVE_DURATION}ms ${MOVE_EASING},
-          height ${MOVE_DURATION}ms ${MOVE_EASING},
-          opacity 200ms ${MOVE_DURATION - 200}ms linear
-        `;
-
-        // Change dimensions to EXACT final size
-        imgStyle.width = `${rect.width}px`;
-        imgStyle.height = `${rect.height}px`;
-        
-        // Apply final transform (move to final position, scale back to 1 since we changed the dimensions)
-        imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(1)`;
-        imgStyle.borderRadius = finalBorderRadius;
-        
-        // Fade out near the end to reveal the background
-        setTimeout(() => {
-          imgStyle.opacity = '0';
-        }, MOVE_DURATION - 200);
-
-        // Cleanup
-        completeDelay = setTimeout(() => {
-          imgStyle.display = 'none';
-          setIsTransitionComplete(true);
-          setIsLoading(false);
-        }, MOVE_DURATION + 50);
-
-      }, SCALE_DOWN_DURATION + 50);
-
-    }, INITIAL_DELAY);
-
-    // Cleanup function for React
-    return () => {
-      clearTimeout(initialDelayTimer);
-      if (moveTransitionStart) clearTimeout(moveTransitionStart);
-      if (completeDelay) clearTimeout(completeDelay);
+    const baseStyles: React.CSSProperties = {
+      backgroundImage: `url('/ahmed.jpg')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      transition: 'none',
     };
-  }, [isTransitionComplete]);
 
+    if (animationPhase === 'initial') {
+      return {
+        ...baseStyles,
+        position: 'fixed' as const,
+        top: '50vh',
+        left: '50vw',
+        width: `${INITIAL_SIZE}px`,
+        height: `${INITIAL_SIZE}px`,
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '16px',
+        zIndex: 100,
+      };
+    }
 
-  
+    if (animationPhase === 'shrink') {
+      return {
+        ...baseStyles,
+        position: 'fixed' as const,
+        top: '50vh',
+        left: '50vw',
+        width: `${INITIAL_SIZE}px`,
+        height: `${INITIAL_SIZE}px`,
+        transform: `translate(-50%, -50%) scale(${SHRINK_SCALE})`,
+        borderRadius: '8px',
+        zIndex: 100,
+        transition: 'transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94), border-radius 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      };
+    }
+
+    if (animationPhase === 'move') {
+      return {
+        ...baseStyles,
+        position: 'fixed' as const,
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        transform: 'none',
+        borderRadius: isDesktop ? '8px' : '6px',
+        zIndex: 100,
+        transition: 'all 1500ms cubic-bezier(0.4, 0, 0.2, 1)',
+      };
+    }
+
+    // Complete - return to normal grid position
+    return {
+      ...baseStyles,
+      borderRadius: isDesktop ? '8px' : '6px',
+    };
+  };
+
+  const profileStyles = getProfileStyles();
+  const isAnimating = animationPhase !== 'complete';
+
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
@@ -235,18 +222,6 @@ export default function Page() {
         }`}
       />
 
-      <img
-        id="animated-profile"
-        src={isTransitionComplete ? '' : "/ahmed.jpg"}
-        alt="Ahmed Messaad"
-        className={`object-cover ${isTransitionComplete ? 'hidden' : 'block'}`}
-        style={{
-          transform: `translate(-50%, -50%)`,
-          zIndex: 100,
-          pointerEvents: 'none',
-        }}
-      />
-
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
@@ -291,7 +266,6 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* HERO SECTION - FIXED */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
               isLoading
@@ -332,7 +306,8 @@ export default function Page() {
 
           <section 
             id="profile-grid-section"
-            className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden ${!isAnimating ? 'relative' : ''}`}
+            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' }}
           />
 
           <aside
@@ -358,7 +333,6 @@ export default function Page() {
           </aside>
           
           <div className="col-span-2 flex gap-3 h-full">
-            {/* ABOUT SECTION - FIXED */}
             <section
               id="about"
               className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
@@ -426,7 +400,7 @@ export default function Page() {
                 </h2>
                 
                 <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
                     rel="noreferrer"
@@ -436,7 +410,7 @@ export default function Page() {
                     LINKEDIN
                   </a>
                   
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="https://github.com/RYANX9"
                     target="_blank"
                     rel="noreferrer"
@@ -446,7 +420,7 @@ export default function Page() {
                     GITHUB 
                   </a>
                   
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="mailto:ahmed.messaad@outlook.com"
                     onClick={(e) => e.stopPropagation()}
                     className="text-neutral-500 hover:text-white transition"
@@ -508,7 +482,8 @@ export default function Page() {
 
           <section
             id="profile-mobile-section"
-            className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] relative"
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] ${!isAnimating ? 'relative' : ''}`}
+            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' }}
           />
 
           <section
