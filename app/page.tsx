@@ -23,7 +23,6 @@ export default function Page() {
     if (isTransitionComplete || !animatedImg || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
-        // Ensure final background is set if the effect runs on load without animation
         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
         profileSection.style.backgroundSize = 'cover';
         profileSection.style.backgroundPosition = 'center';
@@ -49,16 +48,17 @@ export default function Page() {
     const INITIAL_SIZE = isDesktop ? 240 : 180;
     const SHRINK_SCALE = 0.8;
     
-    // Calculate EXACT final scale needed (will fit width perfectly)
-    const finalScale = rect.width / INITIAL_SIZE;
-    
-    // Calculate final position
+    // Calculate EXACT final dimensions and position
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;
     const targetCenterX = rect.left + rect.width / 2;
     const targetCenterY = rect.top + rect.height / 2;
     const moveX = targetCenterX - screenCenterX;
     const moveY = targetCenterY - screenCenterY;
+    
+    // Final scale to match the section WIDTH exactly
+    const finalScale = rect.width / INITIAL_SIZE;
+    const finalBorderRadius = isDesktop ? '8px' : '6px';
 
     const imgStyle = animatedImg.style;
     let moveTransitionStart: NodeJS.Timeout | null = null;
@@ -76,6 +76,7 @@ export default function Page() {
     imgStyle.transform = `translate(-50%, -50%) scale(1)`;
     imgStyle.objectFit = 'cover';
     imgStyle.objectPosition = 'center';
+    imgStyle.overflow = 'hidden';
     
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
@@ -88,20 +89,25 @@ export default function Page() {
 
       // --- Step 3: Move and scale to final position ---
       moveTransitionStart = setTimeout(() => {
-        const finalBorderRadius = isDesktop ? '8px' : '6px';
         
         // Set transition for the move/scale
         imgStyle.transition = `
           transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
           border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
+          width ${MOVE_DURATION}ms ${MOVE_EASING},
+          height ${MOVE_DURATION}ms ${MOVE_EASING},
           opacity 200ms ${MOVE_DURATION - 200}ms linear
         `;
 
-        // Apply final transform (move + scale to final size)
-        imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(${finalScale})`;
+        // Change dimensions to EXACT final size
+        imgStyle.width = `${rect.width}px`;
+        imgStyle.height = `${rect.height}px`;
+        
+        // Apply final transform (move to final position, scale back to 1 since we changed the dimensions)
+        imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(1)`;
         imgStyle.borderRadius = finalBorderRadius;
         
-        // Fade out near the end
+        // Fade out near the end to reveal the background
         setTimeout(() => {
           imgStyle.opacity = '0';
         }, MOVE_DURATION - 200);
