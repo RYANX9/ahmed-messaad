@@ -24,25 +24,20 @@ export default function ProjectCard({
   isMobile = false,
   theme,
 }: ProjectCardProps) {
-  const isActive = activeProject === p.id;
-
   return (
     <div
       className={`${idx !== 0 ? "border-t" : ""} transition`}
       style={{
         borderColor: theme.border,
-        backgroundColor: isActive ? theme.surfaceHover : theme.surface,
+        backgroundColor: activeProject === p.id ? theme.surface : 'transparent'
       }}
     >
       {/* ========== PROJECT HEADER (Clickable) ========== */}
       <button
-        onClick={() => onToggle(isActive ? "" : p.id)}
+        onClick={() => onToggle(activeProject === p.id ? "" : p.id)}
         className={`w-full flex justify-between items-center ${
           isMobile ? "px-6 py-4" : "px-8 xl:px-10 py-4 xl:py-5"
-        } text-left transition`}
-        style={{
-          color: theme.textPrimary,
-        }}
+        } text-left`}
       >
         <div className="flex flex-col">
           {/* Project Name */}
@@ -50,7 +45,6 @@ export default function ProjectCard({
             className={`${
               isMobile ? "text-sm" : "text-base xl:text-lg"
             } font-semibold font-mono`}
-            style={{ color: theme.textPrimary }}
           >
             {p.name}
           </div>
@@ -61,7 +55,7 @@ export default function ProjectCard({
               className={`${
                 isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
               } mt-1 font-accent uppercase tracking-wide`}
-              style={{ color: theme.textSecondary }}
+              style={{ color: theme.textTertiary }}
             >
               {p.context} • {p.year}
             </div>
@@ -75,9 +69,11 @@ export default function ProjectCard({
               className={`arrow-animate inline-flex items-center gap-2 ${
                 isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
               } tracking-wide transition font-mono ${
-                isActive ? "opacity-100" : "opacity-0 pointer-events-none"
+                activeProject === p.id
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
               } transition-opacity duration-300`}
-              style={{ color: theme.accentDark }}
+              style={{ color: theme.textPrimary }}
             >
               {p.linkText}
               <svg
@@ -85,7 +81,7 @@ export default function ProjectCard({
                 height={isMobile ? "12" : "14"}
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke={theme.accentDark}
+                stroke="currentColor"
                 strokeWidth="2"
               >
                 <path d="M7 17L17 7M17 7H7M17 7V17" />
@@ -99,11 +95,11 @@ export default function ProjectCard({
           className={`${
             isMobile ? "w-4 h-4" : "w-5 h-5 xl:w-6 xl:h-6"
           } transition-transform flex-shrink-0 ml-3 ${
-            isActive ? "rotate-90" : ""
+            activeProject === p.id ? "rotate-90" : ""
           }`}
           viewBox="0 0 24 24"
           fill="none"
-          stroke={theme.textSecondary}
+          stroke="currentColor"
           strokeWidth="2"
         >
           <path d="M9 18l6-6-6-6" />
@@ -113,7 +109,7 @@ export default function ProjectCard({
       {/* ========== PROJECT DETAILS (Expandable) ========== */}
       <div
         className={`overflow-hidden transition-all duration-500 ${
-          isActive
+          activeProject === p.id
             ? isMobile
               ? "max-h-[800px]"
               : "max-h-[900px]"
@@ -126,7 +122,6 @@ export default function ProjectCard({
             className={`relative w-full ${
               isMobile ? "h-40 mb-4" : "h-48 xl:h-56 mb-4 xl:mb-5"
             } rounded-lg overflow-hidden`}
-            style={{ borderColor: theme.border }}
           >
             <Image
               src={p.image}
@@ -144,7 +139,7 @@ export default function ProjectCard({
                 ? "mb-4 text-sm"
                 : "mb-4 xl:mb-5 text-[13px] xl:text-[14px]"
             } leading-relaxed font-sans`}
-            style={{ color: theme.textTertiary }}
+            style={{ color: theme.textSecondary }}
           >
             {p.description}
           </p>
@@ -158,16 +153,18 @@ export default function ProjectCard({
             {p.tech.map((t) => (
               <span
                 key={t}
-                className={`rounded transition font-mono ${
+                className={`border rounded ${
                   isMobile
                     ? "text-[10px] px-2.5 py-1"
                     : "text-[11px] xl:text-[12px] px-3 py-1.5"
-                }`}
+                } transition font-mono`}
                 style={{
                   backgroundColor: theme.surface,
-                  color: theme.textSecondary,
-                  border: `1px solid ${theme.border}`,
+                  color: theme.textPrimary,
+                  borderColor: theme.border
                 }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surfaceHover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface}
               >
                 {t}
               </span>
