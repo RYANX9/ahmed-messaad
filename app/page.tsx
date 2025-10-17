@@ -37,7 +37,6 @@ export default function Page() {
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
 
-    // Animation Constants
     // Get target dimensions FIRST
     const rect = profileSection.getBoundingClientRect();
     
@@ -125,6 +124,7 @@ export default function Page() {
       if (completeDelay) clearTimeout(completeDelay);
     };
   }, [isTransitionComplete]);
+
 
   
   return (
