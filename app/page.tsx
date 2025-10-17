@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
-
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
@@ -64,23 +63,25 @@ export default function Page() {
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
     imgStyle.transform = `translate(-50%, -50%) scale(1)`; // Initial centering transform
+    
+    // **NEW:** Set initial clip-path and transition it alongside the first scale
+    imgStyle.clipPath = 'inset(0 0 0 0 round 16px)';
+    
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
     // --- Step 2: Scale Down Animation ---
     const initialDelayTimer = setTimeout(() => {
       // Apply scale down transition and new transform
-      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
+      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms, clip-path ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
       imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
       imgStyle.borderRadius = '8px';
 
-      // --- Step 3: Wait for scale down, then start the main move ---
+      // --- Step 3: Wait for scale down, then start the main move & smooth crop ---
       moveTransitionStart = setTimeout(() => {
         const rect = profileSection.getBoundingClientRect();
 
-        // **PERFORMANCE FIX: Calculate GPU-Accelerated Transform**
-        
-        // 1. Calculate the required translation (Move image center from screen center to target center)
+        // 1. Calculate the required translation
         const screenCenterX = window.innerWidth / 2;
         const screenCenterY = window.innerHeight / 2;
         const targetCenterX = rect.left + rect.width / 2;
@@ -89,20 +90,35 @@ export default function Page() {
         const moveX = targetCenterX - screenCenterX;
         const moveY = targetCenterY - screenCenterY;
 
-        // 2. Calculate the final scale factor 
-        // We scale the INITIAL_SIZE to match the target section's width (rect.width)
+        // 2. Calculate the final scale factor
         const finalScale = rect.width / INITIAL_SIZE;
+        
+        // 3. Calculate the clipping inset for smooth cropping
+        // The image is scaled to rect.width (width = INITIAL_SIZE * finalScale). 
+        // The visible height should be rect.height.
+        const scaledHeight = INITIAL_SIZE * finalScale;
+        const heightDifference = scaledHeight - rect.height;
+        
+        // This calculates the percentage of the original INITIAL_SIZE to clip from top/bottom
+        const clipAmountPercent = ((heightDifference / 2) / INITIAL_SIZE) * 100;
+        const finalClipTopBottom = Math.max(0, clipAmountPercent); // Ensure it's not negative
 
-        // 3. Set the long transition on transform and opacity only
-        // **CRITICAL:** Removed expensive changes to position/size properties (top, left, width, height)
-        imgStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
+        // 4. Set the long transition, now including clip-path
+        imgStyle.transition = `
+          transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
+          opacity 200ms ${MOVE_DURATION - 200}ms linear, 
+          border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
+          clip-path ${MOVE_DURATION}ms ${MOVE_EASING}
+        `;
 
-        // 4. Set the final transform (combines initial centering, move, and final scale)
-        // Using translate3d helps hint the browser to use hardware acceleration.
+        // 5. Set the final transform
         imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(${finalScale})`;
 
-        // 5. Update border radius for the final shape
-        imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+        // 6. Set the final border radius and **Clip-Path**
+        const finalBorderRadius = isDesktop ? '8px' : '6px';
+        imgStyle.borderRadius = finalBorderRadius;
+        // The clip-path transitions to hide the parts of the image that fall outside the target section's height.
+        imgStyle.clipPath = `inset(${finalClipTopBottom}% 0% ${finalClipTopBottom}% 0% round ${finalBorderRadius})`;
         
         // Set opacity to 0 shortly before the end
         setTimeout(() => {
@@ -128,7 +144,7 @@ export default function Page() {
     };
   }, [isTransitionComplete]);
 
-
+  
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
       <style jsx global>{`
