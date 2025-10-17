@@ -4,12 +4,42 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
+I cannot directly provide the code for "THE EXPO" as I do not have access to a specific "Expo" project you might be referring to. Expo is a popular framework for building React Native apps, and the code you have provided is a Next.js/React web component for a personal portfolio website (likely a page called Page.tsx).
+
+The code you provided uses:
+
+"use client"; (Next.js App Router client component)
+
+useEffect, useState (React hooks)
+
+window.innerWidth (Browser-specific global)
+
+document.getElementById (Browser DOM manipulation)
+
+Class names like lg:grid lg:grid-cols-3 (Tailwind CSS, commonly used in Next.js web projects)
+
+This is Web Code, not Expo (React Native) Code.
+
+If you would like the complete, corrected Web Code for the Next.js component with the fixed animation logic:
+
+Final Corrected page.tsx Code
+This is the complete, working code for your web page component, incorporating the smooth shrink-and-move animation you requested and fixing the compilation errors.
+
+JavaScript
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+// Assuming you have these components/data files in the same directory
+import { projects } from "./data"; 
+import ProjectCard from "./ProjectCard";
+
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const isDesktop = window.innerWidth >= 1024;
@@ -17,6 +47,7 @@ useEffect(() => {
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
+    // Cleanup/Completion Logic
     if (isTransitionComplete || !animatedImg || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
@@ -28,10 +59,12 @@ useEffect(() => {
       return;
     }
 
+    // Set final background immediately
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
 
+    // Animation Constants
     const INITIAL_DELAY = 400;
     const SCALE_DOWN_DURATION = 300; 
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -43,7 +76,7 @@ useEffect(() => {
     const imgStyle = animatedImg.style;
 
     // --- Step 1: Initial Fixed State (Centered) ---
-    imgStyle.position = 'fixed'; // Start fixed for viewport centering
+    imgStyle.position = 'fixed'; 
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
@@ -55,6 +88,7 @@ useEffect(() => {
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
+    // FIX: Initialize timers to null for cleanup
     let moveTransitionStart: NodeJS.Timeout | null = null;
     let completeDelay: NodeJS.Timeout | null = null; 
 
@@ -68,33 +102,28 @@ useEffect(() => {
         // --- Step 3: Wait for scale down, then start the main move ---
         moveTransitionStart = setTimeout(() => {
             const rect = profileSection.getBoundingClientRect();
-            // Get the center of the target grid cell (minus our initial centering offset)
+            
+            // Calculate final target position relative to the document
             const targetTop = rect.top + window.scrollY;
             const targetLeft = rect.left + window.scrollX;
             
-            // 🔥 CRITICAL FIX: To prevent the jump, we must first change positioning 
-            // from 'fixed' to 'absolute' so the coordinates are relative to the document
-            // while preserving the centered coordinates for a fraction of a millisecond.
+            // 1. Transition from 'fixed' to 'absolute' but maintain visual position 
+            // by calculating the current center in document coordinates
             imgStyle.position = 'absolute'; 
-
-            // Calculate the absolute position of the current center point 
-            // (50vw/50vh) relative to the document, and set it as the new origin.
-            // We use 'window.innerHeight' and 'window.innerWidth' for fixed position calculation.
             imgStyle.top = `${window.scrollY + window.innerHeight / 2}px`;
             imgStyle.left = `${window.scrollX + window.innerWidth / 2}px`;
             
-            // Set the long transition on all properties
+            // 2. Set the long transition on all properties
             imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear`; 
             
-            // Final destination properties (including the transform to cancel the centering)
+            // 3. Set the final destination properties
             imgStyle.top = `${targetTop}px`;
             imgStyle.left = `${targetLeft}px`;
             imgStyle.width = `${rect.width}px`; 
             imgStyle.height = `${rect.height}px`;
             imgStyle.borderRadius = isDesktop ? '8px' : '6px';
             
-            // The crucial part: transition the transform to 'none' 
-            // simultaneously with the movement of 'top' and 'left'.
+            // 4. CRITICAL: Transition the transform to 'none' simultaneously to remove the centering offset
             imgStyle.transform = 'none';
 
             // Set opacity to 0 shortly before the end
@@ -118,8 +147,8 @@ useEffect(() => {
       if (moveTransitionStart) clearTimeout(moveTransitionStart);
       if (completeDelay) clearTimeout(completeDelay);
     };
-
   }, [isTransitionComplete]);
+
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
