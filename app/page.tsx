@@ -4,35 +4,6 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
-I cannot directly provide the code for "THE EXPO" as I do not have access to a specific "Expo" project you might be referring to. Expo is a popular framework for building React Native apps, and the code you have provided is a Next.js/React web component for a personal portfolio website (likely a page called Page.tsx).
-
-The code you provided uses:
-
-"use client"; (Next.js App Router client component)
-
-useEffect, useState (React hooks)
-
-window.innerWidth (Browser-specific global)
-
-document.getElementById (Browser DOM manipulation)
-
-Class names like lg:grid lg:grid-cols-3 (Tailwind CSS, commonly used in Next.js web projects)
-
-This is Web Code, not Expo (React Native) Code.
-
-If you would like the complete, corrected Web Code for the Next.js component with the fixed animation logic:
-
-Final Corrected page.tsx Code
-This is the complete, working code for your web page component, incorporating the smooth shrink-and-move animation you requested and fixing the compilation errors.
-
-JavaScript
-
-"use client";
-
-import React, { useState, useEffect } from "react";
-// Assuming you have these components/data files in the same directory
-import { projects } from "./data"; 
-import ProjectCard from "./ProjectCard";
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -40,8 +11,10 @@ export default function Page() {
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
   useEffect(() => {
+    // Standard early exit for server-side rendering
     if (typeof window === "undefined") return;
 
+    // Determine environment and target elements
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile') as HTMLImageElement;
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
@@ -51,6 +24,7 @@ export default function Page() {
     if (isTransitionComplete || !animatedImg || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
+        // Ensure final background is set if the effect runs on load without animation
         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
         profileSection.style.backgroundSize = 'cover';
         profileSection.style.backgroundPosition = 'center';
@@ -59,24 +33,29 @@ export default function Page() {
       return;
     }
 
-    // Set final background immediately
+    // Set final background immediately (will be visible once the animated image fades out)
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
 
     // Animation Constants
     const INITIAL_DELAY = 400;
-    const SCALE_DOWN_DURATION = 300; 
+    const SCALE_DOWN_DURATION = 300;
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
-    const TARGET_SCALE = 0.8; 
+    const TARGET_SCALE = 0.8;
 
     const imgStyle = animatedImg.style;
 
+    // FIX: Initialize timers to null for cleanup
+    let moveTransitionStart: NodeJS.Timeout | null = null;
+    let completeDelay: NodeJS.Timeout | null = null;
+
     // --- Step 1: Initial Fixed State (Centered) ---
-    imgStyle.position = 'fixed'; 
+    // We keep position: fixed and use width/height/top/left only as anchors.
+    imgStyle.position = 'fixed';
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
@@ -84,64 +63,64 @@ export default function Page() {
     imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
-    imgStyle.transform = `translate(-50%, -50%) scale(1)`; 
+    imgStyle.transform = `translate(-50%, -50%) scale(1)`; // Initial centering transform
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
-    // FIX: Initialize timers to null for cleanup
-    let moveTransitionStart: NodeJS.Timeout | null = null;
-    let completeDelay: NodeJS.Timeout | null = null; 
-
     // --- Step 2: Scale Down Animation ---
     const initialDelayTimer = setTimeout(() => {
-        // Apply scale down transition and new transform
-        imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
-        imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
-        imgStyle.borderRadius = '8px';
+      // Apply scale down transition and new transform
+      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
+      imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
+      imgStyle.borderRadius = '8px';
 
-        // --- Step 3: Wait for scale down, then start the main move ---
-        moveTransitionStart = setTimeout(() => {
-            const rect = profileSection.getBoundingClientRect();
-            
-            // Calculate final target position relative to the document
-            const targetTop = rect.top + window.scrollY;
-            const targetLeft = rect.left + window.scrollX;
-            
-            // 1. Transition from 'fixed' to 'absolute' but maintain visual position 
-            // by calculating the current center in document coordinates
-            imgStyle.position = 'absolute'; 
-            imgStyle.top = `${window.scrollY + window.innerHeight / 2}px`;
-            imgStyle.left = `${window.scrollX + window.innerWidth / 2}px`;
-            
-            // 2. Set the long transition on all properties
-            imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear`; 
-            
-            // 3. Set the final destination properties
-            imgStyle.top = `${targetTop}px`;
-            imgStyle.left = `${targetLeft}px`;
-            imgStyle.width = `${rect.width}px`; 
-            imgStyle.height = `${rect.height}px`;
-            imgStyle.borderRadius = isDesktop ? '8px' : '6px';
-            
-            // 4. CRITICAL: Transition the transform to 'none' simultaneously to remove the centering offset
-            imgStyle.transform = 'none';
+      // --- Step 3: Wait for scale down, then start the main move ---
+      moveTransitionStart = setTimeout(() => {
+        const rect = profileSection.getBoundingClientRect();
 
-            // Set opacity to 0 shortly before the end
-            setTimeout(() => {
-                imgStyle.opacity = '0';
-            }, MOVE_DURATION - 200);
+        // **PERFORMANCE FIX: Calculate GPU-Accelerated Transform**
+        
+        // 1. Calculate the required translation (Move image center from screen center to target center)
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = window.innerHeight / 2;
+        const targetCenterX = rect.left + rect.width / 2;
+        const targetCenterY = rect.top + rect.height / 2;
+        
+        const moveX = targetCenterX - screenCenterX;
+        const moveY = targetCenterY - screenCenterY;
 
-            // Final cleanup after the main transition
-            completeDelay = setTimeout(() => {
-                imgStyle.display = 'none';
-                setIsTransitionComplete(true);
-                setIsLoading(false);
-            }, MOVE_DURATION + 50);
+        // 2. Calculate the final scale factor 
+        // We scale the INITIAL_SIZE to match the target section's width (rect.width)
+        const finalScale = rect.width / INITIAL_SIZE;
 
-        }, SCALE_DOWN_DURATION + 50);
+        // 3. Set the long transition on transform and opacity only
+        // **CRITICAL:** Removed expensive changes to position/size properties (top, left, width, height)
+        imgStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
+
+        // 4. Set the final transform (combines initial centering, move, and final scale)
+        // Using translate3d helps hint the browser to use hardware acceleration.
+        imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(${finalScale})`;
+
+        // 5. Update border radius for the final shape
+        imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+        
+        // Set opacity to 0 shortly before the end
+        setTimeout(() => {
+          imgStyle.opacity = '0';
+        }, MOVE_DURATION - 200);
+
+        // Final cleanup after the main transition
+        completeDelay = setTimeout(() => {
+          imgStyle.display = 'none';
+          setIsTransitionComplete(true);
+          setIsLoading(false);
+        }, MOVE_DURATION + 50);
+
+      }, SCALE_DOWN_DURATION + 50);
 
     }, INITIAL_DELAY);
 
+    // Cleanup function for React
     return () => {
       clearTimeout(initialDelayTimer);
       if (moveTransitionStart) clearTimeout(moveTransitionStart);
