@@ -17,11 +17,10 @@ export default function Page() {
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
-    // --- Cleanup/Completion Logic (Unchanged) ---
+    // Cleanup/Completion Logic (Unchanged)
     if (isTransitionComplete || !animatedImg || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
-        // Ensure the background is set even if the effect runs after hydration
         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
         profileSection.style.backgroundSize = 'cover';
         profileSection.style.backgroundPosition = 'center';
@@ -30,25 +29,23 @@ export default function Page() {
       return;
     }
 
-    // Set final background immediately to prevent a flash of white/empty space
+    // Set final background immediately
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
-    // ---------------------------------------------
 
-
-    // --- Animation Constants ---
-    const INITIAL_DELAY = 400; // Delay before the animation starts
-    const SCALE_DOWN_DURATION = 300; // NEW: Duration for the scale down
-    const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // ease-out-quad or similar
+    // Animation Constants
+    const INITIAL_DELAY = 400;
+    const SCALE_DOWN_DURATION = 300; 
+    const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
-    const TARGET_SCALE = 0.8; // NEW: Target scale for the shrink effect
+    const TARGET_SCALE = 0.8; 
 
     const imgStyle = animatedImg.style;
 
-    // --- Step 1: Initial Fixed State (Centered) ---
+    // Step 1: Initial Fixed State (Centered)
     imgStyle.position = 'fixed';
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
@@ -57,21 +54,20 @@ export default function Page() {
     imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
-    // Initial scale and centering
     imgStyle.transform = `translate(-50%, -50%) scale(1)`; 
     animatedImg.src = '/ahmed.jpg';
-    imgStyle.display = 'block'; // Ensure it's visible
+    imgStyle.display = 'block';
 
-    
-    let scaleDownTimer: NodeJS.Timeout;
-    let moveTransitionStart: NodeJS.Timeout;
+    // FIX: Initialize timers to null so they are always defined for cleanup.
+    let moveTransitionStart: NodeJS.Timeout | null = null;
+    let completeDelay: NodeJS.Timeout | null = null; 
 
     // Step 2: Scale Down Animation
     const initialDelayTimer = setTimeout(() => {
         // Apply scale down transition and new transform
         imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
         imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
-        imgStyle.borderRadius = '8px'; // Optional: slightly tighten the border-radius on shrink
+        imgStyle.borderRadius = '8px';
 
         // Step 3: Wait for scale down to finish, then start the main move
         moveTransitionStart = setTimeout(() => {
@@ -83,40 +79,37 @@ export default function Page() {
             imgStyle.transform = 'none'; 
             
             // Start the main transition
-            // Note: Combined transition for position, size, border-radius, and opacity
             imgStyle.transition = `top ${MOVE_DURATION}ms ${MOVE_EASING}, left ${MOVE_DURATION}ms ${MOVE_EASING}, width ${MOVE_DURATION}ms ${MOVE_EASING}, height ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear`; 
             
             // Set final coordinates and size
             imgStyle.top = `${absoluteTop}px`;
             imgStyle.left = `${absoluteLeft}px`;
-            imgStyle.width = `${rect.width}px`; // Use rect.width/height directly
+            imgStyle.width = `${rect.width}px`; 
             imgStyle.height = `${rect.height}px`;
             imgStyle.borderRadius = isDesktop ? '8px' : '6px';
 
-            // Optional: Set opacity to 0 shortly before the end of the move duration
+            // Set opacity to 0 shortly before the end of the move duration
             setTimeout(() => {
                 imgStyle.opacity = '0';
             }, MOVE_DURATION - 200);
 
 
             // Final cleanup after the main transition
-            const completeDelay = setTimeout(() => {
+            completeDelay = setTimeout(() => {
                 imgStyle.display = 'none';
                 setIsTransitionComplete(true);
                 setIsLoading(false);
             }, MOVE_DURATION + 50);
 
-            return () => clearTimeout(completeDelay);
+        }, SCALE_DOWN_DURATION + 50);
 
-        }, SCALE_DOWN_DURATION + 50); // Wait for scale down + a tiny buffer
-
-        return () => clearTimeout(moveTransitionStart);
     }, INITIAL_DELAY);
 
+    // FIX: Clear all timers that were initialized inside or outside the callback
     return () => {
       clearTimeout(initialDelayTimer);
-      clearTimeout(scaleDownTimer);
-      clearTimeout(moveTransitionStart);
+      if (moveTransitionStart) clearTimeout(moveTransitionStart);
+      if (completeDelay) clearTimeout(completeDelay);
     };
   }, [isTransitionComplete]);
 
