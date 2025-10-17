@@ -236,7 +236,7 @@ export default function Page() {
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
           <section
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 lg:p-7 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
@@ -244,7 +244,7 @@ export default function Page() {
           >
             <div className="flex items-start justify-end">
               <svg
-                className="w-16 h-16 xl:w-20 xl:h-20 text-neutral-700"
+                className="w-12 h-12 lg:w-14 lg:h-14 xl:w-20 xl:h-20 text-neutral-700"
                 viewBox="0 0 100 100"
                 fill="none"
                 stroke="currentColor"
@@ -262,17 +262,17 @@ export default function Page() {
             </div>
             
             <div>
-              <h1 className="text-[26px] xl:text-[32px] leading-[1.2] mb-6">
+              <h1 className="text-[20px] lg:text-[24px] xl:text-[32px] leading-[1.2] mb-4 lg:mb-5 xl:mb-6">
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
-              <div className="text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
+              <div className="text-[9px] lg:text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
-
+          
           <section 
             id="profile-grid-section"
             className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
