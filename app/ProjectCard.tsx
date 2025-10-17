@@ -1,11 +1,6 @@
-// =============================================================================
-// PROJECTCARD.TSX - Reusable Project Card Component
-// =============================================================================
-
 import React from "react";
 import Image from "next/image";
 import { Project } from "./data";
-import { Theme } from "./colors";
 
 interface ProjectCardProps {
   project: Project;
@@ -13,7 +8,6 @@ interface ProjectCardProps {
   activeProject: string | null;
   onToggle: (id: string) => void;
   isMobile?: boolean;
-  theme: Theme;
 }
 
 export default function ProjectCard({
@@ -22,17 +16,13 @@ export default function ProjectCard({
   activeProject,
   onToggle,
   isMobile = false,
-  theme,
 }: ProjectCardProps) {
   return (
     <div
-      className={`${idx !== 0 ? "border-t" : ""} transition`}
-      style={{
-        borderColor: theme.border,
-        backgroundColor: activeProject === p.id ? theme.surface : 'transparent'
-      }}
+      className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a] transition ${
+        activeProject === p.id ? "bg-[#151515]" : ""
+      }`}
     >
-      {/* ========== PROJECT HEADER (Clickable) ========== */}
       <button
         onClick={() => onToggle(activeProject === p.id ? "" : p.id)}
         className={`w-full flex justify-between items-center ${
@@ -40,7 +30,6 @@ export default function ProjectCard({
         } text-left`}
       >
         <div className="flex flex-col">
-          {/* Project Name */}
           <div
             className={`${
               isMobile ? "text-sm" : "text-base xl:text-lg"
@@ -48,32 +37,26 @@ export default function ProjectCard({
           >
             {p.name}
           </div>
-
-          {/* Context, Year & Link */}
           <div className="flex items-center gap-4">
             <div
               className={`${
                 isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
-              } mt-1 font-accent uppercase tracking-wide`}
-              style={{ color: theme.textTertiary }}
+              } text-neutral-500 mt-1 font-accent uppercase tracking-wide`}
             >
               {p.context} • {p.year}
             </div>
-
-            {/* External Link (only visible when expanded) */}
             <a
               href={p.link}
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className={`arrow-animate inline-flex items-center gap-2 ${
+              className={`arrow-animate inline-flex items-center gap-2 text-white ${
                 isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
               } tracking-wide transition font-mono ${
                 activeProject === p.id
                   ? "opacity-100"
                   : "opacity-0 pointer-events-none"
               } transition-opacity duration-300`}
-              style={{ color: theme.textPrimary }}
             >
               {p.linkText}
               <svg
@@ -89,8 +72,6 @@ export default function ProjectCard({
             </a>
           </div>
         </div>
-
-        {/* Chevron Icon */}
         <svg
           className={`${
             isMobile ? "w-4 h-4" : "w-5 h-5 xl:w-6 xl:h-6"
@@ -106,7 +87,6 @@ export default function ProjectCard({
         </svg>
       </button>
 
-      {/* ========== PROJECT DETAILS (Expandable) ========== */}
       <div
         className={`overflow-hidden transition-all duration-500 ${
           activeProject === p.id
@@ -117,7 +97,6 @@ export default function ProjectCard({
         }`}
       >
         <div className={isMobile ? "px-6 pb-5" : "px-8 xl:px-10 pb-6 xl:pb-7"}>
-          {/* Project Image */}
           <div
             className={`relative w-full ${
               isMobile ? "h-40 mb-4" : "h-48 xl:h-56 mb-4 xl:mb-5"
@@ -132,19 +111,15 @@ export default function ProjectCard({
             />
           </div>
 
-          {/* Project Description */}
           <p
             className={`${
               isMobile
                 ? "mb-4 text-sm"
                 : "mb-4 xl:mb-5 text-[13px] xl:text-[14px]"
-            } leading-relaxed font-sans`}
-            style={{ color: theme.textSecondary }}
+            } text-neutral-400 leading-relaxed font-sans`}
           >
             {p.description}
           </p>
-
-          {/* Tech Stack Tags */}
           <div
             className={`flex flex-wrap ${
               isMobile ? "gap-2 mb-4" : "gap-2 xl:gap-2.5 mb-4 xl:mb-5"
@@ -153,18 +128,11 @@ export default function ProjectCard({
             {p.tech.map((t) => (
               <span
                 key={t}
-                className={`border rounded ${
+                className={`bg-[#1a1a1a] text-white border border-[#2a2a2a] rounded ${
                   isMobile
                     ? "text-[10px] px-2.5 py-1"
                     : "text-[11px] xl:text-[12px] px-3 py-1.5"
-                } transition font-mono`}
-                style={{
-                  backgroundColor: theme.surface,
-                  color: theme.textPrimary,
-                  borderColor: theme.border
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.surfaceHover}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.surface}
+                } transition hover:bg-[#333] font-mono`}
               >
                 {t}
               </span>
