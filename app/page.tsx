@@ -18,6 +18,9 @@ export default function Page() {
 
     if (!profileSection) return;
 
+    // Get the final position before we start animating
+    const rect = profileSection.getBoundingClientRect();
+
     // Animation timing
     const INITIAL_DELAY = 400;
     const SHRINK_DURATION = 300;
@@ -52,8 +55,14 @@ export default function Page() {
   }, []);
 
   // Calculate styles based on animation phase and viewport
-  const getProfileStyles = () => {
-    if (typeof window === "undefined") return {};
+  const getProfileStyles = (): React.CSSProperties => {
+    if (typeof window === "undefined") {
+      return {
+        backgroundImage: `url('/ahmed.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
     
     const isDesktop = window.innerWidth >= 1024;
     const INITIAL_SIZE = isDesktop ? 240 : 180;
@@ -63,13 +72,12 @@ export default function Page() {
       backgroundImage: `url('/ahmed.jpg')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      transition: 'none',
     };
 
     if (animationPhase === 'initial') {
       return {
         ...baseStyles,
-        position: 'fixed' as const,
+        position: 'fixed',
         top: '50vh',
         left: '50vw',
         width: `${INITIAL_SIZE}px`,
@@ -77,13 +85,14 @@ export default function Page() {
         transform: 'translate(-50%, -50%)',
         borderRadius: '16px',
         zIndex: 100,
+        transition: 'none',
       };
     }
 
     if (animationPhase === 'shrink') {
       return {
         ...baseStyles,
-        position: 'fixed' as const,
+        position: 'fixed',
         top: '50vh',
         left: '50vw',
         width: `${INITIAL_SIZE}px`,
@@ -96,13 +105,21 @@ export default function Page() {
     }
 
     if (animationPhase === 'move') {
+      // Calculate where the grid section actually is
+      const profileSection = document.getElementById(isDesktop ? 'profile-grid-section' : 'profile-mobile-section');
+      if (!profileSection) {
+        return baseStyles;
+      }
+      
+      const rect = profileSection.getBoundingClientRect();
+      
       return {
         ...baseStyles,
-        position: 'fixed' as const,
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
+        position: 'fixed',
+        top: `${rect.top}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
         transform: 'none',
         borderRadius: isDesktop ? '8px' : '6px',
         zIndex: 100,
@@ -110,7 +127,7 @@ export default function Page() {
       };
     }
 
-    // Complete - return to normal grid position
+    // Complete - normal styling
     return {
       ...baseStyles,
       borderRadius: isDesktop ? '8px' : '6px',
@@ -306,8 +323,8 @@ export default function Page() {
 
           <section 
             id="profile-grid-section"
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden ${!isAnimating ? 'relative' : ''}`}
-            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' }}
+            className={`border border-[#2a2a2a] rounded-2xl overflow-hidden ${isAnimating ? '' : 'bg-[#1a1a1a]'}`}
+            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' as const }}
           />
 
           <aside
@@ -482,8 +499,8 @@ export default function Page() {
 
           <section
             id="profile-mobile-section"
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] ${!isAnimating ? 'relative' : ''}`}
-            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' }}
+            className={`border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] ${isAnimating ? '' : 'bg-[#0a0a0a] relative'}`}
+            style={isAnimating ? profileStyles : { ...profileStyles, position: 'relative' as const }}
           />
 
           <section
