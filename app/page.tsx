@@ -4,12 +4,7 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
-export default function Page() {
-  const [activeProject, setActiveProject] = useState<string | null>("airm");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false);
-
-  useEffect(() => {
+useEffect(() => {
     if (typeof window === "undefined") return;
 
     const isDesktop = window.innerWidth >= 1024;
@@ -17,7 +12,6 @@ export default function Page() {
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
-    // Cleanup/Completion Logic (Unchanged)
     if (isTransitionComplete || !animatedImg || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
@@ -29,12 +23,10 @@ export default function Page() {
       return;
     }
 
-    // Set final background immediately
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
 
-    // Animation Constants
     const INITIAL_DELAY = 400;
     const SCALE_DOWN_DURATION = 300; 
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
@@ -45,8 +37,8 @@ export default function Page() {
 
     const imgStyle = animatedImg.style;
 
-    // Step 1: Initial Fixed State (Centered)
-    imgStyle.position = 'fixed';
+    // --- Step 1: Initial Fixed State (Centered) ---
+    imgStyle.position = 'fixed'; // Start fixed for viewport centering
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
@@ -58,41 +50,52 @@ export default function Page() {
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
-    // FIX: Initialize timers to null so they are always defined for cleanup.
     let moveTransitionStart: NodeJS.Timeout | null = null;
     let completeDelay: NodeJS.Timeout | null = null; 
 
-    // Step 2: Scale Down Animation
+    // --- Step 2: Scale Down Animation ---
     const initialDelayTimer = setTimeout(() => {
         // Apply scale down transition and new transform
         imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
         imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
         imgStyle.borderRadius = '8px';
 
-        // Step 3: Wait for scale down to finish, then start the main move
+        // --- Step 3: Wait for scale down, then start the main move ---
         moveTransitionStart = setTimeout(() => {
             const rect = profileSection.getBoundingClientRect();
-            const absoluteTop = rect.top + window.scrollY;
-            const absoluteLeft = rect.left + window.scrollX;
+            // Get the center of the target grid cell (minus our initial centering offset)
+            const targetTop = rect.top + window.scrollY;
+            const targetLeft = rect.left + window.scrollX;
             
-            // Revert transform to allow for smooth position/size transition
-            imgStyle.transform = 'none'; 
+            // 🔥 CRITICAL FIX: To prevent the jump, we must first change positioning 
+            // from 'fixed' to 'absolute' so the coordinates are relative to the document
+            // while preserving the centered coordinates for a fraction of a millisecond.
+            imgStyle.position = 'absolute'; 
+
+            // Calculate the absolute position of the current center point 
+            // (50vw/50vh) relative to the document, and set it as the new origin.
+            // We use 'window.innerHeight' and 'window.innerWidth' for fixed position calculation.
+            imgStyle.top = `${window.scrollY + window.innerHeight / 2}px`;
+            imgStyle.left = `${window.scrollX + window.innerWidth / 2}px`;
             
-            // Start the main transition
-            imgStyle.transition = `top ${MOVE_DURATION}ms ${MOVE_EASING}, left ${MOVE_DURATION}ms ${MOVE_EASING}, width ${MOVE_DURATION}ms ${MOVE_EASING}, height ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear`; 
+            // Set the long transition on all properties
+            imgStyle.transition = `all ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear`; 
             
-            // Set final coordinates and size
-            imgStyle.top = `${absoluteTop}px`;
-            imgStyle.left = `${absoluteLeft}px`;
+            // Final destination properties (including the transform to cancel the centering)
+            imgStyle.top = `${targetTop}px`;
+            imgStyle.left = `${targetLeft}px`;
             imgStyle.width = `${rect.width}px`; 
             imgStyle.height = `${rect.height}px`;
             imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+            
+            // The crucial part: transition the transform to 'none' 
+            // simultaneously with the movement of 'top' and 'left'.
+            imgStyle.transform = 'none';
 
-            // Set opacity to 0 shortly before the end of the move duration
+            // Set opacity to 0 shortly before the end
             setTimeout(() => {
                 imgStyle.opacity = '0';
             }, MOVE_DURATION - 200);
-
 
             // Final cleanup after the main transition
             completeDelay = setTimeout(() => {
@@ -105,7 +108,6 @@ export default function Page() {
 
     }, INITIAL_DELAY);
 
-    // FIX: Clear all timers that were initialized inside or outside the callback
     return () => {
       clearTimeout(initialDelayTimer);
       if (moveTransitionStart) clearTimeout(moveTransitionStart);
