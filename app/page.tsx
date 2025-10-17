@@ -38,22 +38,34 @@ export default function Page() {
     profileSection.style.backgroundPosition = 'center';
 
     // Animation Constants
+    // Get target dimensions FIRST
+    const rect = profileSection.getBoundingClientRect();
+    
+    // Animation Constants
     const INITIAL_DELAY = 400;
     const SCALE_DOWN_DURATION = 300;
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
-    const TARGET_SCALE = 0.8;
+    const SHRINK_SCALE = 0.8;
+    
+    // Calculate EXACT final scale needed (will fit width perfectly)
+    const finalScale = rect.width / INITIAL_SIZE;
+    
+    // Calculate final position
+    const screenCenterX = window.innerWidth / 2;
+    const screenCenterY = window.innerHeight / 2;
+    const targetCenterX = rect.left + rect.width / 2;
+    const targetCenterY = rect.top + rect.height / 2;
+    const moveX = targetCenterX - screenCenterX;
+    const moveY = targetCenterY - screenCenterY;
 
     const imgStyle = animatedImg.style;
-
-    // FIX: Initialize timers to null for cleanup
     let moveTransitionStart: NodeJS.Timeout | null = null;
     let completeDelay: NodeJS.Timeout | null = null;
 
     // --- Step 1: Initial Fixed State (Centered) ---
-    // We keep position: fixed and use width/height/top/left only as anchors.
     imgStyle.position = 'fixed';
     imgStyle.top = '50vh';
     imgStyle.left = '50vw';
@@ -62,70 +74,40 @@ export default function Page() {
     imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
-    imgStyle.transform = `translate(-50%, -50%) scale(1)`; // Initial centering transform
-    
-    // **NEW:** Set initial clip-path and transition it alongside the first scale
-    imgStyle.clipPath = 'inset(0 0 0 0 round 16px)';
+    imgStyle.transform = `translate(-50%, -50%) scale(1)`;
+    imgStyle.objectFit = 'cover';
+    imgStyle.objectPosition = 'center';
     
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
-    // --- Step 2: Scale Down Animation ---
+    // --- Step 2: Scale Down Animation (shrink to 80%) ---
     const initialDelayTimer = setTimeout(() => {
-      // Apply scale down transition and new transform
-      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms, clip-path ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
-      imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
+      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
+      imgStyle.transform = `translate(-50%, -50%) scale(${SHRINK_SCALE})`;
       imgStyle.borderRadius = '8px';
 
-      // --- Step 3: Wait for scale down, then start the main move & smooth crop ---
+      // --- Step 3: Move and scale to final position ---
       moveTransitionStart = setTimeout(() => {
-        const rect = profileSection.getBoundingClientRect();
-
-        // 1. Calculate the required translation
-        const screenCenterX = window.innerWidth / 2;
-        const screenCenterY = window.innerHeight / 2;
-        const targetCenterX = rect.left + rect.width / 2;
-        const targetCenterY = rect.top + rect.height / 2;
+        const finalBorderRadius = isDesktop ? '8px' : '6px';
         
-        const moveX = targetCenterX - screenCenterX;
-        const moveY = targetCenterY - screenCenterY;
-
-        // 2. Calculate the final scale factor
-        const finalScale = rect.width / INITIAL_SIZE;
-        
-        // 3. Calculate the clipping inset for smooth cropping
-        // The image is scaled to rect.width (width = INITIAL_SIZE * finalScale). 
-        // The visible height should be rect.height.
-        const scaledHeight = INITIAL_SIZE * finalScale;
-        const heightDifference = scaledHeight - rect.height;
-        
-        // This calculates the percentage of the original INITIAL_SIZE to clip from top/bottom
-        const clipAmountPercent = ((heightDifference / 2) / INITIAL_SIZE) * 100;
-        const finalClipTopBottom = Math.max(0, clipAmountPercent); // Ensure it's not negative
-
-        // 4. Set the long transition, now including clip-path
+        // Set transition for the move/scale
         imgStyle.transition = `
           transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
-          opacity 200ms ${MOVE_DURATION - 200}ms linear, 
           border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
-          clip-path ${MOVE_DURATION}ms ${MOVE_EASING}
+          opacity 200ms ${MOVE_DURATION - 200}ms linear
         `;
 
-        // 5. Set the final transform
+        // Apply final transform (move + scale to final size)
         imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(${finalScale})`;
-
-        // 6. Set the final border radius and **Clip-Path**
-        const finalBorderRadius = isDesktop ? '8px' : '6px';
         imgStyle.borderRadius = finalBorderRadius;
-        // The clip-path transitions to hide the parts of the image that fall outside the target section's height.
-        imgStyle.clipPath = `inset(${finalClipTopBottom}% 0% ${finalClipTopBottom}% 0% round ${finalBorderRadius})`;
         
-        // Set opacity to 0 shortly before the end
+        // Fade out near the end
         setTimeout(() => {
           imgStyle.opacity = '0';
         }, MOVE_DURATION - 200);
 
-        // Final cleanup after the main transition
+        // Cleanup
         completeDelay = setTimeout(() => {
           imgStyle.display = 'none';
           setIsTransitionComplete(true);
