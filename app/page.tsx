@@ -235,16 +235,17 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
+          {/* HERO SECTION - FIXED */}
           <section
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 lg:p-7 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
             }`}
           >
-            <div className="flex items-start justify-end">
+            <div className="flex items-start justify-end flex-shrink-0">
               <svg
-                className="w-12 h-12 lg:w-14 lg:h-14 xl:w-20 xl:h-20 text-neutral-700"
+                className="w-12 h-12 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 text-neutral-700"
                 viewBox="0 0 100 100"
                 fill="none"
                 stroke="currentColor"
@@ -261,18 +262,18 @@ export default function Page() {
               </svg>
             </div>
             
-            <div>
-              <h1 className="text-[20px] lg:text-[24px] xl:text-[32px] leading-[1.2] mb-4 lg:mb-5 xl:mb-6">
+            <div className="flex-shrink-0 mt-auto">
+              <h1 className="text-[18px] xl:text-[22px] 2xl:text-[28px] leading-[1.25] mb-3 xl:mb-4 2xl:mb-5">
                 <span className="font-mono font-bold">Engineering Explainable AI </span>
                 <span className="italic font-serif font-light">Systems </span>
                 <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
-              <div className="text-[9px] lg:text-[10px] xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
+              <div className="text-[9px] xl:text-[10px] 2xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 Medical AI Research • Transfer Learning • Computer Vision
               </div>
             </div>
           </section>
-          
+
           <section 
             id="profile-grid-section"
             className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
@@ -301,17 +302,18 @@ export default function Page() {
           </aside>
           
           <div className="col-span-2 flex gap-3 h-full">
+            {/* ABOUT SECTION - FIXED */}
             <section
               id="about"
-              className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-8 xl:p-10 flex flex-col justify-between transition-all duration-1000 ${
+              className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
               }`}
             >
-              <div className="flex items-start justify-start">
+              <div className="flex items-start justify-start flex-shrink-0">
                 <svg
-                  className="w-12 h-12 xl:w-14 xl:h-14 text-neutral-700"
+                  className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 text-neutral-700"
                   viewBox="0 0 100 100"
                   fill="none"
                   stroke="currentColor"
@@ -322,11 +324,11 @@ export default function Page() {
                 </svg>
               </div>
               
-              <div>
-                <h3 className="text-[10px] xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-4 xl:mb-5 font-accent">
+              <div className="flex-shrink-0 mt-auto">
+                <h3 className="text-[9px] xl:text-[10px] 2xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-3 xl:mb-4 2xl:mb-5 font-accent">
                   About
                 </h3>
-                <p className="text-neutral-300 text-[14px] xl:text-[16px] leading-relaxed font-sans">
+                <p className="text-neutral-300 text-[12px] xl:text-[13px] 2xl:text-[15px] leading-relaxed font-sans">
                   Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
                   My work investigates explainable deep learning architectures, transfer learning optimization, 
                   and diagnostic system design for resource-constrained clinical environments.
