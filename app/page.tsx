@@ -36,104 +36,98 @@ export default function Page() {
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
 
-    // Get target dimensions FIRST
+    // Get target dimensions and position
     const rect = profileSection.getBoundingClientRect();
     
     // Animation Constants
     const INITIAL_DELAY = 400;
     const SCALE_DOWN_DURATION = 300;
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    const MOVE_DURATION = 1500;
-    const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    const MOVE_DURATION = 1200;
+    const MOVE_EASING = 'cubic-bezier(0.33, 1, 0.68, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
-    const SHRINK_SCALE = 0.8;
+    const SHRINK_SCALE = 0.85;
     
-    // Calculate EXACT final position - we'll keep the image centered in its container
+    // Calculate exact screen center
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;
+    
+    // Calculate exact target center
     const targetCenterX = rect.left + rect.width / 2;
     const targetCenterY = rect.top + rect.height / 2;
     
-    // Calculate movement needed (from screen center to target center)
+    // Movement from center to target
     const moveX = targetCenterX - screenCenterX;
     const moveY = targetCenterY - screenCenterY;
     
-    // Calculate the final scale to match target dimensions
-    // We need to scale from INITIAL_SIZE to rect dimensions
-    const finalScaleX = rect.width / INITIAL_SIZE;
-    const finalScaleY = rect.height / INITIAL_SIZE;
+    // Final scale needed (accounting for the shrink that already happened)
+    const finalScaleX = (rect.width / INITIAL_SIZE) / SHRINK_SCALE;
+    const finalScaleY = (rect.height / INITIAL_SIZE) / SHRINK_SCALE;
     
     const finalBorderRadius = isDesktop ? '8px' : '6px';
 
     const imgStyle = animatedImg.style;
-    let moveTransitionStart: NodeJS.Timeout | null = null;
-    let completeDelay: NodeJS.Timeout | null = null;
+    let scaleTimer: NodeJS.Timeout | null = null;
+    let moveTimer: NodeJS.Timeout | null = null;
+    let fadeTimer: NodeJS.Timeout | null = null;
+    let completeTimer: NodeJS.Timeout | null = null;
 
-    // --- Step 1: Initial Fixed State (Centered) ---
+    // --- Step 1: Initial State (Centered, Full Size) ---
     imgStyle.position = 'fixed';
-    imgStyle.top = '50vh';
-    imgStyle.left = '50vw';
+    imgStyle.top = '50%';
+    imgStyle.left = '50%';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
     imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
-    imgStyle.transform = `translate(-50%, -50%) scale(1)`;
+    imgStyle.transform = 'translate(-50%, -50%) scale(1)';
     imgStyle.objectFit = 'cover';
     imgStyle.objectPosition = 'center';
-    imgStyle.overflow = 'hidden';
+    imgStyle.transition = 'none';
     
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
-    // --- Step 2: Scale Down Animation (shrink to 80%) ---
-    const initialDelayTimer = setTimeout(() => {
+    // --- Step 2: Scale Down (after initial delay) ---
+    scaleTimer = setTimeout(() => {
       imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
       imgStyle.transform = `translate(-50%, -50%) scale(${SHRINK_SCALE})`;
-      imgStyle.borderRadius = '8px';
+      imgStyle.borderRadius = '12px';
 
-      // --- Step 3: Move and scale to final position ---
-      moveTransitionStart = setTimeout(() => {
+      // --- Step 3: Move to Position and Scale to Final Size ---
+      moveTimer = setTimeout(() => {
+        imgStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
         
-        // Set transition for the move/scale - only animate transform and border-radius
-        imgStyle.transition = `
-          transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
-          border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
-          opacity 200ms ${MOVE_DURATION - 200}ms linear
-        `;
-        
-        // Apply final transform: move to target position AND scale to match final size
-        // Scale from current (SHRINK_SCALE) to final size
-        const combinedScaleX = (finalScaleX / SHRINK_SCALE);
-        const combinedScaleY = (finalScaleY / SHRINK_SCALE);
-        
-        imgStyle.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${combinedScaleX}, ${combinedScaleY})`;
+        // Move to target center and scale to exact final dimensions
+        imgStyle.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${finalScaleX}, ${finalScaleY})`;
         imgStyle.borderRadius = finalBorderRadius;
         
-        // Fade out near the end to reveal the background
-        setTimeout(() => {
+        // --- Step 4: Fade Out Near End ---
+        fadeTimer = setTimeout(() => {
+          imgStyle.transition = `opacity 150ms ease-out`;
           imgStyle.opacity = '0';
-        }, MOVE_DURATION - 200);
+        }, MOVE_DURATION - 150);
 
-        // Cleanup
-        completeDelay = setTimeout(() => {
+        // --- Step 5: Complete and Cleanup ---
+        completeTimer = setTimeout(() => {
           imgStyle.display = 'none';
           setIsTransitionComplete(true);
           setIsLoading(false);
-        }, MOVE_DURATION + 50);
+        }, MOVE_DURATION + 100);
 
       }, SCALE_DOWN_DURATION + 50);
 
     }, INITIAL_DELAY);
 
-    // Cleanup function for React
+    // Cleanup
     return () => {
-      clearTimeout(initialDelayTimer);
-      if (moveTransitionStart) clearTimeout(moveTransitionStart);
-      if (completeDelay) clearTimeout(completeDelay);
+      if (scaleTimer) clearTimeout(scaleTimer);
+      if (moveTimer) clearTimeout(moveTimer);
+      if (fadeTimer) clearTimeout(fadeTimer);
+      if (completeTimer) clearTimeout(completeTimer);
     };
   }, [isTransitionComplete]);
-
 
   
   return (
@@ -193,7 +187,8 @@ export default function Page() {
             transform: translate(-3px, -3px) rotate(-2deg);
           }
         }
-        @keyframes slow-spin {
+
+        @keyframes spin-once {
           from {
             transform: rotate(0deg);
           }
@@ -201,17 +196,21 @@ export default function Page() {
             transform: rotate(360deg);
           }
         }
-        
-        .slow-spin {
-          animation: slow-spin 20s linear infinite;
-        }
-        
+
         .arrow-animate:hover svg {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
 
         .arrow-contact-animate {
           animation: arrow-float 3s ease-in-out infinite;
+        }
+
+        .spin-delayed {
+          animation: spin-once 3s ease-in-out 0.5s 1 forwards;
+        }
+
+        .ai-svg-white {
+          filter: brightness(0) invert(1) opacity(0.7);
         }
 
         .invisible-scroll {
@@ -306,7 +305,7 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* HERO SECTION - FIXED */}
+          {/* HERO SECTION */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
               isLoading
@@ -315,26 +314,18 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end flex-shrink-0">
-              <div className="flex items-start justify-end">
-                <img 
-                  src="/ai.svg" 
-                  alt="AI Icon"
-                  className="w-14 h-14 slow-spin"
-                />
-              </div>
+              <img 
+                src="/ai.svg" 
+                alt="AI Icon"
+                className={`w-12 h-12 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 ai-svg-white ${!isLoading ? 'spin-delayed' : ''}`}
+              />
             </div>
             
             <div className="flex-shrink-0 mt-auto">
-              <h1 className="flex flex-wrap items-baseline gap-2 leading-[1.25]">
-                <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
-                  Engineering Explainable AI
-                </span>
-                <span className="italic font-serif font-light text-[24px] xl:text-[26px]">
-                  Systems
-                </span>
-                <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
-                  for Clinical Impact
-                </span>
+              <h1 className="text-[18px] xl:text-[22px] 2xl:text-[28px] leading-[1.25] mb-3 xl:mb-4 2xl:mb-5">
+                <span className="font-mono font-bold">Engineering Explainable AI </span>
+                <span className="italic font-serif font-light">Systems </span>
+                <span className="font-mono font-bold">for Clinical Impact</span>
               </h1>
               <div className="text-[9px] xl:text-[10px] 2xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 Medical AI Research • Transfer Learning • Computer Vision
@@ -370,7 +361,7 @@ export default function Page() {
           </aside>
           
           <div className="col-span-2 flex gap-3 h-full">
-            {/* ABOUT SECTION - FIXED */}
+            {/* ABOUT SECTION */}
             <section
               id="about"
               className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
@@ -438,7 +429,7 @@ export default function Page() {
                 </h2>
                 
                 <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
                     rel="noreferrer"
@@ -448,7 +439,7 @@ export default function Page() {
                     LINKEDIN
                   </a>
                   
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="https://github.com/RYANX9"
                     target="_blank"
                     rel="noreferrer"
@@ -458,7 +449,7 @@ export default function Page() {
                     GITHUB 
                   </a>
                   
-                  <a // <-- FIXED: Added missing <a> tag
+                  <a
                     href="mailto:ahmed.messaad@outlook.com"
                     onClick={(e) => e.stopPropagation()}
                     className="text-neutral-500 hover:text-white transition"
@@ -488,13 +479,11 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end">
-              <div className="flex items-start justify-end">
-                <img 
-                  src="/ai.svg" 
-                  alt="AI Icon"
-                  className="w-14 h-14 slow-spin"
-                />
-              </div>
+              <img 
+                src="/ai.svg" 
+                alt="AI Icon"
+                className={`w-14 h-14 ai-svg-white ${!isLoading ? 'spin-delayed' : ''}`}
+              />
             </div>
             
             <div className="mt-auto">
