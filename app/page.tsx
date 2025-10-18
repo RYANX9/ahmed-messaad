@@ -86,9 +86,9 @@ export default function Page() {
     imgStyle.transition = 'none';
     imgStyle.willChange = 'transform, border-radius, opacity';
     imgStyle.backfaceVisibility = 'hidden';
-    imgStyle.WebkitBackfaceVisibility = 'hidden';
+    (imgStyle as any).webkitBackfaceVisibility = 'hidden';
     imgStyle.perspective = '1000px';
-    imgStyle.WebkitPerspective = '1000px';
+    (imgStyle as any).webkitPerspective = '1000px';
     
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
