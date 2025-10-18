@@ -48,16 +48,21 @@ export default function Page() {
     const INITIAL_SIZE = isDesktop ? 240 : 180;
     const SHRINK_SCALE = 0.8;
     
-    // Calculate EXACT final dimensions and position
+    // Calculate EXACT final position - we'll keep the image centered in its container
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;
     const targetCenterX = rect.left + rect.width / 2;
     const targetCenterY = rect.top + rect.height / 2;
+    
+    // Calculate movement needed (from screen center to target center)
     const moveX = targetCenterX - screenCenterX;
     const moveY = targetCenterY - screenCenterY;
     
-    // Final scale to match the section WIDTH exactly
-    const finalScale = rect.width / INITIAL_SIZE;
+    // Calculate the final scale to match target dimensions
+    // We need to scale from INITIAL_SIZE to rect dimensions
+    const finalScaleX = rect.width / INITIAL_SIZE;
+    const finalScaleY = rect.height / INITIAL_SIZE;
+    
     const finalBorderRadius = isDesktop ? '8px' : '6px';
 
     const imgStyle = animatedImg.style;
@@ -90,21 +95,19 @@ export default function Page() {
       // --- Step 3: Move and scale to final position ---
       moveTransitionStart = setTimeout(() => {
         
-        // Set transition for the move/scale
+        // Set transition for the move/scale - only animate transform and border-radius
         imgStyle.transition = `
           transform ${MOVE_DURATION}ms ${MOVE_EASING}, 
           border-radius ${MOVE_DURATION}ms ${MOVE_EASING},
-          width ${MOVE_DURATION}ms ${MOVE_EASING},
-          height ${MOVE_DURATION}ms ${MOVE_EASING},
           opacity 200ms ${MOVE_DURATION - 200}ms linear
         `;
-
-        // Change dimensions to EXACT final size
-        imgStyle.width = `${rect.width}px`;
-        imgStyle.height = `${rect.height}px`;
         
-        // Apply final transform (move to final position, scale back to 1 since we changed the dimensions)
-        imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(1)`;
+        // Apply final transform: move to target position AND scale to match final size
+        // Scale from current (SHRINK_SCALE) to final size
+        const combinedScaleX = (finalScaleX / SHRINK_SCALE);
+        const combinedScaleY = (finalScaleY / SHRINK_SCALE);
+        
+        imgStyle.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${combinedScaleX}, ${combinedScaleY})`;
         imgStyle.borderRadius = finalBorderRadius;
         
         // Fade out near the end to reveal the background
@@ -190,7 +193,19 @@ export default function Page() {
             transform: translate(-3px, -3px) rotate(-2deg);
           }
         }
-
+        @keyframes slow-spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        .slow-spin {
+          animation: slow-spin 20s linear infinite;
+        }
+        
         .arrow-animate:hover svg {
           animation: arrow-bounce 0.6s ease-in-out infinite;
         }
@@ -300,22 +315,13 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end flex-shrink-0">
-              <svg
-                className="w-12 h-12 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="0.5"
-              >
-                <circle cx="50" cy="50" r="40" />
-                <circle cx="50" cy="50" r="30" />
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="10" />
-                <line x1="50" y1="10" x2="50" y2="90" />
-                <line x1="10" y1="50" x2="90" y2="50" />
-                <line x1="20" y1="20" x2="80" y2="80" />
-                <line x1="80" y1="20" x2="20" y2="80" />
-              </svg>
+              <div className="flex items-start justify-end">
+                <img 
+                  src="/ai.svg" 
+                  alt="AI Icon"
+                  className="w-14 h-14 slow-spin"
+                />
+              </div>
             </div>
             
             <div className="flex-shrink-0 mt-auto">
@@ -476,22 +482,13 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end">
-              <svg
-                className="w-14 h-14 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="0.5"
-              >
-                <circle cx="50" cy="50" r="40" />
-                <circle cx="50" cy="50" r="30" />
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="10" />
-                <line x1="50" y1="10" x2="50" y2="90" />
-                <line x1="10" y1="50" x2="90" y2="50" />
-                <line x1="20" y1="20" x2="80" y2="80" />
-                <line x1="80" y1="20" x2="20" y2="80" />
-              </svg>
+              <div className="flex items-start justify-end">
+                <img 
+                  src="/ai.svg" 
+                  alt="AI Icon"
+                  className="w-14 h-14 slow-spin"
+                />
+              </div>
             </div>
             
             <div className="mt-auto">
