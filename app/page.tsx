@@ -1,27 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
+import './animations.css';
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Standard early exit for server-side rendering
     if (typeof window === "undefined") return;
 
-    // Determine environment and target elements
     const isDesktop = window.innerWidth >= 1024;
     const animatedImg = document.getElementById('animated-profile') as HTMLImageElement;
     const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
-    // Cleanup/Completion Logic
     if (isTransitionComplete || !animatedImg || !profileSection) {
-      if (!isTransitionComplete) {
+      if (!isTransitionComplete && profileSection) {
         setIsLoading(false);
         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
         profileSection.style.backgroundSize = 'cover';
@@ -31,218 +30,194 @@ export default function Page() {
       return;
     }
 
-    // Set final background immediately (will be visible once the animated image fades out)
+    // Set background immediately
     profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
     profileSection.style.backgroundSize = 'cover';
     profileSection.style.backgroundPosition = 'center';
+    profileSection.style.opacity = '0';
 
-    // Get target dimensions and position
+    // Force a reflow to ensure everything is rendered
+    void profileSection.offsetHeight;
+
+    // Get precise measurements
     const rect = profileSection.getBoundingClientRect();
-    
-    // Animation Constants
-    const INITIAL_DELAY = 400;
-    const SCALE_DOWN_DURATION = 300;
-    const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    const MOVE_DURATION = 1200;
-    const MOVE_EASING = 'cubic-bezier(0.33, 1, 0.68, 1)';
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Constants
     const INITIAL_SIZE = isDesktop ? 240 : 180;
-    const SHRINK_SCALE = 0.85;
-    
-    // Calculate exact screen center
-    const screenCenterX = window.innerWidth / 2;
-    const screenCenterY = window.innerHeight / 2;
-    
-    // Calculate exact target center
-    const targetCenterX = rect.left + rect.width / 2;
-    const targetCenterY = rect.top + rect.height / 2;
-    
-    // Movement from center to target
-    const moveX = targetCenterX - screenCenterX;
-    const moveY = targetCenterY - screenCenterY;
-    
-    // Final scale needed (accounting for the shrink that already happened)
-    const finalScaleX = (rect.width / INITIAL_SIZE) / SHRINK_SCALE;
-    const finalScaleY = (rect.height / INITIAL_SIZE) / SHRINK_SCALE;
-    
-    const finalBorderRadius = isDesktop ? '8px' : '6px';
+    const INITIAL_DELAY = 400;
+    const SHRINK_DURATION = 300;
+    const MOVE_DURATION = 1400;
+    const FADE_DURATION = 200;
+
+    // Calculate exact positions
+    const startX = viewportWidth / 2;
+    const startY = viewportHeight / 2;
+    const endX = rect.left + rect.width / 2;
+    const endY = rect.top + rect.height / 2;
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    // Calculate scales
+    const shrinkScale = 0.85;
+    const finalScaleX = rect.width / INITIAL_SIZE;
+    const finalScaleY = rect.height / INITIAL_SIZE;
 
     const imgStyle = animatedImg.style;
-    let scaleTimer: NodeJS.Timeout | null = null;
-    let moveTimer: NodeJS.Timeout | null = null;
-    let fadeTimer: NodeJS.Timeout | null = null;
-    let completeTimer: NodeJS.Timeout | null = null;
+    let startTime: number | null = null;
+    let phase: 'initial' | 'shrink' | 'move' | 'fade' | 'complete' = 'initial';
 
-    // --- Step 1: Initial State (Centered, Full Size) ---
+    // Setup initial state
     imgStyle.position = 'fixed';
-    imgStyle.top = '50%';
-    imgStyle.left = '50%';
+    imgStyle.top = '0';
+    imgStyle.left = '0';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
+    imgStyle.margin = '0';
+    imgStyle.padding = '0';
+    imgStyle.border = 'none';
     imgStyle.borderRadius = '16px';
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
-    imgStyle.transform = 'translate(-50%, -50%) scale(1)';
     imgStyle.objectFit = 'cover';
     imgStyle.objectPosition = 'center';
+    imgStyle.transform = `translate(${startX - INITIAL_SIZE / 2}px, ${startY - INITIAL_SIZE / 2}px) scale(1)`;
     imgStyle.transition = 'none';
+    imgStyle.willChange = 'transform, border-radius, opacity';
+    imgStyle.backfaceVisibility = 'hidden';
+    imgStyle.WebkitBackfaceVisibility = 'hidden';
+    imgStyle.perspective = '1000px';
+    imgStyle.WebkitPerspective = '1000px';
     
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
-    // --- Step 2: Scale Down (after initial delay) ---
-    scaleTimer = setTimeout(() => {
-      imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}`;
-      imgStyle.transform = `translate(-50%, -50%) scale(${SHRINK_SCALE})`;
-      imgStyle.borderRadius = '12px';
+    // Force reflow
+    void animatedImg.offsetHeight;
 
-      // --- Step 3: Move to Position and Scale to Final Size ---
-      moveTimer = setTimeout(() => {
-        imgStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
+    // Animation function using requestAnimationFrame for smoothness
+    const animate = (timestamp: number) => {
+      if (startTime === null) {
+        startTime = timestamp;
+      }
+
+      const elapsed = timestamp - startTime;
+
+      // Phase 1: Initial delay
+      if (phase === 'initial') {
+        if (elapsed >= INITIAL_DELAY) {
+          phase = 'shrink';
+          startTime = timestamp;
+        }
+      }
+      
+      // Phase 2: Shrink animation
+      else if (phase === 'shrink') {
+        const progress = Math.min(elapsed / SHRINK_DURATION, 1);
+        const eased = easeOutCubic(progress);
         
-        // Move to target center and scale to exact final dimensions
-        imgStyle.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${finalScaleX}, ${finalScaleY})`;
-        imgStyle.borderRadius = finalBorderRadius;
+        const currentScale = 1 + (shrinkScale - 1) * eased;
+        const currentBorderRadius = 16 + (12 - 16) * eased;
         
-        // --- Step 4: Fade Out Near End ---
-        fadeTimer = setTimeout(() => {
-          imgStyle.transition = `opacity 150ms ease-out`;
-          imgStyle.opacity = '0';
-        }, MOVE_DURATION - 150);
+        imgStyle.transform = `translate(${startX - INITIAL_SIZE / 2}px, ${startY - INITIAL_SIZE / 2}px) scale(${currentScale})`;
+        imgStyle.borderRadius = `${currentBorderRadius}px`;
+        
+        if (progress >= 1) {
+          phase = 'move';
+          startTime = timestamp;
+        }
+      }
+      
+      // Phase 3: Move and scale animation
+      else if (phase === 'move') {
+        const progress = Math.min(elapsed / MOVE_DURATION, 1);
+        const eased = easeInOutCubic(progress);
+        
+        // Current position
+        const currentDeltaX = deltaX * eased;
+        const currentDeltaY = deltaY * eased;
+        const currentX = startX + currentDeltaX - INITIAL_SIZE / 2;
+        const currentY = startY + currentDeltaY - INITIAL_SIZE / 2;
+        
+        // Current scale
+        const scaleX = shrinkScale + (finalScaleX - shrinkScale) * eased;
+        const scaleY = shrinkScale + (finalScaleY - shrinkScale) * eased;
+        
+        // Current border radius
+        const finalBorderRadius = isDesktop ? 8 : 6;
+        const currentBorderRadius = 12 + (finalBorderRadius - 12) * eased;
+        
+        imgStyle.transform = `translate(${currentX}px, ${currentY}px) scale(${scaleX}, ${scaleY})`;
+        imgStyle.borderRadius = `${currentBorderRadius}px`;
+        
+        // Start fading near the end
+        if (progress >= 0.85 && phase === 'move') {
+          phase = 'fade';
+          startTime = timestamp;
+        } else if (progress >= 1) {
+          phase = 'complete';
+        }
+      }
+      
+      // Phase 4: Fade out
+      else if (phase === 'fade') {
+        const fadeProgress = Math.min(elapsed / FADE_DURATION, 1);
+        const currentOpacity = 1 - fadeProgress;
+        
+        imgStyle.opacity = `${currentOpacity}`;
+        
+        // Make background visible as we fade
+        profileSection.style.opacity = `${fadeProgress}`;
+        
+        if (fadeProgress >= 1) {
+          phase = 'complete';
+        }
+      }
 
-        // --- Step 5: Complete and Cleanup ---
-        completeTimer = setTimeout(() => {
-          imgStyle.display = 'none';
-          setIsTransitionComplete(true);
-          setIsLoading(false);
-        }, MOVE_DURATION + 100);
+      // Continue animation or complete
+      if (phase !== 'complete') {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      } else {
+        // Cleanup
+        imgStyle.display = 'none';
+        profileSection.style.opacity = '1';
+        setIsTransitionComplete(true);
+        setIsLoading(false);
+        
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      }
+    };
 
-      }, SCALE_DOWN_DURATION + 50);
+    // Easing functions
+    function easeOutCubic(t: number): number {
+      return 1 - Math.pow(1 - t, 3);
+    }
 
-    }, INITIAL_DELAY);
+    function easeInOutCubic(t: number): number {
+      return t < 0.5 
+        ? 4 * t * t * t 
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    // Start animation
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     // Cleanup
     return () => {
-      if (scaleTimer) clearTimeout(scaleTimer);
-      if (moveTimer) clearTimeout(moveTimer);
-      if (fadeTimer) clearTimeout(fadeTimer);
-      if (completeTimer) clearTimeout(completeTimer);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
     };
   }, [isTransitionComplete]);
 
   
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
-        
-        * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-        
-        *::-webkit-scrollbar {
-          display: none !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-        
-        .font-mono {
-          font-family: 'IBM Plex Mono', monospace;
-          letter-spacing: 0.02em;
-        }
-        
-        .font-serif {
-          font-family: 'Crimson Pro', serif;
-        }
-        
-        .font-sans {
-          font-family: 'Inter', sans-serif;
-        }
-        
-        .font-accent {
-          font-family: 'Space Grotesk', sans-serif;
-          letter-spacing: 0.05em;
-        }
-
-        @keyframes arrow-bounce {
-          0%, 100% {
-            transform: translateX(0);
-          }
-          50% {
-            transform: translateX(4px);
-          }
-        }
-
-        @keyframes arrow-float {
-          0%, 100% {
-            transform: translate(0, 0) rotate(0deg);
-          }
-          25% {
-            transform: translate(3px, -3px) rotate(2deg);
-          }
-          50% {
-            transform: translate(0, -5px) rotate(0deg);
-          }
-          75% {
-            transform: translate(-3px, -3px) rotate(-2deg);
-          }
-        }
-
-        @keyframes spin-once {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .arrow-animate:hover svg {
-          animation: arrow-bounce 0.6s ease-in-out infinite;
-        }
-
-        .arrow-contact-animate {
-          animation: arrow-float 3s ease-in-out infinite;
-        }
-
-        .spin-delayed {
-          animation: spin-once 3s ease-in-out 0.5s 1 forwards;
-        }
-
-        .ai-svg-white {
-          filter: brightness(0) invert(1) opacity(0.7);
-        }
-
-        .invisible-scroll {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-          overflow-y: scroll !important;
-        }
-        
-        .invisible-scroll::-webkit-scrollbar {
-          display: none !important;
-          width: 0 !important;
-          height: 0 !important;
-          background: transparent !important;
-        }
-
-        .scroll-fade-bottom {
-          position: relative;
-        }
-
-        .scroll-fade-bottom::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 80px;
-          background: linear-gradient(to bottom, transparent, #0a0a0a 90%);
-          pointer-events: none;
-          z-index: 10;
-        }
-      `}</style>
-
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
@@ -255,7 +230,6 @@ export default function Page() {
         alt="Ahmed Messaad"
         className={`object-cover ${isTransitionComplete ? 'hidden' : 'block'}`}
         style={{
-          transform: `translate(-50%, -50%)`,
           zIndex: 100,
           pointerEvents: 'none',
         }}
