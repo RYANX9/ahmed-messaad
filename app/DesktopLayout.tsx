@@ -1,7 +1,6 @@
 import React from "react";
-// Assuming these are locally available and correctly typed
 import ProjectCard from "./ProjectCard";
-import { Project } from "./data"; 
+import { Project } from "./data";
 
 interface DesktopLayoutProps {
   isLoading: boolean;
@@ -10,11 +9,6 @@ interface DesktopLayoutProps {
   setActiveProject: (id: string | null) => void;
 }
 
-/**
- * Desktop Layout component (hidden on mobile).
- * Renders the full 3-column grid structure with updated light-mode styles 
- * and image replacements for the Hero and About icons.
- */
 export default function DesktopLayout({
   isLoading,
   projects,
@@ -22,34 +16,34 @@ export default function DesktopLayout({
   setActiveProject,
 }: DesktopLayoutProps) {
   return (
-    // Main Container: Only visible on large screens and above (desktop)
-    <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3 text-neutral-900">
+    <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
       <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
         
         {/* HERO SECTION - FIXED */}
         <section
-          className={`bg-white border border-neutral-200 rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
+          className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-500"
           }`}
         >
           <div className="flex items-start justify-end flex-shrink-0">
-            {/* REPLACED INLINE SVG with IMG tag pointing to /ai.svg */}
-            <img 
-              src="/ai.svg" 
-              alt="AI Icon" 
-              className="w-20 h-20 text-neutral-900" 
+            {/* Replaced inline SVG with image from public folder: /ai.svg */}
+            <img
+              src="/ai.svg"
+              alt="AI Icon"
+              // Adjusting size to match the original inline SVG (100x100)
+              className="w-[100px] h-[100px] flex-shrink-0"
             />
           </div>
           
           <div className="flex-shrink-0 mt-auto">
-            <h1 className="text-[18px] xl:text-[22px] 2xl:text-[28px] leading-[1.25] mb-3 xl:mb-4 2xl:mb-5 text-neutral-900">
+            <h1 className="text-[18px] xl:text-[22px] 2xl:text-[28px] leading-[1.25] mb-3 xl:mb-4 2xl:mb-5">
               <span className="font-mono font-bold">Engineering Explainable AI </span>
               <span className="italic font-serif font-light">Systems </span>
               <span className="font-mono font-bold">for Clinical Impact</span>
             </h1>
-            <div className="text-[9px] xl:text-[10px] 2xl:text-[11px] tracking-wider uppercase text-neutral-600 font-accent">
+            <div className="text-[9px] xl:text-[10px] 2xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
               Medical AI Research • Transfer Learning • Computer Vision
             </div>
           </div>
@@ -58,14 +52,13 @@ export default function DesktopLayout({
         {/* PROFILE IMAGE SECTION - TARGET FOR ANIMATION */}
         <section 
           id="profile-grid-section"
-          // Slight contrast background
-          className="bg-neutral-50 border border-neutral-200 rounded-2xl overflow-hidden relative"
+          className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
         />
 
         {/* PROJECTS SECTION */}
         <aside
           id="projects"
-          className={`row-span-2 bg-white border border-neutral-200 rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
+          className={`row-span-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex flex-col overflow-hidden transition-all duration-1000 scroll-fade-bottom ${
             isLoading
               ? "opacity-0 translate-y-[50px]"
               : "opacity-100 translate-y-0 delay-900"
@@ -89,18 +82,19 @@ export default function DesktopLayout({
           {/* ABOUT SECTION - FIXED */}
           <section
             id="about"
-            className={`flex-1 w-1/2 bg-white border border-neutral-200 rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
+            className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-1100"
             }`}
           >
             <div className="flex items-start justify-start flex-shrink-0">
-              {/* REPLACED INLINE SVG with IMG tag pointing to /noun.svg */}
+              {/* Replaced inline SVG with image from public folder: /noun.svg */}
               <img
                 src="/noun.svg"
-                alt="Noun Icon"
-                className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14"
+                alt="About Icon"
+                // Retained sizing classes from original SVG
+                className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 flex-shrink-0"
               />
             </div>
             
@@ -108,7 +102,7 @@ export default function DesktopLayout({
               <h3 className="text-[9px] xl:text-[10px] 2xl:text-[11px] uppercase tracking-wider text-neutral-500 mb-3 xl:mb-4 2xl:mb-5 font-accent">
                 About
               </h3>
-              <p className="text-neutral-700 text-[12px] xl:text-[13px] 2xl:text-[15px] leading-relaxed font-sans">
+              <p className="text-neutral-300 text-[12px] xl:text-[13px] 2xl:text-[15px] leading-relaxed font-sans">
                 Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
                 My work investigates explainable deep learning architectures, transfer learning optimization, 
                 and diagnostic system design for resource-constrained clinical environments.
@@ -122,8 +116,7 @@ export default function DesktopLayout({
             onClick={() =>
               (window.location.href = "mailto:ahmed.messaad@outlook.com")
             }
-            // Light mode hover style applied
-            className={`flex-1 w-1/2 bg-neutral-50 border border-neutral-200 rounded-2xl p-6 2xl:p-8 flex flex-col cursor-pointer relative hover:bg-neutral-100 transition-all duration-1000 overflow-hidden ${
+            className={`flex-1 w-1/2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 overflow-hidden ${
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-1100"
@@ -133,9 +126,8 @@ export default function DesktopLayout({
               <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
                 Start a Conversation<br />
               </div>
-              {/* Arrow SVG adjusted to be dark on light background */}
               <svg
-                className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate text-neutral-900"
+                className="w-6 h-6 xl:w-7 xl:h-7 arrow-contact-animate"
                 viewBox="0 0 32 32"
                 fill="none"
                 stroke="currentColor"
@@ -148,7 +140,7 @@ export default function DesktopLayout({
             <div className="flex-1"></div>
             
             <div className="mt-auto flex-shrink-0"> 
-              <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8 text-neutral-900">
+              <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
                 <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
               
@@ -158,8 +150,7 @@ export default function DesktopLayout({
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  // Text color adjusted for light mode
-                  className="text-neutral-600 hover:text-neutral-900 transition"
+                  className="text-neutral-500 hover:text-white transition"
                 >
                   LINKEDIN
                 </a>
@@ -169,8 +160,7 @@ export default function DesktopLayout({
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  // Text color adjusted for light mode
-                  className="text-neutral-600 hover:text-neutral-900 transition"
+                  className="text-neutral-500 hover:text-white transition"
                 >
                   GITHUB 
                 </a>
@@ -178,8 +168,7 @@ export default function DesktopLayout({
                 <a 
                   href="mailto:ahmed.messaad@outlook.com"
                   onClick={(e) => e.stopPropagation()}
-                  // Text color adjusted for light mode
-                  className="text-neutral-600 hover:text-neutral-900 transition"
+                  className="text-neutral-500 hover:text-white transition"
                 >
                   EMAIL
                 </a>
