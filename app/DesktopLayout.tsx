@@ -1,6 +1,6 @@
 import React from "react";
-import ProjectCard from "./ProjectCard";
-import { Project } from "./data";
+import ProjectCard from "./ProjectCard"; // Assuming ProjectCard is in the same directory
+import { Project } from "./data"; // Assuming 'Project' type is exported from data
 
 interface DesktopLayoutProps {
   isLoading: boolean;
@@ -28,12 +28,13 @@ export default function DesktopLayout({
           }`}
         >
           <div className="flex items-start justify-end flex-shrink-0">
-            {/* Replaced inline SVG with image from public folder: /ai.svg */}
+            {/* SVG REPLACED WITH IMAGE: /ai.svg */}
             <img
               src="/ai.svg"
-              alt="AI Icon"
-              // Adjusting size to match the original inline SVG (100x100)
-              className="w-[100px] h-[100px] flex-shrink-0"
+              alt="AI icon"
+              // `invert` turns black to white (or almost white on a black background)
+              // `scale-80` makes it 80% smaller as requested
+              className="w-[100px] h-[100px] invert scale-80 transition-all duration-500"
             />
           </div>
           
@@ -48,13 +49,13 @@ export default function DesktopLayout({
             </div>
           </div>
         </section>
-
+        
         {/* PROFILE IMAGE SECTION - TARGET FOR ANIMATION */}
-        <section 
+        <section
           id="profile-grid-section"
           className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
         />
-
+        
         {/* PROJECTS SECTION */}
         <aside
           id="projects"
@@ -89,12 +90,12 @@ export default function DesktopLayout({
             }`}
           >
             <div className="flex items-start justify-start flex-shrink-0">
-              {/* Replaced inline SVG with image from public folder: /noun.svg */}
+              {/* SVG REPLACED WITH IMAGE: /noun.svg */}
               <img
                 src="/noun.svg"
-                alt="About Icon"
-                // Retained sizing classes from original SVG
-                className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 flex-shrink-0"
+                alt="About icon"
+                // `invert` turns black to white (or almost white on a black background)
+                className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 invert"
               />
             </div>
             
@@ -103,13 +104,13 @@ export default function DesktopLayout({
                 About
               </h3>
               <p className="text-neutral-300 text-[12px] xl:text-[13px] 2xl:text-[15px] leading-relaxed font-sans">
-                Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
-                My work investigates explainable deep learning architectures, transfer learning optimization, 
+                Developing clinically-deployable AI systems that bridge academic research and healthcare impact.
+                My work investigates explainable deep learning architectures, transfer learning optimization,
                 and diagnostic system design for resource-constrained clinical environments.
               </p>
             </div>
           </section>
-
+          
           {/* CONTACT SECTION */}
           <section
             id="contact-section"
@@ -139,13 +140,13 @@ export default function DesktopLayout({
             
             <div className="flex-1"></div>
             
-            <div className="mt-auto flex-shrink-0"> 
+            <div className="mt-auto flex-shrink-0">
               <h2 className="text-[48px] xl:text-[56px] font-bold leading-none mb-6 xl:mb-8">
                 <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
               
               <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
-                <a 
+                <a
                   href="https://linkedin.com/in/ahmedmessaad"
                   target="_blank"
                   rel="noreferrer"
@@ -155,17 +156,17 @@ export default function DesktopLayout({
                   LINKEDIN
                 </a>
                 
-                <a 
+                <a
                   href="https://github.com/RYANX9"
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="text-neutral-500 hover:text-white transition"
                 >
-                  GITHUB 
+                  GITHUB
                 </a>
                 
-                <a 
+                <a
                   href="mailto:ahmed.messaad@outlook.com"
                   onClick={(e) => e.stopPropagation()}
                   className="text-neutral-500 hover:text-white transition"
