@@ -329,7 +329,7 @@ export default function Page() {
                 <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
                   Engineering Explainable AI
                 </span>
-                <span className="italic font-serif font-light text-[20px] xl:text-[26px]">
+                <span className="italic font-serif font-light text-[24px] xl:text-[26px]">
                   Systems
                 </span>
                 <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
