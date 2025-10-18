@@ -246,10 +246,6 @@ export default function Page() {
         }`}
       />
 
-      {/* **CRITICAL CHANGE:** The temporary <img> with id="animated-profile" has been REMOVED. 
-        The animation is now handled directly by the section elements below.
-      */}
-
       <header
         className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
@@ -303,22 +299,12 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end flex-shrink-0">
-              <svg
-                className="w-12 h-12 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="0.5"
-              >
-                <circle cx="50" cy="50" r="40" />
-                <circle cx="50" cy="50" r="30" />
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="10" />
-                <line x1="50" y1="10" x2="50" y2="90" />
-                <line x1="10" y1="50" x2="90" y2="50" />
-                <line x1="20" y1="20" x2="80" y2="80" />
-                <line x1="80" y1="20" x2="20" y2="80" />
-              </svg>
+              {/* **REPLACED INLINE SVG with /ai.svg** */}
+              <img
+                src="/ai.svg"
+                alt="AI System Icon"
+                className="w-12 h-12 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 filter brightness-0 invert scale-[0.8] text-neutral-700"
+              />
             </div>
             
             <div className="flex-shrink-0 mt-auto">
@@ -333,16 +319,12 @@ export default function Page() {
             </div>
           </section>
 
-          {/* **CRITICAL CHANGE:** The section is now the animated element.
-            It starts with opacity 1, but is fixed and centered, then it animates 
-            to its grid-defined position, opacity 1, and scale 1.
-          */}
           <section 
             id="profile-grid-section"
             className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
             style={
                 !isTransitionComplete 
-                ? { opacity: 0 } // Start hidden until the animation effect mounts
+                ? { opacity: 0 }
                 : {}
             }
           />
@@ -380,16 +362,12 @@ export default function Page() {
               }`}
             >
               <div className="flex items-start justify-start flex-shrink-0">
-                <svg
-                  className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 text-neutral-700"
-                  viewBox="0 0 100 100"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                >
-                  <circle cx="50" cy="50" r="20" />
-                  <circle cx="50" cy="50" r="5" />
-                </svg>
+                {/* **REPLACED INLINE SVG with /noun.svg** */}
+                <img
+                  src="/noun.svg"
+                  alt="Abstract Icon"
+                  className="w-10 h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 filter brightness-0 invert text-neutral-700"
+                />
               </div>
               
               <div className="flex-shrink-0 mt-auto">
@@ -488,22 +466,12 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end">
-              <svg
-                className="w-14 h-14 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="0.5"
-              >
-                <circle cx="50" cy="50" r="40" />
-                <circle cx="50" cy="50" r="30" />
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="10" />
-                <line x1="50" y1="10" x2="50" y2="90" />
-                <line x1="10" y1="50" x2="90" y2="50" />
-                <line x1="20" y1="20" x2="80" y2="80" />
-                <line x1="80" y1="20" x2="20" y2="80" />
-              </svg>
+              {/* **REPLACED INLINE SVG with /ai.svg (Mobile)** */}
+              <img
+                src="/ai.svg"
+                alt="AI System Icon"
+                className="w-14 h-14 filter brightness-0 invert scale-[0.8] text-neutral-700"
+              />
             </div>
             
             <div className="mt-auto">
@@ -518,14 +486,12 @@ export default function Page() {
             </div>
           </section>
 
-          {/* **CRITICAL CHANGE:** The mobile section is now the animated element.
-          */}
           <section
             id="profile-mobile-section"
             className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] relative"
             style={
                 !isTransitionComplete 
-                ? { opacity: 0 } // Start hidden until the animation effect mounts
+                ? { opacity: 0 }
                 : {}
             }
           />
@@ -538,16 +504,12 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-start">
-              <svg
-                className="w-10 h-10 text-neutral-700"
-                viewBox="0 0 100 100"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-              >
-                <circle cx="50" cy="50" r="20" />
-                <circle cx="50" cy="50" r="5" />
-              </svg>
+              {/* **REPLACED INLINE SVG with /noun.svg (Mobile)** */}
+              <img
+                src="/noun.svg"
+                alt="Abstract Icon"
+                className="w-10 h-10 filter brightness-0 invert text-neutral-700"
+              />
             </div>
             
             <div className="mt-auto">
