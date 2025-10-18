@@ -105,7 +105,7 @@ export default function Page() {
       
       // New scale: initialScale * TARGET_SCALE (0.8)
       sectionStyle.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${initialScale * TARGET_SCALE})`;
-      sectionStyle.borderRadius = '8px'; // Adjust border radius for the scale down
+      sectionStyle.borderRadius = '10px'; // Adjust border radius for the scale down
 
       // --- Step 3: Wait for scale down, then start the main move ---
       moveTransitionStart = setTimeout(() => {
@@ -115,7 +115,7 @@ export default function Page() {
         
         sectionStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
         sectionStyle.transform = `none`; // Move to final grid position and scale (scale: 1)
-        sectionStyle.borderRadius = isDesktop ? '8px' : '6px'; // Final border radius
+        sectionStyle.borderRadius = isDesktop ? '10px' : '10px'; // Final border radius
         
         // Set opacity to 0 shortly before the end
         setTimeout(() => {
