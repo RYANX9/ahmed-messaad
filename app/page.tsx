@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { projects } from "./data"; // Assuming 'projects' and 'Project' are exported from data
+import { projects } from "./data";
 import DesktopLayout from "./DesktopLayout";
 import MobileLayout from "./MobileLayout";
 
 // Import the external CSS file
-import './animations.css'; 
+import './animations.css';
 
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("airm");
@@ -48,6 +48,8 @@ export default function Page() {
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const INITIAL_SIZE = isDesktop ? 240 : 180;
+    // Target final border radius values based on your Layout components' Tailwind classes
+    const FINAL_BORDER_RADIUS = isDesktop ? '16px' : '8px'; // Assuming Desktop is 'rounded-2xl' (16px) and Mobile is 'rounded-xl' (8px)
 
     const imgStyle = animatedImg.style;
 
@@ -60,25 +62,32 @@ export default function Page() {
     imgStyle.left = '50vw';
     imgStyle.width = `${INITIAL_SIZE}px`;
     imgStyle.height = `${INITIAL_SIZE}px`;
-    imgStyle.borderRadius = '16px';
+    imgStyle.borderRadius = '16px'; // Initial larger radius
     imgStyle.zIndex = '100';
     imgStyle.opacity = '1';
     imgStyle.transform = `translate(-50%, -50%) scale(1)`; // Initial centering transform
+    imgStyle.objectFit = 'cover'; // Ensure the image content itself is covered
     animatedImg.src = '/ahmed.jpg';
     imgStyle.display = 'block';
 
     // --- Step 2: Scale Down Animation ---
     const initialDelayTimer = setTimeout(() => {
-      const TARGET_SCALE = 0.8;
-      // Apply scale down transition and new transform
+      // No need for an intermediate scale down (0.8) and radius change if the goal is a direct match to the target.
+      // We can skip the intermediate step or simplify it if desired.
+      // For a simpler, more direct animation, we can go straight to the move.
+      // If you like the pause/pre-scale, keep this:
+      const TARGET_SCALE = 1.0; // Keeping scale at 1.0 for simplicity, or 0.8 if you want the "zoom-out" effect
+      
       imgStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
       imgStyle.transform = `translate(-50%, -50%) scale(${TARGET_SCALE})`;
-      imgStyle.borderRadius = '8px';
+      imgStyle.borderRadius = '16px'; // Maintain large radius if moving directly
+      
 
       // --- Step 3: Wait for scale down, then start the main move ---
+      // We use a slight delay to ensure the initial transition is registered
       moveTransitionStart = setTimeout(() => {
         const rect = profileSection.getBoundingClientRect();
-
+        
         // 1. Calculate the required translation (Move image center from screen center to target center)
         const screenCenterX = window.innerWidth / 2;
         const screenCenterY = window.innerHeight / 2;
@@ -88,17 +97,21 @@ export default function Page() {
         const moveX = targetCenterX - screenCenterX;
         const moveY = targetCenterY - screenCenterY;
 
-        // 2. Calculate the final scale factor 
+        // 2. Calculate the final scale factor to match the target width/height
+        // The image scales from its INITIAL_SIZE to the target width (rect.width)
         const finalScale = rect.width / INITIAL_SIZE;
 
         // 3. Set the long transition on transform and opacity only
         imgStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
 
-        // 4. Set the final transform (combines initial centering, move, and final scale)
+        // 4. Set the final transform:
+        // - Starts from the initial center position (implied by 'fixed' positioning and the original translate(-50%,-50%)).
+        // - Moves by (moveX, moveY) to the target center.
+        // - Scales to the final size.
         imgStyle.transform = `translate3d(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px), 0) scale(${finalScale})`;
 
-        // 5. Update border radius for the final shape
-        imgStyle.borderRadius = isDesktop ? '8px' : '6px';
+        // 5. Apply the final border radius from the target element
+        imgStyle.borderRadius = FINAL_BORDER_RADIUS;
         
         // Set opacity to 0 shortly before the end
         setTimeout(() => {
