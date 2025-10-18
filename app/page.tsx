@@ -33,9 +33,12 @@ export default function Page() {
         profileSection.style.backgroundPosition = 'center';
         profileSection.style.opacity = '1';
         
-        // **NEW**: Ensure the final, static position/transform is set.
+        // Ensure final, static position/transform is set.
         profileSection.style.position = 'unset'; 
         profileSection.style.transform = 'none';
+        // FIX: Also remove hardcoded width/height if we are skipping animation
+        profileSection.style.width = '';
+        profileSection.style.height = '';
         
         setIsTransitionComplete(true);
       }
@@ -121,9 +124,14 @@ export default function Page() {
 
         // Final cleanup after the main transition
         completeDelay = setTimeout(() => {
-          // Remove fixed positioning and zIndex to let it sit in the grid normally
+          // Remove fixed positioning and zIndex
           sectionStyle.position = 'unset';
           sectionStyle.zIndex = 'auto';
+          
+          // **THE FIX**: Clear the hardcoded dimensions!
+          sectionStyle.width = ''; 
+          sectionStyle.height = '';
+
           sectionStyle.opacity = '1'; // Make the static element visible again
           
           setIsTransitionComplete(true);
