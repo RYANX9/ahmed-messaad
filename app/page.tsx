@@ -325,10 +325,16 @@ export default function Page() {
             </div>
             
             <div className="flex-shrink-0 mt-auto">
-              <h1 className="text-[18px] xl:text-[22px] 2xl:text-[28px] leading-[1.25] mb-3 xl:mb-4 2xl:mb-5">
-                <span className="font-mono font-bold">Engineering Explainable AI </span>
-                <span className="italic font-serif font-light">Systems </span>
-                <span className="font-mono font-bold">for Clinical Impact</span>
+              <h1 className="flex flex-wrap items-baseline gap-2 leading-[1.25]">
+                <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
+                  Engineering Explainable AI
+                </span>
+                <span className="italic font-serif font-light text-[20px] xl:text-[26px]">
+                  Systems
+                </span>
+                <span className="font-mono font-bold text-[18px] xl:text-[22px] 2xl:text-[28px]">
+                  for Clinical Impact
+                </span>
               </h1>
               <div className="text-[9px] xl:text-[10px] 2xl:text-[11px] tracking-wider uppercase text-neutral-400 font-accent">
                 Medical AI Research • Transfer Learning • Computer Vision
