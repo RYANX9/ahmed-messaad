@@ -423,7 +423,7 @@ export default function Page() {
                   <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
                 </h2>
                 
-                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-3">
+                <div className="flex justify-between w-full text-[9px] xl:text-[10px] tracking-wider uppercase font-accent mb-2">
                   <a 
                     href="https://linkedin.com/in/ahmedmessaad"
                     target="_blank"
@@ -454,7 +454,7 @@ export default function Page() {
                 </div>
                 
                 <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono">
-                  Designed & Built by Ahmed Messaad
+                  Developed by Ahmed Messaad
                 </div>
               </div>
             </section>
@@ -614,7 +614,7 @@ export default function Page() {
             </div>
             
             <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
-              Designed & Built by Ahmed Messaad
+              Developed by Ahmed Messaad
             </div>
           </section>
         </div>
