@@ -16,6 +16,18 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "clinrl",
+    name: "ClinRL: Safe Treatment Optimization with DRL",
+    context: "Reinforcement Learning for Clinical Decision Optimization",
+    year: "2025",
+    description:
+      "Deep reinforcement learning framework (PPO, A2C, DQN) optimizing treatment sequencing and clinical safety. Implemented reward normalization, callback evaluation, and policy filtering achieving +107% reward improvement and >94% post-filter safety. Delivered automated reporting and visualization modules with JSON export for clinical auditability.",
+    tech: ["PyTorch", "Stable-Baselines3", "Matplotlib", "Pandas"],
+    link: "https://www.kaggle.com/code/ahmedmessaad/clinrl-safe-treatment-optimization-with-drl",
+    linkText: "View Report",
+    image: "/clinrl.jpg",
+  },
+  {
     id: "airm",
     name: "AIRM Brain Tumor System",
     context: "Clinical AI Research",
