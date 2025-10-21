@@ -25,7 +25,7 @@ export const projects: Project[] = [
     tech: ["PyTorch", "Stable-Baselines3", "Matplotlib", "Pandas"],
     link: "https://www.kaggle.com/code/ahmedmessaad/clinrl-safe-treatment-optimization-with-drl",
     linkText: "View Report",
-    image: "/clinrl.jpg",
+    image: "/clinrl.jpeg",
   },
   {
     id: "airm",
