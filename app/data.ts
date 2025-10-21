@@ -18,7 +18,7 @@ export const projects: Project[] = [
   {
     id: "clinrl",
     name: "ClinRL: Safe Treatment Optimization with DRL",
-    context: "Reinforcement Learning for Clinical Decision Optimization",
+    context: "RL for Clinical Decision Optimization",
     year: "2025",
     description:
       "Reinforcement learning framework (PPO, A2C, DQN) for treatment optimization. Achieved +107% reward gain and >94% clinical safety using reward normalization, evaluation callbacks, and policy filtering.",
