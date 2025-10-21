@@ -7,7 +7,7 @@ import ProjectCard from "./ProjectCard";
 
 
 export default function Page() {
-  const [activeProject, setActiveProject] = useState<string | null>("airm");
+  const [activeProject, setActiveProject] = useState<string | null>("clinrl");
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitionComplete, setIsTransitionComplete] = useState(false);
 
