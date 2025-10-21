@@ -21,7 +21,7 @@ export const projects: Project[] = [
     context: "Reinforcement Learning for Clinical Decision Optimization",
     year: "2025",
     description:
-      "Deep reinforcement learning framework (PPO, A2C, DQN) optimizing treatment sequencing and clinical safety. Implemented reward normalization, callback evaluation, and policy filtering achieving +107% reward improvement and >94% post-filter safety. Delivered automated reporting and visualization modules with JSON export for clinical auditability.",
+      "Reinforcement learning framework (PPO, A2C, DQN) for treatment optimization. Achieved +107% reward gain and >94% clinical safety using reward normalization, evaluation callbacks, and policy filtering.",
     tech: ["PyTorch", "Stable-Baselines3", "Matplotlib", "Pandas"],
     link: "https://www.kaggle.com/code/ahmedmessaad/clinrl-safe-treatment-optimization-with-drl",
     linkText: "notebook",
