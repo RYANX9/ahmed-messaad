@@ -120,7 +120,7 @@ export default function ProjectCard({
               src={p.image}
               alt={p.name}
               fill
-              quality={100}
+              unoptimized
               style={{ objectFit: "cover" }}
               sizes={isMobile ? "100vw" : "(min-width: 1024px) 20vw, 100vw"}
             />
