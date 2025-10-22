@@ -16,15 +16,15 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "clinrl",
-    name: "ClinRL: Safe Treatment Optimization with DRL",
-    context: "Clinical Decision Automation",
+    id: "treatment-drl",
+    name: "Medical Treatment DRL",
+    context: "Sequential Decision-Making Research",
     year: "2025",
     description:
-      "Reinforcement learning framework (PPO, A2C, DQN) for treatment optimization. Achieved +107% reward gain and >94% clinical safety using reward normalization, evaluation callbacks, and policy filtering.",
-    tech: ["Stable-Baselines3", "Gym", "NumPy", "Pandas"],
-    link: "https://www.kaggle.com/code/ahmedmessaad/clinrl-safe-treatment-optimization-with-drl",
-    linkText: "notebook",
+      "ICU treatment timing system trained on MIMIC-III data. A2C agent achieved 99.5% clinical appropriateness with +76–145 reward improvement over baselines. Implemented rule-based safety filter boosting PPO/DQN appropriateness by 40 points. Custom 26D Gym environment with temporal lab trends and treatment effect simulation.",
+    tech: ["Stable-Baselines3", "Gym", "NumPy", "Pandas", "MIMIC-III"],
+    link: "https://github.com/RYANX9/medical-treatment-drl/",
+    linkText: "View Code",
     image: "/clinrl.jpeg",
   },
   {
