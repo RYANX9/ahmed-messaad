@@ -374,8 +374,7 @@ export default function Page() {
                 <img
                   src="/noun.svg"
                   alt="Abstract Icon"
-                  className="w-8 h-8 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14 filter brightness-0 invert text-neutral-700"
-
+                  className="w-8 h-8 xl:w-9 xl:h-9 2xl:w-10 2xl:h-10 filter brightness-0 invert text-neutral-700"
                 />
               </div>
               
