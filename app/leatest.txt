@@ -463,7 +463,7 @@ export default function Page() {
       </div>
 
       {/* MOBILE LAYOUT */}
-      <div className="lg:hidden pt-18 p-3">
+      <div className="md:hidden pt-18 p-3">
         <div className="flex flex-col gap-3">
           
           <section
