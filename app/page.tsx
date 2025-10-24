@@ -260,11 +260,11 @@ export default function Page() {
         } lg:grid lg:grid-cols-3`}
       >
         <div className="lg:col-span-1 lg:hidden font-mono text-sm font-bold tracking-wider">
-          AHMED MESSAAD • AI RESEARCHER
+          AHMED MESSAAD
         </div>
         
         <div className="hidden lg:block lg:col-span-1 lg:col-start-2 text-center font-mono text-xl font-bold tracking-wider">
-          AHMED MESSAAD • AI RESEARCHER
+          AHMED MESSAAD
         </div>
         
         <div className="flex justify-end items-center lg:col-span-1">
