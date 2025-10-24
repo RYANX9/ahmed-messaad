@@ -59,8 +59,8 @@ export const projects: Project[] = [
     description:
       "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers. Systematic ablation study investigating optimal temporal convolution strategies for healthcare prediction tasks.",
     tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
-    link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
-    linkText: "View Project",
+    link: "https://github.com/RYANX9/healthcare-cost-prediction",
+    linkText: "View Code",
     image: "/healthcarecost.png",
   },
   {
