@@ -478,7 +478,7 @@ export default function Page() {
       
       {/* START ISOLATED EDIT 4: Insert the new Tablet Layout JSX */}
       {/* TABLET LAYOUT */}      
-      <div className="hidden md:block lg:hidden mt-[64px] p-3 transition-all duration-500">        
+      <div className="hidden md:block lg:hidden mt-[64px] p-3">        
         <div className="flex flex-col gap-3 responsive-flex">          
           {/* HERO + PROFILE */}          
           <div className="flex flex-row gap-3 responsive-flex">            
