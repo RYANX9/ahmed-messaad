@@ -17,11 +17,21 @@ export default function Page() {
 
     // Determine environment and target elements
     const isDesktop = window.innerWidth >= 1024;
+    // START ISOLATED EDIT 1: Update target section logic for Tablet Layout
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
     
     // **CRITICAL CHANGE**: The animated element is now the SECTION itself.
     // The temporary <img> is completely removed from the logic.
-    const targetSectionId = isDesktop ? 'profile-grid-section' : 'profile-mobile-section';
+    let targetSectionId;
+    if (isDesktop) {
+        targetSectionId = 'profile-grid-section';
+    } else if (isTablet) {
+        targetSectionId = 'profile-tablet-section';
+    } else {
+        targetSectionId = 'profile-mobile-section';
+    }
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
+    // END ISOLATED EDIT 1
 
     // Cleanup/Completion Logic
     if (isTransitionComplete || !profileSection) {
@@ -51,7 +61,9 @@ export default function Page() {
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
-    const INITIAL_SIZE = isDesktop ? 240 : 180;
+    // START ISOLATED EDIT 2: Adjust initial size for Tablet/Mobile
+    const INITIAL_SIZE = isDesktop ? 240 : isTablet ? 200 : 180;
+    // END ISOLATED EDIT 2
     const TARGET_SCALE = 0.8;
     
     const sectionStyle = profileSection.style;
@@ -115,7 +127,9 @@ export default function Page() {
         
         sectionStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
         sectionStyle.transform = `none`; // Move to final grid position and scale (scale: 1)
-        sectionStyle.borderRadius = isDesktop ? '16px' : '16px'; // Final border radius
+        // START ISOLATED EDIT 3: Adjust final border radius
+        sectionStyle.borderRadius = isDesktop || isTablet ? '16px' : '16px'; // Final border radius
+        // END ISOLATED EDIT 3
         
         // Set opacity to 0 shortly before the end
         setTimeout(() => {
@@ -461,6 +475,143 @@ export default function Page() {
           </div>
         </div>
       </div>
+      
+      {/* START ISOLATED EDIT 4: Insert the new Tablet Layout JSX */}
+      {/* TABLET LAYOUT */}      
+      <div className="hidden md:block lg:hidden mt-[64px] p-3 transition-all duration-500">        
+        <div className="flex flex-col gap-3 responsive-flex">          
+          {/* HERO + PROFILE */}          
+          <div className="flex flex-row gap-3 responsive-flex">            
+            <section              
+              className={`flex-[0.6] bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-500"              }`}            
+            >              
+              <div className="flex items-start justify-end">                
+                <img                  
+                  src="/ai.svg"                  
+                  alt="AI System Icon"                  
+                  className="w-12 h-12 filter brightness-0 invert transition-all duration-300"                
+                />              
+              </div>              
+              <div className="mt-auto">                
+                <h1 className="text-[22px] leading-[1.3] mb-3 responsive-text responsive-spacing">                  
+                  <span className="font-mono font-bold">Engineering Explainable AI</span>{" "}                  
+                  <span className="italic font-serif font-light text-[26px]">Systems</span>{" "}                  
+                  <span className="font-mono font-bold">for Clinical Impact</span>                
+                </h1>                
+                <div className="text-[10px] tracking-wider uppercase text-neutral-400 font-accent responsive-text">                  
+                  Medical AI Research • Transfer Learning • Computer Vision                
+                </div>              
+              </div>            
+            </section>            
+            <section              
+              id="profile-tablet-section"              
+              className="flex-[0.4] bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative responsive-section"
+              style={
+                  !isTransitionComplete 
+                  ? { opacity: 0 }
+                  : {}
+              }
+            />          
+          </div>          
+          {/* ABOUT + CONTACT */}          
+          <div className="flex flex-row gap-3 responsive-flex">            
+            <section              
+              id="about-tablet"              
+              className={`flex-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-900"              }`}            
+            >              
+              <div className="flex items-start justify-start">                
+                <img                  
+                  src="/noun.svg"                  
+                  alt="Abstract Icon"                  
+                  className="w-8 h-8 filter brightness-0 invert transition-all duration-300"                
+                />              
+              </div>              
+              <div className="mt-auto">                
+                <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent responsive-text responsive-spacing">                  
+                  About                
+                </h3>                
+                <p className="text-neutral-300 text-[13px] leading-relaxed font-sans responsive-text">                  
+                  Developing clinically-deployable AI systems that bridge academic research and healthcare impact.                   My work investigates explainable deep learning architectures, transfer learning optimization,                   and diagnostic system design for resource-constrained clinical environments.                
+                </p>              
+              </div>            
+            </section>            
+            <section              
+              id="contact-tablet"              
+              onClick={() =>                (window.location.href = "mailto:ahmed.messaad@outlook.com")              }              
+              className={`flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-1100"              }`}            
+            >              
+              <div className="flex justify-between items-start">                
+                <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent responsive-text">                  
+                  Start a Conversation<br />                
+                </div>                
+                <svg                  
+                  className="w-6 h-6 arrow-contact-animate transition-all duration-300"                  
+                  viewBox="0 0 32 32"                  
+                  fill="none"                  
+                  stroke="currentColor"                  
+                  strokeWidth="2"                
+                >                  
+                  <path d="M8 24L24 8M24 8H8M24 8V24" />                
+                </svg>              
+              </div>              
+              <div className="flex-1" />              
+              <div className="mt-auto">                
+                <h2 className="text-[40px] font-bold leading-none mb-4 responsive-text responsive-spacing">                  
+                  <span className="font-mono">Contact</span>&thinsp;                  
+                  <span className="italic font-serif font-light">me</span>                
+                </h2>                
+                <div className="flex justify-between text-[9px] tracking-wider uppercase font-accent mb-4 responsive-text responsive-spacing">                  
+                  <a                    
+                    href="https://linkedin.com/in/ahmedmessaad"                    
+                    target="_blank"                    
+                    rel="noreferrer"                    
+                    onClick={(e) => e.stopPropagation()}                    
+                    className="text-neutral-500 hover:text-white transition-colors duration-300"                  
+                  >                    
+                    LINKEDIN                  
+                  </a>                  
+                  <a                    
+                    href="https://github.com/RYANX9"                    
+                    target="_blank"                    
+                    rel="noreferrer"                    
+                    onClick={(e) => e.stopPropagation()}                    
+                    className="text-neutral-500 hover:text-white transition-colors duration-300"                  
+                  >                    
+                    GITHUB                  
+                  </a>                  
+                  <a                    
+                    href="mailto:ahmed.messaad@outlook.com"                    
+                    onClick={(e) => e.stopPropagation()}                    
+                    className="text-neutral-500 hover:text-white transition-colors duration-300"                  
+                  >                    
+                    EMAIL                  
+                  </a>                
+                </div>                
+                <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono responsive-text">                  
+                  Developed by Ahmed Messaad                
+                </div>              
+              </div>            
+            </section>          
+          </div>          
+          {/* PROJECTS */}          
+          <aside            
+            id="projects-tablet"            
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 responsive-section ${              isLoading                ? "opacity-0 translate-y-[30px]"                : "opacity-100 translate-y-0 delay-1300"            }`}          
+          >            
+            {projects.map((p, idx) => (              
+              <ProjectCard                
+                key={p.id}                
+                project={p}                
+                index={idx}                
+                activeProject={activeProject}                
+                onToggle={setActiveProject} 
+                isMobile={true}
+              />            
+            ))}          
+          </aside>        
+        </div>      
+      </div>
+      {/* END ISOLATED EDIT 4 */}
 
       {/* MOBILE LAYOUT */}
       <div className="lg:hidden pt-18 p-3">
