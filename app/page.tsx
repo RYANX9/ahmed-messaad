@@ -254,8 +254,7 @@ export default function Page() {
         <a  
             href="/ahmed_messad_cv.pdf"
             download
-            className="flex items-center text-white transition-colors duration-200"
-          >
+            className="flex items-center text-white transition-colors duration-200">
             <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 lg:px-4 py-1.5 lg:py-2 text-[12px] lg:text-[14px] font-mono tracking-wide hover:bg-[#252525] transition">
               <span className="hidden lg:inline">DOWNLOAD CV</span>
               <span className="lg:hidden inline">CV</span>
@@ -286,8 +285,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-500"
-            }`}
-          >
+            }`}>
             <div className="flex items-start justify-end flex-shrink-0">
               <img
                 src="/ai.svg"
@@ -319,8 +317,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[50px]"
                 : "opacity-100 translate-y-0 delay-900"
-            }`}
-          >
+            }`}>
             <div className="flex-1 overflow-y-auto invisible-scroll">
               {projects.map((p, idx) => (
                 <ProjectCard
@@ -342,8 +339,7 @@ export default function Page() {
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
-              }`}
-            >
+              }`}>
               <div className="flex items-start justify-start flex-shrink-0">
                 <img
                   src="/noun.svg"
@@ -373,8 +369,7 @@ export default function Page() {
                 isLoading
                   ? "opacity-0 translate-y-[50px]"
                   : "opacity-100 translate-y-0 delay-1100"
-              }`}
-            >
+              }`}>
               <div className="flex justify-between items-start flex-shrink-0">
                 <div className="text-[9px] xl:text-[10px] tracking-wider uppercase text-neutral-500 font-accent">
                   Start a Conversation<br />
@@ -445,8 +440,7 @@ export default function Page() {
                 isLoading
                   ? "opacity-0 translate-y-[30px]"
                   : "opacity-100 translate-y-0 delay-500"
-              }`}            
-            >              
+              }`}>            
               <div className="flex items-start justify-end">                
                 <img                  
                   src="/ai.svg"                  
@@ -477,8 +471,7 @@ export default function Page() {
                 isLoading
                   ? "opacity-0 translate-y-[30px]"
                   : "opacity-100 translate-y-0 delay-900"
-              }`}            
-            >              
+              }`}>            
               <div className="flex items-start justify-start">                
                 <img                  
                   src="/noun.svg"                  
@@ -506,8 +499,7 @@ export default function Page() {
                 isLoading
                   ? "opacity-0 translate-y-[30px]"
                   : "opacity-100 translate-y-0 delay-1100"
-              }`}            
-            >              
+              }`}>            
               <div className="flex justify-between items-start">                
                 <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent responsive-text">                  
                   Start a Conversation<br />                
@@ -567,8 +559,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-1300"
-            }`}          
-          >            
+            }`}>          
             {projects.map((p, idx) => (              
               <ProjectCard                
                 key={p.id}                
@@ -592,8 +583,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-500"
-            }`}
-          >
+            }`}>
             <div className="flex items-start justify-end">
               <img
                 src="/ai.svg"
@@ -624,8 +614,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-900"
-            }`}
-          >
+            }`}>
             <div className="flex items-start justify-start">
               <img
                 src="/noun.svg"
@@ -652,8 +641,7 @@ export default function Page() {
               isLoading
                 ? "opacity-0 translate-y-[30px]"
                 : "opacity-100 translate-y-0 delay-1100"
-            }`}
-          >
+            }`}>
             {projects.map((p, idx) => (
               <ProjectCard
                 key={p.id}
