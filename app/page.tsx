@@ -17,11 +17,9 @@ export default function Page() {
 
     // Determine environment and target elements
     const isDesktop = window.innerWidth >= 1024;
-    // START ISOLATED EDIT 1: Update target section logic for Tablet Layout
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
     
-    // **CRITICAL CHANGE**: The animated element is now the SECTION itself.
-    // The temporary <img> is completely removed from the logic.
+    // The animated element is now the SECTION itself.
     let targetSectionId;
     if (isDesktop) {
         targetSectionId = 'profile-grid-section';
@@ -31,7 +29,6 @@ export default function Page() {
         targetSectionId = 'profile-mobile-section';
     }
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
-    // END ISOLATED EDIT 1
 
     // Cleanup/Completion Logic
     if (isTransitionComplete || !profileSection) {
@@ -46,7 +43,6 @@ export default function Page() {
         // Ensure final, static position/transform is set.
         profileSection.style.position = 'unset'; 
         profileSection.style.transform = 'none';
-        // FIX: Also remove hardcoded width/height if we are skipping animation
         profileSection.style.width = '';
         profileSection.style.height = '';
         
@@ -61,9 +57,7 @@ export default function Page() {
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
     const MOVE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
-    // START ISOLATED EDIT 2: Adjust initial size for Tablet/Mobile
     const INITIAL_SIZE = isDesktop ? 240 : isTablet ? 200 : 180;
-    // END ISOLATED EDIT 2
     const TARGET_SCALE = 0.8;
     
     const sectionStyle = profileSection.style;
@@ -73,68 +67,52 @@ export default function Page() {
     sectionStyle.backgroundSize = 'cover';
     sectionStyle.backgroundPosition = 'center';
 
-    // FIX: Initialize timers to null for cleanup
+    // Initialize timers to null for cleanup
     let moveTransitionStart: NodeJS.Timeout | null = null;
     let completeDelay: NodeJS.Timeout | null = null;
 
     // --- Step 1: Initial Fixed State (Centered & Large) ---
-    // Calculate the target element's final bounding box.
     const rect = profileSection.getBoundingClientRect();
     
-    // Calculate the required translation (Move target center to screen center)
     const screenCenterX = window.innerWidth / 2;
     const screenCenterY = window.innerHeight / 2;
     const targetCenterX = rect.left + rect.width / 2;
     const targetCenterY = rect.top + rect.height / 2;
     
-    // Calculate the movement vector from the target's FINAL position to the initial CENTER position.
-    // This is the **reverse** of the movement later.
     const moveX = screenCenterX - targetCenterX;
     const moveY = screenCenterY - targetCenterY;
     
-    // Calculate the scale required to match the initial size (INITIAL_SIZE) with the final size (rect.width)
     const initialScale = INITIAL_SIZE / rect.width;
 
     // Set the initial, fixed, centered, and scaled-up state.
-    // **IMPORTANT**: Position MUST be set to fixed to lift it out of the grid flow.
     sectionStyle.position = 'fixed'; 
     sectionStyle.top = `${rect.top}px`;
     sectionStyle.left = `${rect.left}px`;
     sectionStyle.width = `${rect.width}px`;
     sectionStyle.height = `${rect.height}px`;
-    sectionStyle.zIndex = '100'; // Make sure it's above other elements
-    sectionStyle.opacity = '1';
+    sectionStyle.zIndex = '100';
+    sectionStyle.opacity = '1'; // KEEP VISIBLE THROUGHOUT
     
-    // Apply the initial transform: move from its final position (rect.top/left) to the screen center, and scale up.
     sectionStyle.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${initialScale})`; 
-    sectionStyle.transition = 'none'; // No transition yet
+    sectionStyle.transition = 'none';
 
     // --- Step 2: Scale Down Animation (Delayed) ---
     const initialDelayTimer = setTimeout(() => {
       
-      // We start the transition to the TARGET_SCALE (slightly smaller than initialScale)
       sectionStyle.transition = `transform ${SCALE_DOWN_DURATION}ms ${SCALE_DOWN_EASING}, border-radius ${SCALE_DOWN_DURATION}ms`;
       
-      // New scale: initialScale * TARGET_SCALE (0.8)
       sectionStyle.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${initialScale * TARGET_SCALE})`;
-      sectionStyle.borderRadius = '14px'; // Adjust border radius for the scale down
+      sectionStyle.borderRadius = '14px';
 
       // --- Step 3: Wait for scale down, then start the main move ---
       moveTransitionStart = setTimeout(() => {
         
-        // Final transform is NO movement (0, 0) and final scale is 1 (its native size in the grid).
-        // This makes the element move from fixed-centered back to its original grid spot.
+        // REMOVED THE OPACITY FADE - Just move and scale
+        sectionStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
+        sectionStyle.transform = `none`;
+        sectionStyle.borderRadius = isDesktop || isTablet ? '16px' : '16px';
         
-        sectionStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, opacity 200ms ${MOVE_DURATION - 200}ms linear, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
-        sectionStyle.transform = `none`; // Move to final grid position and scale (scale: 1)
-        // START ISOLATED EDIT 3: Adjust final border radius
-        sectionStyle.borderRadius = isDesktop || isTablet ? '16px' : '16px'; // Final border radius
-        // END ISOLATED EDIT 3
-        
-        // Set opacity to 0 shortly before the end
-        setTimeout(() => {
-          sectionStyle.opacity = '0';
-        }, MOVE_DURATION - 200);
+        // NO MORE OPACITY CHANGES - stays visible
 
         // Final cleanup after the main transition
         completeDelay = setTimeout(() => {
@@ -142,11 +120,12 @@ export default function Page() {
           sectionStyle.position = 'unset';
           sectionStyle.zIndex = 'auto';
           
-          // **THE FIX**: Clear the hardcoded dimensions!
+          // Clear the hardcoded dimensions
           sectionStyle.width = ''; 
           sectionStyle.height = '';
 
-          sectionStyle.opacity = '1'; // Make the static element visible again
+          // Keep opacity at 1 - no fade effect
+          sectionStyle.opacity = '1';
           
           setIsTransitionComplete(true);
           setIsLoading(false);
@@ -321,7 +300,6 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end flex-shrink-0">
-              {/* **REPLACED INLINE SVG with /ai.svg** */}
               <img
                 src="/ai.svg"
                 alt="AI System Icon"
@@ -344,11 +322,6 @@ export default function Page() {
           <section 
             id="profile-grid-section"
             className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative"
-            style={
-                !isTransitionComplete 
-                ? { opacity: 0 }
-                : {}
-            }
           />
 
           <aside
@@ -384,7 +357,6 @@ export default function Page() {
               }`}
             >
               <div className="flex items-start justify-start flex-shrink-0">
-                {/* **REPLACED INLINE SVG with /noun.svg** */}
                 <img
                   src="/noun.svg"
                   alt="Abstract Icon"
@@ -476,7 +448,6 @@ export default function Page() {
         </div>
       </div>
       
-      {/* START ISOLATED EDIT 4: Insert the new Tablet Layout JSX */}
       {/* TABLET LAYOUT */}      
       <div className="hidden md:block lg:hidden mt-[64px] p-3">        
         <div className="flex flex-col gap-3 responsive-flex">          
@@ -506,11 +477,6 @@ export default function Page() {
             <section              
               id="profile-tablet-section"              
               className="flex-[0.4] bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative responsive-section"
-              style={
-                  !isTransitionComplete 
-                  ? { opacity: 0 }
-                  : {}
-              }
             />          
           </div>          
           {/* ABOUT + CONTACT */}          
@@ -527,7 +493,107 @@ export default function Page() {
                 />              
               </div>              
               <div className="mt-auto">                
-                <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent responsive-text responsive-spacing">                  
+                <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
+                About
+              </h3>
+              <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
+                Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                My work investigates explainable deep learning architectures, transfer learning optimization, 
+                and diagnostic system design for resource-constrained clinical environments.
+              </p>
+            </div>
+          </section>
+
+          <aside
+            id="projects"
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 ${
+              isLoading
+                ? "opacity-0 translate-y-[30px]"
+                : "opacity-100 translate-y-0 delay-1100"
+            }`}
+          >
+            {projects.map((p, idx) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                index={idx}
+                activeProject={activeProject}
+                onToggle={setActiveProject}
+                isMobile={true}
+              />
+            ))}
+          </aside>
+
+          <section
+            onClick={() =>
+              (window.location.href = "mailto:ahmed.messaad@outlook.com")
+            }
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
+              isLoading
+                ? "opacity-0 translate-y-[30px]"
+                : "opacity-100 translate-y-0 delay-1300"
+            }`}
+          >
+            <div className="flex justify-between items-start">
+              <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
+                Start a Conversation<br />
+              </div>
+              <svg
+                className="w-5 h-5 arrow-contact-animate"
+                viewBox="0 0 32 32"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M8 24L24 8M24 8H8M24 8V24" />
+              </svg>
+            </div>
+            
+            <div className="flex-1"></div>
+            
+            <div className="mt-auto flex flex-col items-start">
+              <h2 className="text-[48px] font-bold leading-none mb-4">
+                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              </h2>
+              
+              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
+                <a
+                  href="https://linkedin.com/in/ahmedmessaad"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  LINKEDIN
+                </a>
+                <a
+                  href="https://github.com/RYANX9"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  GITHUB
+                </a>
+                <a
+                  href="mailto:ahmed.messaad@outlook.com"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  EMAIL
+                </a>
+              </div>
+            </div>
+            
+            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
+              Developed by Ahmed Messaad
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
+} responsive-text responsive-spacing">                  
                   About                
                 </h3>                
                 <p className="text-neutral-300 text-[13px] leading-relaxed font-sans responsive-text">                  
@@ -611,7 +677,6 @@ export default function Page() {
           </aside>        
         </div>      
       </div>
-      {/* END ISOLATED EDIT 4 */}
 
       {/* MOBILE LAYOUT */}
       <div className="md:hidden pt-18 p-3">
@@ -625,7 +690,6 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-end">
-              {/* **REPLACED INLINE SVG with /ai.svg (Mobile)** */}
               <img
                 src="/ai.svg"
                 alt="AI System Icon"
@@ -648,11 +712,6 @@ export default function Page() {
           <section
             id="profile-mobile-section"
             className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl flex items-center justify-center overflow-hidden h-[50vh] relative"
-            style={
-                !isTransitionComplete 
-                ? { opacity: 0 }
-                : {}
-            }
           />
 
           <section
@@ -663,7 +722,6 @@ export default function Page() {
             }`}
           >
             <div className="flex items-start justify-start">
-              {/* **REPLACED INLINE SVG with /noun.svg (Mobile)** */}
               <img
                 src="/noun.svg"
                 alt="Abstract Icon"
