@@ -251,7 +251,7 @@ export default function Page() {
         </div>
         
         <div className="flex justify-end items-center lg:col-span-1">
-          
+        <a  
             href="/ahmed_messad_cv.pdf"
             download
             className="flex items-center text-white transition-colors duration-200"
