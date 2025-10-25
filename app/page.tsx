@@ -667,72 +667,71 @@ export default function Page() {
           </aside>
 
           <section
-            onClick={() =>
-              (window.location.href = "mailto:ahmed.messaad@outlook.com")
-            }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
-              isLoading
-                ? "opacity-0 translate-y-[30px]"
-                : "opacity-100 translate-y-0 delay-1300"
-            }`}
-          >
-            <div className="flex justify-between items-start">
-              <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-                Start a Conversation<br />
-              </div>
-              <svg
-                className="w-5 h-5 arrow-contact-animate"
-                viewBox="0 0 32 32"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M8 24L24 8M24 8H8M24 8V24" />
-              </svg>
-            </div>
-            
-            <div className="flex-1"></div>
-            
-            <div className="mt-auto flex flex-col items-start">
-              <h2 className="text-[48px] font-bold leading-none mb-4">
-                <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-              </h2>
-              
-              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
-                
-                  href="https://linkedin.com/in/ahmedmessaad"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  LINKEDIN
-                </a>
-                
-                  href="https://github.com/RYANX9"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  GITHUB
-                </a>
-                
-                  href="mailto:ahmed.messaad@outlook.com"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  EMAIL
-                </a>
-              </div>
-            </div>
-            
-            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
-              Developed by Ahmed Messaad
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
-  );
+            onClick={() =>
+              (window.location.href = "mailto:ahmed.messaad@outlook.com")
+            }
+            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
+              isLoading
+                ? "opacity-0 translate-y-[30px]"
+                : "opacity-100 translate-y-0 delay-1300"
+            }`}>
+            <div className="flex justify-between items-start">
+              <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
+                Start a Conversation<br />
+              </div>
+              <svg
+                className="w-5 h-5 arrow-contact-animate"
+                viewBox="0 0 32 32"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M8 24L24 8M24 8H8M24 8V24" />
+              </svg>
+            </div>
+            
+            <div className="flex-1"></div>
+            
+            <div className="mt-auto flex flex-col items-start">
+              <h2 className="text-[48px] font-bold leading-none mb-4">
+                <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+              </h2>
+              
+              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
+                <a
+                  href="https://linkedin.com/in/ahmedmessaad"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  LINKEDIN
+                </a>
+                <a
+                  href="https://github.com/RYANX9"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  GITHUB
+                </a>
+                <a
+                  href="mailto:ahmed.messaad@outlook.com"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-neutral-500 hover:text-white transition"
+                >
+                  EMAIL
+                </a>
+              </div>
+            </div>
+            
+            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
+              Developed by Ahmed Messaad
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  );
 }
