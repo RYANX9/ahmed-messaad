@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import { projects } from "./data";
 import ProjectCard from "./ProjectCard";
 
-
 export default function Page() {
   const [activeProject, setActiveProject] = useState<string | null>("treatment-drl");
   const [isLoading, setIsLoading] = useState(true);
@@ -19,14 +18,13 @@ export default function Page() {
     const isDesktop = window.innerWidth >= 1024;
     const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
     
-    // The animated element is now the SECTION itself.
     let targetSectionId;
     if (isDesktop) {
-        targetSectionId = 'profile-grid-section';
+      targetSectionId = 'profile-grid-section';
     } else if (isTablet) {
-        targetSectionId = 'profile-tablet-section';
+      targetSectionId = 'profile-tablet-section';
     } else {
-        targetSectionId = 'profile-mobile-section';
+      targetSectionId = 'profile-mobile-section';
     }
     const profileSection = document.getElementById(targetSectionId) as HTMLElement;
 
@@ -34,13 +32,11 @@ export default function Page() {
     if (isTransitionComplete || !profileSection) {
       if (!isTransitionComplete) {
         setIsLoading(false);
-        // Ensure final state is set if the effect runs on load without animation
         profileSection.style.backgroundImage = `url('/ahmed.jpg')`;
         profileSection.style.backgroundSize = 'cover';
         profileSection.style.backgroundPosition = 'center';
         profileSection.style.opacity = '1';
         
-        // Ensure final, static position/transform is set.
         profileSection.style.position = 'unset'; 
         profileSection.style.transform = 'none';
         profileSection.style.width = '';
@@ -62,7 +58,7 @@ export default function Page() {
     
     const sectionStyle = profileSection.style;
 
-    // Set final background immediately (will be visible once the animation completes)
+    // Set final background immediately
     sectionStyle.backgroundImage = `url('/ahmed.jpg')`;
     sectionStyle.backgroundSize = 'cover';
     sectionStyle.backgroundPosition = 'center';
@@ -84,14 +80,13 @@ export default function Page() {
     
     const initialScale = INITIAL_SIZE / rect.width;
 
-    // Set the initial, fixed, centered, and scaled-up state.
     sectionStyle.position = 'fixed'; 
     sectionStyle.top = `${rect.top}px`;
     sectionStyle.left = `${rect.left}px`;
     sectionStyle.width = `${rect.width}px`;
     sectionStyle.height = `${rect.height}px`;
     sectionStyle.zIndex = '100';
-    sectionStyle.opacity = '1'; // KEEP VISIBLE THROUGHOUT
+    sectionStyle.opacity = '1';
     
     sectionStyle.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${initialScale})`; 
     sectionStyle.transition = 'none';
@@ -107,24 +102,21 @@ export default function Page() {
       // --- Step 3: Wait for scale down, then start the main move ---
       moveTransitionStart = setTimeout(() => {
         
-        // REMOVED THE OPACITY FADE - Just move and scale
+        // FIX: Remove opacity transition, keep only transform and border-radius
         sectionStyle.transition = `transform ${MOVE_DURATION}ms ${MOVE_EASING}, border-radius ${MOVE_DURATION}ms ${MOVE_EASING}`;
         sectionStyle.transform = `none`;
         sectionStyle.borderRadius = isDesktop || isTablet ? '16px' : '16px';
         
-        // NO MORE OPACITY CHANGES - stays visible
+        // FIX: Keep opacity at 1 (no fade-out)
+        sectionStyle.opacity = '1';
 
-        // Final cleanup after the main transition
+        // FIX: Final cleanup after the main transition
         completeDelay = setTimeout(() => {
-          // Remove fixed positioning and zIndex
+          sectionStyle.transition = "";
           sectionStyle.position = 'unset';
           sectionStyle.zIndex = 'auto';
-          
-          // Clear the hardcoded dimensions
           sectionStyle.width = ''; 
           sectionStyle.height = '';
-
-          // Keep opacity at 1 - no fade effect
           sectionStyle.opacity = '1';
           
           setIsTransitionComplete(true);
@@ -142,7 +134,6 @@ export default function Page() {
       if (completeDelay) clearTimeout(completeDelay);
     };
   }, [isTransitionComplete]);
-
 
   return (
     <main className="bg-[#0a0a0a] text-white min-h-screen overflow-x-hidden">
@@ -240,7 +231,6 @@ export default function Page() {
         }
       `}</style>
 
-      {/* This fixed overlay acts as a clean background for the start of the animation */}
       <div
         className={`fixed inset-0 bg-[#0a0a0a] z-[90] pointer-events-none transition-opacity duration-700 ${
           isLoading ? "opacity-100" : "opacity-0"
@@ -261,7 +251,7 @@ export default function Page() {
         </div>
         
         <div className="flex justify-end items-center lg:col-span-1">
-          <a
+          
             href="/ahmed_messad_cv.pdf"
             download
             className="flex items-center text-white transition-colors duration-200"
@@ -291,7 +281,6 @@ export default function Page() {
       <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
         <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
           
-          {/* HERO SECTION - FIXED */}
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
               isLoading
@@ -347,7 +336,6 @@ export default function Page() {
           </aside>
           
           <div className="col-span-2 flex gap-3 h-full">
-            {/* ABOUT SECTION - FIXED */}
             <section
               id="about"
               className={`flex-1 w-1/2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
@@ -451,10 +439,13 @@ export default function Page() {
       {/* TABLET LAYOUT */}      
       <div className="hidden md:block lg:hidden mt-[64px] p-3">        
         <div className="flex flex-col gap-3 responsive-flex">          
-          {/* HERO + PROFILE */}          
           <div className="flex flex-row gap-3 responsive-flex">            
             <section              
-              className={`flex-[0.6] bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-500"              }`}            
+              className={`flex-[0.6] bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${
+                isLoading
+                  ? "opacity-0 translate-y-[30px]"
+                  : "opacity-100 translate-y-0 delay-500"
+              }`}            
             >              
               <div className="flex items-start justify-end">                
                 <img                  
@@ -479,11 +470,14 @@ export default function Page() {
               className="flex-[0.4] bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl overflow-hidden relative responsive-section"
             />          
           </div>          
-          {/* ABOUT + CONTACT */}          
           <div className="flex flex-row gap-3 responsive-flex">            
             <section              
               id="about-tablet"              
-              className={`flex-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-900"              }`}            
+              className={`flex-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col justify-between transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${
+                isLoading
+                  ? "opacity-0 translate-y-[30px]"
+                  : "opacity-100 translate-y-0 delay-900"
+              }`}            
             >              
               <div className="flex items-start justify-start">                
                 <img                  
@@ -493,118 +487,26 @@ export default function Page() {
                 />              
               </div>              
               <div className="mt-auto">                
-                <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent">
-                About
-              </h3>
-              <p className="text-neutral-300 text-[14px] leading-relaxed font-sans">
-                Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
-                My work investigates explainable deep learning architectures, transfer learning optimization, 
-                and diagnostic system design for resource-constrained clinical environments.
-              </p>
-            </div>
-          </section>
-
-          <aside
-            id="projects"
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 ${
-              isLoading
-                ? "opacity-0 translate-y-[30px]"
-                : "opacity-100 translate-y-0 delay-1100"
-            }`}
-          >
-            {projects.map((p, idx) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                index={idx}
-                activeProject={activeProject}
-                onToggle={setActiveProject}
-                isMobile={true}
-              />
-            ))}
-          </aside>
-
-          <section
-            onClick={() =>
-              (window.location.href = "mailto:ahmed.messaad@outlook.com")
-            }
-            className={`bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer hover:bg-[#252525] transition-all duration-1000 relative justify-between min-h-[35vh] ${
-              isLoading
-                ? "opacity-0 translate-y-[30px]"
-                : "opacity-100 translate-y-0 delay-1300"
-            }`}
-          >
-            <div className="flex justify-between items-start">
-              <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent">
-                Start a Conversation<br />
-              </div>
-              <svg
-                className="w-5 h-5 arrow-contact-animate"
-                viewBox="0 0 32 32"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M8 24L24 8M24 8H8M24 8V24" />
-              </svg>
-            </div>
-            
-            <div className="flex-1"></div>
-            
-            <div className="mt-auto flex flex-col items-start">
-              <h2 className="text-[48px] font-bold leading-none mb-4">
-                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
-              </h2>
-              
-              <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
-                <a
-                  href="https://linkedin.com/in/ahmedmessaad"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  LINKEDIN
-                </a>
-                <a
-                  href="https://github.com/RYANX9"
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  GITHUB
-                </a>
-                <a
-                  href="mailto:ahmed.messaad@outlook.com"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-neutral-500 hover:text-white transition"
-                >
-                  EMAIL
-                </a>
-              </div>
-            </div>
-            
-            <div className="text-[8px] text-neutral-500 uppercase tracking-widest font-mono mt-auto pt-2">
-              Developed by Ahmed Messaad
-            </div>
-          </section>
-        </div>
-      </div>
-    </main>
-  );
-} responsive-text responsive-spacing">                  
+                <h3 className="text-[9px] uppercase tracking-wider text-neutral-500 mb-3 font-accent responsive-text responsive-spacing">                  
                   About                
                 </h3>                
                 <p className="text-neutral-300 text-[13px] leading-relaxed font-sans responsive-text">                  
-                  Developing clinically-deployable AI systems that bridge academic research and healthcare impact.                   My work investigates explainable deep learning architectures, transfer learning optimization,                   and diagnostic system design for resource-constrained clinical environments.                
+                  Developing clinically-deployable AI systems that bridge academic research and healthcare impact. 
+                  My work investigates explainable deep learning architectures, transfer learning optimization, 
+                  and diagnostic system design for resource-constrained clinical environments.                
                 </p>              
               </div>            
             </section>            
             <section              
               id="contact-tablet"              
-              onClick={() =>                (window.location.href = "mailto:ahmed.messaad@outlook.com")              }              
-              className={`flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${                isLoading                  ? "opacity-0 translate-y-[30px]"                  : "opacity-100 translate-y-0 delay-1100"              }`}            
+              onClick={() =>
+                (window.location.href = "mailto:ahmed.messaad@outlook.com")
+              }              
+              className={`flex-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col cursor-pointer relative hover:bg-[#252525] transition-all duration-1000 overflow-hidden responsive-section responsive-spacing ${
+                isLoading
+                  ? "opacity-0 translate-y-[30px]"
+                  : "opacity-100 translate-y-0 delay-1100"
+              }`}            
             >              
               <div className="flex justify-between items-start">                
                 <div className="text-[9px] tracking-wider uppercase text-neutral-500 font-accent responsive-text">                  
@@ -659,10 +561,13 @@ export default function Page() {
               </div>            
             </section>          
           </div>          
-          {/* PROJECTS */}          
           <aside            
             id="projects-tablet"            
-            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 responsive-section ${              isLoading                ? "opacity-0 translate-y-[30px]"                : "opacity-100 translate-y-0 delay-1300"            }`}          
+            className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl overflow-hidden transition-all duration-1000 responsive-section ${
+              isLoading
+                ? "opacity-0 translate-y-[30px]"
+                : "opacity-100 translate-y-0 delay-1300"
+            }`}          
           >            
             {projects.map((p, idx) => (              
               <ProjectCard                
@@ -790,11 +695,11 @@ export default function Page() {
             
             <div className="mt-auto flex flex-col items-start">
               <h2 className="text-[48px] font-bold leading-none mb-4">
-                  <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
+                <span className="font-mono">Contact</span>&thinsp;<span className="italic font-serif font-light">me</span>
               </h2>
               
               <div className="flex justify-between w-full text-[9px] tracking-wider uppercase font-accent mb-4">
-                <a
+                
                   href="https://linkedin.com/in/ahmedmessaad"
                   target="_blank"
                   rel="noreferrer"
@@ -803,7 +708,7 @@ export default function Page() {
                 >
                   LINKEDIN
                 </a>
-                <a
+                
                   href="https://github.com/RYANX9"
                   target="_blank"
                   rel="noreferrer"
@@ -812,7 +717,7 @@ export default function Page() {
                 >
                   GITHUB
                 </a>
-                <a
+                
                   href="mailto:ahmed.messaad@outlook.com"
                   onClick={(e) => e.stopPropagation()}
                   className="text-neutral-500 hover:text-white transition"
