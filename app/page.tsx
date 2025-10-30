@@ -252,7 +252,7 @@ export default function Page() {
         
         <div className="flex justify-end items-center lg:col-span-1">
         <a  
-            href="/ahmed_messad_cv.pdf"
+            href="/ahmed_messaad_cv.pdf"
             download
             className="flex items-center text-white transition-colors duration-200">
             <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 lg:px-4 py-1.5 lg:py-2 text-[12px] lg:text-[14px] font-mono tracking-wide hover:bg-[#252525] transition">
