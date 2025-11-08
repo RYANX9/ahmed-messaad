@@ -238,7 +238,7 @@ export default function Page() {
       />
 
       <header
-        className={`fixed top-0 left-0 right-0 h-16 lg:h-20 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
+        className={`fixed top-0 left-0 right-0 h-14 lg:h-17 bg-[#0a0a0a] border-b border-[#2a2a2a] z-50 flex justify-between items-center px-4 lg:px-10 transition-opacity duration-700 ${
           isLoading ? "opacity-0" : "opacity-100 delay-300"
         } lg:grid lg:grid-cols-3`}
       >
