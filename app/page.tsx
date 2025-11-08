@@ -276,9 +276,9 @@ export default function Page() {
         </div>
       </header>
 
-      {/* DESKTOP LAYOUT */}
-      <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3">
-        <div className="grid grid-cols-[9fr_6fr_10fr] auto-rows-fr gap-3 h-full">
+       {/* DESKTOP LAYOUT */}
+      <div className="hidden lg:block lg:h-[calc(100vh-80px)] lg:mt-[80px] p-3 overflow-hidden">
+        <div className="grid grid-cols-[9fr_6fr_10fr] grid-rows-2 gap-3 h-full">
           
           <section
             className={`bg-[#0a0a0a] border border-[#2a2a2a] rounded-2xl p-6 2xl:p-8 flex flex-col justify-between transition-all duration-1000 overflow-hidden ${
