@@ -133,15 +133,17 @@ export default function Page() {
   }, [isTransitionComplete]);
 
   return (
-    <main className="bg-[#0a0a0a] text-white h-screen overflow-hidden">
+    <main className="bg-[#0a0a0a] text-white min-h-screen lg:h-screen lg:overflow-hidden">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
         
-        html, body {
-          overflow: hidden !important;
-          height: 100vh !important;
-          position: fixed !important;
-          width: 100% !important;
+        @media (min-width: 1024px) {
+          html, body {
+            overflow: hidden !important;
+            height: 100vh !important;
+            position: fixed !important;
+            width: 100% !important;
+          }
         }
         
         * {
@@ -436,7 +438,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-      
       
       {/* TABLET LAYOUT */}      
       <div className="hidden md:block lg:hidden mt-[64px] p-3">        
