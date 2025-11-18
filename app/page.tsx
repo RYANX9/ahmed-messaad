@@ -48,7 +48,7 @@ export default function Page() {
     }
 
     // Animation Constants
-    const INITIAL_DELAY = 400;
+    const INITIAL_DELAY = 1000;
     const SCALE_DOWN_DURATION = 300;
     const SCALE_DOWN_EASING = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     const MOVE_DURATION = 1500;
