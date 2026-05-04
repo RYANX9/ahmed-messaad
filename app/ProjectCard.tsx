@@ -22,7 +22,9 @@ export default function ProjectCard({
   if (isPublication) {
     return (
       <div
-        className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a]`}
+        className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a] border-l-2 border-l-white transition ${
+          activeProject === p.id ? "bg-[#151515]" : ""
+        }`}
       >
         <button
           onClick={() => onToggle(activeProject === p.id ? "" : p.id)}
@@ -31,13 +33,22 @@ export default function ProjectCard({
           } text-left`}
         >
           <div className="flex flex-col flex-1 min-w-0">
-            {/* Label */}
-            <div
-              className={`${
-                isMobile ? "text-[8px]" : "text-[9px] xl:text-[10px]"
-              } uppercase tracking-widest text-neutral-600 font-mono mb-1`}
-            >
-              Publication
+            {/* Always-visible label row — shown even when collapsed */}
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className={`${
+                  isMobile ? "text-[8px]" : "text-[8px] xl:text-[9px]"
+                } uppercase tracking-widest font-mono text-neutral-500 border border-[#3a3a3a] rounded px-1.5 py-0.5`}
+              >
+                Publication
+              </span>
+              <span
+                className={`${
+                  isMobile ? "text-[8px]" : "text-[8px] xl:text-[9px]"
+                } uppercase tracking-widest font-mono text-neutral-500`}
+              >
+                ★ Award
+              </span>
             </div>
 
             {/* Title */}
@@ -49,7 +60,7 @@ export default function ProjectCard({
               {p.name}
             </div>
 
-            {/* Context row */}
+            {/* Context + link row */}
             <div className="flex items-center gap-4 mt-1">
               <div
                 className={`${
@@ -123,7 +134,6 @@ export default function ProjectCard({
               {p.description}
             </p>
 
-            {/* Tags — award tag gets white border, rest stay default */}
             <div
               className={`flex flex-wrap ${
                 isMobile ? "gap-2" : "gap-2 xl:gap-2.5"
@@ -155,7 +165,7 @@ export default function ProjectCard({
     );
   }
 
-  // ── Standard project card (unchanged) ─────────────────────────────────────
+  // ── Standard project card ──────────────────────────────────────────────────
   return (
     <div
       className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a] transition ${
