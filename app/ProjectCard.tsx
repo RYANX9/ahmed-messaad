@@ -47,15 +47,6 @@ export default function ProjectCard({
                   isMobile ? "text-[8px]" : "text-[8px] xl:text-[9px]"
                 } uppercase tracking-widest font-mono text-neutral-500`}
               >
-                ★ Award
-              </span>
-            </div>
-
-            {/* Title */}
-            <div
-              className={`${
-                isMobile ? "text-sm" : "text-base xl:text-lg"
-              } font-semibold font-mono`}
             >
               {p.name}
             </div>
