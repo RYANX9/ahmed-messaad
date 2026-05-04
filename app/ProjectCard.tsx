@@ -33,7 +33,7 @@ export default function ProjectCard({
           } text-left`}
         >
           <div className="flex flex-col flex-1 min-w-0">
-            {/* Always-visible label row — shown even when collapsed */}
+            {/* Always-visible badge — shown even when collapsed */}
             <div className="flex items-center gap-2 mb-1">
               <span
                 className={`${
@@ -42,11 +42,13 @@ export default function ProjectCard({
               >
                 Publication
               </span>
-              <span
-                className={`${
-                  isMobile ? "text-[8px]" : "text-[8px] xl:text-[9px]"
-                } uppercase tracking-widest font-mono text-neutral-500`}
-              >
+            </div>
+
+            {/* Title */}
+            <div
+              className={`${
+                isMobile ? "text-sm" : "text-base xl:text-lg"
+              } font-semibold font-mono`}
             >
               {p.name}
             </div>
