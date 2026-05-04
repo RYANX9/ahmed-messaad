@@ -1,7 +1,3 @@
-// =============================================================================
-// PROJECTCARD.TSX - Reusable Project Card Component
-// =============================================================================
-
 import React from "react";
 import Image from "next/image";
 import { Project } from "./data";
@@ -21,13 +17,151 @@ export default function ProjectCard({
   onToggle,
   isMobile = false,
 }: ProjectCardProps) {
+  const isPublication = p.type === "publication";
+
+  if (isPublication) {
+    return (
+      <div
+        className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a]`}
+      >
+        <button
+          onClick={() => onToggle(activeProject === p.id ? "" : p.id)}
+          className={`w-full flex justify-between items-center ${
+            isMobile ? "px-6 py-4" : "px-8 xl:px-10 py-4 xl:py-5"
+          } text-left`}
+        >
+          <div className="flex flex-col flex-1 min-w-0">
+            {/* Label */}
+            <div
+              className={`${
+                isMobile ? "text-[8px]" : "text-[9px] xl:text-[10px]"
+              } uppercase tracking-widest text-neutral-600 font-mono mb-1`}
+            >
+              Publication
+            </div>
+
+            {/* Title */}
+            <div
+              className={`${
+                isMobile ? "text-sm" : "text-base xl:text-lg"
+              } font-semibold font-mono`}
+            >
+              {p.name}
+            </div>
+
+            {/* Context row */}
+            <div className="flex items-center gap-4 mt-1">
+              <div
+                className={`${
+                  isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
+                } text-neutral-500 font-accent uppercase tracking-wide`}
+              >
+                {p.context} • {p.year}
+              </div>
+
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={`arrow-animate inline-flex items-center gap-2 text-white ${
+                  isMobile ? "text-[9px]" : "text-[10px] xl:text-[11px]"
+                } tracking-wide font-mono transition-opacity duration-300 ${
+                  activeProject === p.id
+                    ? "opacity-100"
+                    : "opacity-0 pointer-events-none"
+                }`}
+              >
+                {p.linkText}
+                <svg
+                  width={isMobile ? "12" : "14"}
+                  height={isMobile ? "12" : "14"}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <svg
+            className={`${
+              isMobile ? "w-4 h-4" : "w-5 h-5 xl:w-6 xl:h-6"
+            } transition-transform flex-shrink-0 ml-3 ${
+              activeProject === p.id ? "rotate-90" : ""
+            }`}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+
+        {/* Expanded content */}
+        <div
+          className={`overflow-hidden transition-all duration-500 ${
+            activeProject === p.id
+              ? isMobile
+                ? "max-h-[600px]"
+                : "max-h-[700px]"
+              : "max-h-0"
+          }`}
+        >
+          <div className={isMobile ? "px-6 pb-5" : "px-8 xl:px-10 pb-6 xl:pb-7"}>
+            <p
+              className={`${
+                isMobile
+                  ? "mb-4 text-sm"
+                  : "mb-4 xl:mb-5 text-[13px] xl:text-[14px]"
+              } text-neutral-400 leading-relaxed font-sans`}
+            >
+              {p.description}
+            </p>
+
+            {/* Tags — award tag gets white border, rest stay default */}
+            <div
+              className={`flex flex-wrap ${
+                isMobile ? "gap-2" : "gap-2 xl:gap-2.5"
+              }`}
+            >
+              {p.tech.map((t) => {
+                const isAward = t.startsWith("★");
+                return (
+                  <span
+                    key={t}
+                    className={`rounded font-mono ${
+                      isMobile
+                        ? "text-[10px] px-2.5 py-1"
+                        : "text-[11px] xl:text-[12px] px-3 py-1.5"
+                    } ${
+                      isAward
+                        ? "bg-[#1a1a1a] text-white border border-white"
+                        : "bg-[#1a1a1a] text-white border border-[#2a2a2a] hover:bg-[#333] transition"
+                    }`}
+                  >
+                    {t}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Standard project card (unchanged) ─────────────────────────────────────
   return (
     <div
       className={`${idx !== 0 ? "border-t" : ""} border-[#2a2a2a] transition ${
         activeProject === p.id ? "bg-[#151515]" : ""
       }`}
     >
-      {/* ========== PROJECT HEADER (Clickable) ========== */}
       <button
         onClick={() => onToggle(activeProject === p.id ? "" : p.id)}
         className={`w-full flex justify-between items-center ${
@@ -35,7 +169,6 @@ export default function ProjectCard({
         } text-left`}
       >
         <div className="flex flex-col">
-          {/* Project Name */}
           <div
             className={`${
               isMobile ? "text-sm" : "text-base xl:text-lg"
@@ -44,7 +177,6 @@ export default function ProjectCard({
             {p.name}
           </div>
 
-          {/* Context, Year & Link */}
           <div className="flex items-center gap-4">
             <div
               className={`${
@@ -54,7 +186,6 @@ export default function ProjectCard({
               {p.context} • {p.year}
             </div>
 
-            {/* External Link (only visible when expanded) */}
             <a
               href={p.link}
               target="_blank"
@@ -83,7 +214,6 @@ export default function ProjectCard({
           </div>
         </div>
 
-        {/* Chevron Icon */}
         <svg
           className={`${
             isMobile ? "w-4 h-4" : "w-5 h-5 xl:w-6 xl:h-6"
@@ -99,7 +229,6 @@ export default function ProjectCard({
         </svg>
       </button>
 
-      {/* ========== PROJECT DETAILS (Expandable) ========== */}
       <div
         className={`overflow-hidden transition-all duration-500 ${
           activeProject === p.id
@@ -110,7 +239,6 @@ export default function ProjectCard({
         }`}
       >
         <div className={isMobile ? "px-6 pb-5" : "px-8 xl:px-10 pb-6 xl:pb-7"}>
-          {/* Project Image */}
           <div
             className={`relative w-full ${
               isMobile ? "h-40 mb-4" : "h-48 xl:h-56 mb-4 xl:mb-5"
@@ -126,7 +254,6 @@ export default function ProjectCard({
             />
           </div>
 
-          {/* Project Description */}
           <p
             className={`${
               isMobile
@@ -137,7 +264,6 @@ export default function ProjectCard({
             {p.description}
           </p>
 
-          {/* Tech Stack Tags */}
           <div
             className={`flex flex-wrap ${
               isMobile ? "gap-2 mb-4" : "gap-2 xl:gap-2.5 mb-4 xl:mb-5"
