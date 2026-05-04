@@ -13,19 +13,6 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "icstem-2023",
-    name: "ICSTEM 2023 — Istanbul",
-    context: "Published Research",
-    year: "2023",
-    description:
-      "Presented transfer learning optimization methodologies for medical image classification in resource-limited clinical environments. Investigated disease-specific architecture selection achieving 90–99% accuracy across five clinical domains. Awarded Outstanding Research Presentation.",
-    tech: ["★ Best Presentation Award", "Transfer Learning", "Deep Learning", "Medical Imaging"],
-    link: "#",
-    linkText: "View Paper",
-    image: "/daily.png",
-    type: "publication",
-  },
-  {
     id: "treatment-drl",
     name: "Medical Treatment DRL",
     context: "Sequential Decision-Making Research",
@@ -72,6 +59,19 @@ export const projects: Project[] = [
     link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
     linkText: "View Project",
     image: "/healthcarecost.png",
+  },
+    {
+    id: "icstem-2023",
+    name: "ICSTEM 2023 — Istanbul",
+    context: "Published Research",
+    year: "2023",
+    description:
+      "Presented transfer learning optimization methodologies for medical image classification in resource-limited clinical environments. Investigated disease-specific architecture selection achieving 90–99% accuracy across five clinical domains. Awarded Outstanding Research Presentation.",
+    tech: ["★ Best Presentation Award", "Transfer Learning", "Deep Learning", "Medical Imaging"],
+    link: "https://drive.google.com/file/d/1xZYQcitGremOxkoe-tyyWCnyXxEGruje/view?usp=sharing",
+    linkText: "View Paper",
+    image: "/daily.png",
+    type: "publication",
   },
   {
     id: "mydailyhealth",
