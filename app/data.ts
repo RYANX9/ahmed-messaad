@@ -1,7 +1,3 @@
-// =============================================================================
-// DATA.TS - Project Data & Type Definitions
-// =============================================================================
-
 export interface Project {
   id: string;
   name: string;
@@ -12,9 +8,23 @@ export interface Project {
   link: string;
   linkText: string;
   image: string;
+  type?: "project" | "publication";
 }
 
 export const projects: Project[] = [
+  {
+    id: "icstem-2023",
+    name: "ICSTEM 2023 — Istanbul",
+    context: "Published Research",
+    year: "2023",
+    description:
+      "Presented transfer learning optimization methodologies for medical image classification in resource-limited clinical environments. Investigated disease-specific architecture selection achieving 90–99% accuracy across five clinical domains. Awarded Outstanding Research Presentation.",
+    tech: ["★ Best Presentation Award", "Transfer Learning", "Deep Learning", "Medical Imaging"],
+    link: "#",
+    linkText: "View Paper",
+    image: "/daily.png",
+    type: "publication",
+  },
   {
     id: "treatment-drl",
     name: "Medical Treatment DRL",
@@ -59,8 +69,8 @@ export const projects: Project[] = [
     description:
       "Conv1D neural network achieving R² = 0.88 for insurance cost forecasting. Feature engineering with SHAP analysis identified key cost drivers. Systematic ablation study investigating optimal temporal convolution strategies for healthcare prediction tasks.",
     tech: ["Conv1D", "SHAP", "Scikit-learn", "Plotly"],
-    link: "https://github.com/RYANX9/healthcare-cost-prediction",
-    linkText: "View Code",
+    link: "https://www.kaggle.com/code/ahmedmessaad/healthcare-cost-prediction-using-neural-networks",
+    linkText: "View Project",
     image: "/healthcarecost.png",
   },
   {
