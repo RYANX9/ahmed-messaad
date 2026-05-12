@@ -37,16 +37,16 @@ export const projects: Project[] = [
     image: "/brain.jpg",
   },
   {
-    id: "hemavision",
-    name: "HemaVision",
-    context: "Medical Automation",
-    year: "2023–2024",
-    description:
-      "Automated hematology platform achieving 97% multi-class blood cell classification. Reduced diagnostic time from 45 minutes to 3 minutes through optimized detection pipeline. Research investigating efficient segmentation architectures for microscopy imaging in clinical workflows.",
-    tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
-    link: "https://youtu.be/YxhA877Wyn0",
-    linkText: "Watch Demo",
-    image: "/blood.jpg",
+   id: "hemavision",
+   name: "HemaVision",
+   context: "Medical Automation · BBC 4Tech",
+   year: "2023–2024",
+   description:
+     "Automated hematology platform for real-time RBC/WBC/platelet detection and classification of leukemia, malaria, and anemia. Reduced diagnostic time from 45 minutes to 3 minutes. Pipeline validated by clinical hematologist. Featured on BBC News Arabic — 4Tech program.",
+   tech: ["YOLOv8", "U-Net", "OpenCV", "PyTorch"],
+   link: "https://www.youtube.com/watch?v=fX77vZlHkng",
+   linkText: "BBC Coverage",
+   image: "/blood.jpg",
   },
   {
     id: "healthcost",
