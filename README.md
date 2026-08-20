@@ -2,6 +2,8 @@
 
 A modern, smooth, and fully animated personal portfolio built with **Next.js**, **TypeScript**, and **React Hooks**.
 
+check live here :::>>>  https://ahmed-messaad.vercel.app/
+
 ## ✨ Features
 - Dynamic intro animation for profile image (smooth across desktop & mobile)
 - Responsive grid and mobile layouts
